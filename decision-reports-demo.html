@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decision Reports — LOCUS-SF</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #f4f1eb; }
+
+    /* Row hover */
+    .report-row { transition: background 160ms ease; }
+    .report-row:hover { background: rgba(248,247,243,0.9); }
+
+    /* Stat card reveal */
+    .stat-card { transition: transform 200ms ease, box-shadow 200ms ease; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.10); }
+
+    /* Checklist item */
+    .check-item { display: flex; align-items: flex-start; gap: 7px; margin-bottom: 5px; }
+    .check-item:last-child { margin-bottom: 0; }
+
+    /* Action button pulse */
+    @keyframes subtlePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.28); }
+      50%       { box-shadow: 0 0 0 5px rgba(245,158,11,0); }
+    }
+    .btn-resolve { animation: subtlePulse 2.8s ease-in-out infinite; }
+    .btn-resolve:hover { animation: none; }
+
+    /* Print styles */
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white; }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1c9b8; border-radius: 99px; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+<!-- ══════════════════════════════════════════════
+     NAVIGATION BAR
+══════════════════════════════════════════════ -->
+<nav class="sticky top-0 z-50 bg-[#111827] border-b border-white/5 no-print">
+  <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-xl bg-amber-500 flex items-center justify-center flex-shrink-0">
+        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zm5.99 7.176A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+      </div>
+      <div class="leading-none">
+        <div class="text-white font-extrabold text-sm tracking-tight">LOCUS-SF</div>
+        <div class="text-amber-400/80 text-[9px] font-semibold tracking-[0.14em] uppercase">San Fernando Opportunity Platform</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-1">
+      <a href="#" class="px-3 py-1.5 text-xs font-medium text-white/60 hover:text-white transition-colors">Home</a>
+      <a href="#" class="px-3 py-1.5 text-xs font-medium text-white/60 hover:text-white transition-colors">Priority Board</a>
+      <a href="#" class="px-3 py-1.5 text-xs font-medium text-white/60 hover:text-white transition-colors">Map Explorer</a>
+      <a href="#" class="px-3 py-1.5 text-xs font-semibold text-amber-400 bg-white/8 rounded-lg">Reports</a>
+      <a href="#" class="ml-2 px-4 py-1.5 text-xs font-bold text-[#111827] bg-amber-400 hover:bg-amber-500 rounded-xl transition-colors">Enter Platform</a>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-7xl mx-auto px-6 py-10 space-y-8">
+
+  <!-- ══════════════════════════════════════════════
+       HERO HEADER CARD
+  ══════════════════════════════════════════════ -->
+  <div class="bg-white rounded-3xl p-8 shadow-sm border border-black/5">
+    <div class="flex items-start justify-between gap-6">
+      <div class="flex-1">
+        <p class="text-[10px] font-bold tracking-[0.22em] text-slate-400 uppercase mb-3">Decision Reports</p>
+        <h1 class="text-4xl font-black text-slate-900 tracking-tight leading-[0.92] mb-4">
+          Policy-ready rankings<br/>with CLUP evidence attached.
+        </h1>
+        <p class="text-sm text-slate-500 font-medium max-w-xl leading-relaxed">
+          Review compliance distribution, suitability, and recommended LGU actions before generating a printable priority report.
+        </p>
+      </div>
+      <div class="flex-shrink-0 flex flex-col items-end gap-2 no-print">
+        <button onclick="window.print()"
+          class="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-sm shadow-amber-200 transition-all duration-150">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          Print / Save PDF
+        </button>
+        <button
+          class="flex items-center gap-2 px-5 py-2.5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 text-xs font-semibold transition-all duration-150">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Export CSV
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       EXECUTIVE SUMMARY — STAT CARDS
+  ══════════════════════════════════════════════ -->
+  <div class="space-y-4">
+    <div>
+      <p class="text-[10px] font-bold tracking-[0.22em] text-slate-400 uppercase mb-1">Executive CLUP Report</p>
+      <div class="flex items-end justify-between flex-wrap gap-4">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight">Investment priority and land-use compliance</h2>
+          <p class="text-sm text-slate-400 font-medium mt-0.5">San Fernando City, La Union &middot; <span id="report-date">July 16, 2026</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stat Cards Row -->
+    <div class="grid grid-cols-3 gap-4">
+
+      <!-- PASS Card -->
+      <div class="stat-card bg-white rounded-2xl p-5 border border-emerald-100 shadow-sm overflow-hidden relative">
+        <div class="absolute top-0 left-0 w-1 h-full bg-emerald-500 rounded-l-2xl"></div>
+        <div class="pl-2">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <span class="text-[9px] font-bold tracking-[0.18em] text-emerald-400 uppercase bg-emerald-50 px-2 py-0.5 rounded-full">Compliant</span>
+          </div>
+          <div id="stat-pass" class="text-4xl font-black text-emerald-700 tracking-tight leading-none mb-1">0</div>
+          <div class="text-xs font-semibold text-slate-500">CLUP PASS</div>
+          <div class="text-[10px] text-slate-400 font-medium mt-1">Sites cleared for investment recommendation</div>
+        </div>
+        <div class="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-emerald-50 opacity-60"></div>
+      </div>
+
+      <!-- CONDITIONAL Card -->
+      <div class="stat-card bg-white rounded-2xl p-5 border border-amber-100 shadow-sm overflow-hidden relative">
+        <div class="absolute top-0 left-0 w-1 h-full bg-amber-400 rounded-l-2xl"></div>
+        <div class="pl-2">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-8 h-8 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center">
+              <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <span class="text-[9px] font-bold tracking-[0.18em] text-amber-500 uppercase bg-amber-50 px-2 py-0.5 rounded-full">Conditional</span>
+          </div>
+          <div id="stat-conditional" class="text-4xl font-black text-amber-600 tracking-tight leading-none mb-1">0</div>
+          <div class="text-xs font-semibold text-slate-500">CONDITIONAL</div>
+          <div class="text-[10px] text-slate-400 font-medium mt-1">Permitted with LGU conditions applied</div>
+        </div>
+        <div class="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-amber-50 opacity-60"></div>
+      </div>
+
+      <!-- FAIL Card -->
+      <div class="stat-card bg-white rounded-2xl p-5 border border-rose-100 shadow-sm overflow-hidden relative">
+        <div class="absolute top-0 left-0 w-1 h-full bg-rose-400 rounded-l-2xl"></div>
+        <div class="pl-2">
+          <div class="flex items-center justify-between mb-3">
+            <div class="w-8 h-8 rounded-xl bg-rose-50 border border-rose-100 flex items-center justify-center">
+              <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            </div>
+            <span class="text-[9px] font-bold tracking-[0.18em] text-rose-400 uppercase bg-rose-50 px-2 py-0.5 rounded-full">Disqualified</span>
+          </div>
+          <div id="stat-fail" class="text-4xl font-black text-rose-600 tracking-tight leading-none mb-1">0</div>
+          <div class="text-xs font-semibold text-slate-500">CLUP FAIL</div>
+          <div class="text-[10px] text-slate-400 font-medium mt-1">Sites incompatible with land-use classification</div>
+        </div>
+        <div class="absolute -bottom-4 -right-4 w-20 h-20 rounded-full bg-rose-50 opacity-60"></div>
+      </div>
+
+    </div>
+
+    <!-- Unverified Alert Banner -->
+    <div id="unverified-banner" class="flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-amber-50 border border-amber-200">
+      <div class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0">
+        <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01"/></svg>
+      </div>
+      <p class="text-xs font-semibold text-amber-800">
+        <span id="unverified-count" class="font-extrabold">5</span> candidate sites are pending CLUP verification.
+        Complete the evidence queue to unlock compliance scoring.
+      </p>
+      <button class="ml-auto text-[10px] font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-xl transition-colors whitespace-nowrap no-print">
+        View Evidence Queue
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       PRIORITY REGISTER TABLE
+  ══════════════════════════════════════════════ -->
+  <div class="bg-white rounded-3xl shadow-sm border border-black/5 overflow-hidden">
+
+    <!-- Table Header -->
+    <div class="px-7 py-5 border-b border-slate-100 flex items-center justify-between">
+      <div>
+        <p class="text-[10px] font-bold tracking-[0.22em] text-slate-400 uppercase mb-0.5">Priority Register</p>
+        <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">CLUP-gated candidate sites</h3>
+      </div>
+      <div class="flex items-center gap-2 no-print">
+        <!-- Filter pills -->
+        <button onclick="filterRows('all')" id="filter-all"
+          class="filter-btn active-filter px-3.5 py-1.5 rounded-xl text-[11px] font-semibold bg-slate-900 text-white transition-all">All</button>
+        <button onclick="filterRows('pass')" id="filter-pass"
+          class="filter-btn px-3.5 py-1.5 rounded-xl text-[11px] font-semibold bg-white border border-slate-200 text-slate-600 hover:border-emerald-300 hover:text-emerald-700 transition-all">Pass</button>
+        <button onclick="filterRows('conditional')" id="filter-conditional"
+          class="filter-btn px-3.5 py-1.5 rounded-xl text-[11px] font-semibold bg-white border border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-700 transition-all">Conditional</button>
+        <button onclick="filterRows('fail')" id="filter-fail"
+          class="filter-btn px-3.5 py-1.5 rounded-xl text-[11px] font-semibold bg-white border border-slate-200 text-slate-600 hover:border-rose-300 hover:text-rose-600 transition-all">Fail</button>
+        <button onclick="filterRows('unverified')" id="filter-unverified"
+          class="filter-btn px-3.5 py-1.5 rounded-xl text-[11px] font-semibold bg-white border border-slate-200 text-slate-600 hover:border-amber-300 hover:text-amber-700 transition-all">Unverified</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-slate-100 bg-slate-50/60">
+            <th class="text-left px-6 py-3 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase w-12">Rank</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase">Candidate Site</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase">Proposed Use</th>
+            <th class="text-center px-4 py-3 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase w-16">IAI</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase">CLUP</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase">Suitability</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase">Evidence</th>
+            <th class="text-left px-4 py-3 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase">Action Checklist</th>
+            <th class="text-right px-6 py-3 text-[10px] font-bold tracking-[0.16em] text-slate-400 uppercase no-print">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="report-tbody">
+          <!-- Rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Table Footer -->
+    <div class="px-7 py-4 border-t border-slate-100 flex items-center justify-between">
+      <p class="text-xs text-slate-400 font-medium">Showing <span id="row-count">5</span> candidate sites</p>
+      <div class="flex items-center gap-2 text-xs text-slate-400 font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Pass
+        <span class="w-2 h-2 rounded-full bg-amber-400 inline-block ml-2"></span> Conditional
+        <span class="w-2 h-2 rounded-full bg-rose-400 inline-block ml-2"></span> Fail
+        <span class="w-2 h-2 rounded-full bg-slate-300 inline-block ml-2"></span> Unverified
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════════ -->
+<script>
+  /* ── Data ── */
+  var sites = [
+    {
+      rank: 1, id: "FBL-001",
+      name: "Fabro Building Prime Lot",
+      location: "Calitbangan · Highway Corridor",
+      use: "Logistics / Warehousing",
+      iai: 98,
+      clup: "unverified",
+      suitability: null,
+      evidence: "unverified",
+      evidenceContext: "Corridor screen",
+      checklist: [
+        { done: false, label: "Import Zoning Map dataset" },
+        { done: false, label: "Resolve against zoning polygon" },
+        { done: false, label: "Attach map extract or clearance" },
+        { done: false, label: "Admin review & sign-off" }
+      ]
+    },
+    {
+      rank: 2, id: "P5-MUC",
+      name: "Property 5 – Mixed Use Complex",
+      location: "San Fernando · Highway Coastal Corridor",
+      use: "Logistics / Warehousing",
+      iai: 97,
+      clup: "unverified",
+      suitability: null,
+      evidence: "unverified",
+      evidenceContext: "Corridor screen",
+      checklist: [
+        { done: false, label: "Import Zoning Map dataset" },
+        { done: false, label: "Resolve against zoning polygon" },
+        { done: false, label: "Attach map extract or clearance" },
+        { done: false, label: "Admin review & sign-off" }
+      ]
+    },
+    {
+      rank: 3, id: "P10-BPR",
+      name: "Property 10 – Business Park Ready",
+      location: "Barangay IV · Downtown Core",
+      use: "Logistics / Warehousing",
+      iai: 93,
+      clup: "conditional",
+      suitability: 78,
+      evidence: "partial",
+      evidenceContext: "Map extract attached",
+      checklist: [
+        { done: true,  label: "Import Zoning Map dataset" },
+        { done: true,  label: "Resolve against zoning polygon" },
+        { done: false, label: "Attach map extract or clearance" },
+        { done: false, label: "Admin review & sign-off" }
+      ]
+    },
+    {
+      rank: 4, id: "P3-TPS",
+      name: "Property 3 – Tech Park Site",
+      location: "Madayegdeg · Highway Corridor",
+      use: "Logistics / Warehousing",
+      iai: 93,
+      clup: "unverified",
+      suitability: null,
+      evidence: "unverified",
+      evidenceContext: "Corridor screen",
+      checklist: [
+        { done: false, label: "Import Zoning Map dataset" },
+        { done: false, label: "Resolve against zoning polygon" },
+        { done: false, label: "Attach map extract or clearance" },
+        { done: false, label: "Admin review & sign-off" }
+      ]
+    },
+    {
+      rank: 5, id: "LFB-BRL",
+      name: "LaFinns Beach Resort Land",
+      location: "Poro · Coastal Belt",
+      use: "Tourism / Hospitality",
+      iai: 92,
+      clup: "pass",
+      suitability: 91,
+      evidence: "complete",
+      evidenceContext: "All documents verified",
+      checklist: [
+        { done: true, label: "Import Zoning Map dataset" },
+        { done: true, label: "Resolve against zoning polygon" },
+        { done: true, label: "Attach map extract or clearance" },
+        { done: true, label: "Admin review & sign-off" }
+      ]
+    }
+  ];
+
+  /* ── Badge renderers ── */
+  function clupBadge(status) {
+    if (status === 'pass')
+      return '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[10px] font-bold text-emerald-700"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>PASS</span>';
+    if (status === 'conditional')
+      return '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-[10px] font-bold text-amber-700"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>CONDITIONAL</span>';
+    if (status === 'fail')
+      return '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 border border-rose-200 text-[10px] font-bold text-rose-600"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>FAIL</span>';
+    return '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-500"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Unverified</span>';
+  }
+
+  function evidenceBadge(status, ctx) {
+    var badge = '';
+    if (status === 'complete')
+      badge = '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[10px] font-bold text-emerald-700">&#x2713; Complete</span>';
+    else if (status === 'partial')
+      badge = '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-violet-50 border border-violet-200 text-[10px] font-bold text-violet-700">&#x25D2; Partial</span>';
+    else
+      badge = '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-[10px] font-bold text-amber-700">&#x26A0; Unverified</span>';
+    return badge + '<div class="text-[10px] text-slate-400 font-medium mt-1.5">' + ctx + '</div>';
+  }
+
+  function suitabilityCell(score) {
+    if (score === null)
+      return '<div class="text-slate-400 font-bold text-sm">&#x2014;&#x2014; <span class="text-slate-300">/100</span></div><div class="text-[10px] text-slate-300 font-medium mt-0.5">Pending data</div>';
+    var color = score >= 80 ? 'text-emerald-600' : score >= 60 ? 'text-amber-600' : 'text-rose-600';
+    return '<div class="' + color + ' font-extrabold text-sm">' + score + '<span class="text-slate-300 font-medium">/100</span></div><div class="mt-1 h-1.5 w-16 rounded-full bg-slate-100 overflow-hidden"><div class="h-full rounded-full ' + (score >= 80 ? 'bg-emerald-400' : score >= 60 ? 'bg-amber-400' : 'bg-rose-400') + '" style="width:' + score + '%"></div></div>';
+  }
+
+  function checklistHtml(items) {
+    return items.map(function(item) {
+      if (item.done)
+        return '<div class="check-item"><span class="w-4 h-4 rounded flex-shrink-0 flex items-center justify-center bg-emerald-100 border border-emerald-300 mt-0.5"><svg class="w-2.5 h-2.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></span><span class="text-[11px] text-slate-400 line-through leading-snug">' + item.label + '</span></div>';
+      return '<div class="check-item"><span class="w-4 h-4 rounded flex-shrink-0 border-2 border-slate-200 bg-white mt-0.5"></span><span class="text-[11px] text-slate-600 font-medium leading-snug">' + item.label + '</span></div>';
+    }).join('');
+  }
+
+  function iaiCell(score) {
+    var color = score >= 90 ? 'text-emerald-700 bg-emerald-50' : score >= 75 ? 'text-amber-700 bg-amber-50' : 'text-slate-600 bg-slate-100';
+    return '<span class="inline-block px-2 py-1 rounded-lg ' + color + ' text-xs font-extrabold">' + score + '</span>';
+  }
+
+  function actionBtn(site) {
+    var allDone = site.checklist.every(function(c){ return c.done; });
+    if (allDone)
+      return '<button class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-bold hover:bg-emerald-100 transition-colors"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>View Report</button>';
+    var someDone = site.checklist.some(function(c){ return c.done; });
+    if (someDone)
+      return '<button class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-[11px] font-bold transition-colors shadow-sm"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Upload Evidence</button>';
+    return '<button class="btn-resolve flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-[11px] font-bold transition-colors shadow-sm"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>Resolve Now</button>';
+  }
+
+  /* ── Render ── */
+  function renderRows(data) {
+    var tbody = document.getElementById('report-tbody');
+    document.getElementById('row-count').textContent = data.length;
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" class="text-center py-14 text-sm text-slate-400 font-medium">No sites match this filter.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.map(function(site, i) {
+      var bg = i % 2 === 0 ? 'bg-white' : 'bg-slate-50/40';
+      return [
+        '<tr class="report-row ' + bg + ' border-b border-slate-100" data-clup="' + site.clup + '">',
+          /* Rank */
+          '<td class="px-6 py-4 align-top">',
+            '<div class="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-extrabold text-slate-600">' + site.rank + '</div>',
+          '</td>',
+          /* Site Name */
+          '<td class="px-4 py-4 align-top min-w-[160px]">',
+            '<div class="text-sm font-bold text-slate-900 leading-snug mb-0.5">' + site.name + '</div>',
+            '<div class="text-[11px] text-slate-400 font-medium">' + site.location + '</div>',
+            '<div class="text-[10px] font-semibold text-slate-300 mt-1 tracking-wide uppercase">' + site.id + '</div>',
+          '</td>',
+          /* Proposed Use */
+          '<td class="px-4 py-4 align-top min-w-[120px]">',
+            '<div class="text-xs font-semibold text-slate-700 leading-snug">' + site.use + '</div>',
+          '</td>',
+          /* IAI */
+          '<td class="px-4 py-4 align-top text-center">' + iaiCell(site.iai) + '</td>',
+          /* CLUP */
+          '<td class="px-4 py-4 align-top">' + clupBadge(site.clup) + '</td>',
+          /* Suitability */
+          '<td class="px-4 py-4 align-top min-w-[100px]">' + suitabilityCell(site.suitability) + '</td>',
+          /* Evidence */
+          '<td class="px-4 py-4 align-top min-w-[130px]">' + evidenceBadge(site.evidence, site.evidenceContext) + '</td>',
+          /* Action Checklist */
+          '<td class="px-4 py-4 align-top min-w-[190px]">',
+            '<div class="space-y-0">' + checklistHtml(site.checklist) + '</div>',
+          '</td>',
+          /* Actions */
+          '<td class="px-6 py-4 align-top text-right no-print">' + actionBtn(site) + '</td>',
+        '</tr>'
+      ].join('');
+    }).join('');
+
+    updateStats(data);
+  }
+
+  function updateStats(data) {
+    var pass = data.filter(function(s){ return s.clup === 'pass'; }).length;
+    var cond = data.filter(function(s){ return s.clup === 'conditional'; }).length;
+    var fail = data.filter(function(s){ return s.clup === 'fail'; }).length;
+    var unv  = data.filter(function(s){ return s.clup === 'unverified'; }).length;
+    document.getElementById('stat-pass').textContent = pass;
+    document.getElementById('stat-conditional').textContent = cond;
+    document.getElementById('stat-fail').textContent = fail;
+    document.getElementById('unverified-count').textContent = unv;
+    document.getElementById('unverified-banner').style.display = unv > 0 ? 'flex' : 'none';
+  }
+
+  /* ── Filter ── */
+  var currentFilter = 'all';
+  function filterRows(filter) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-btn').forEach(function(b) {
+      b.classList.remove('bg-slate-900','text-white','active-filter');
+      b.classList.add('bg-white','text-slate-600','border-slate-200');
+    });
+    var active = document.getElementById('filter-' + filter);
+    active.classList.add('bg-slate-900','text-white');
+    active.classList.remove('bg-white','text-slate-600','border-slate-200');
+
+    var filtered = filter === 'all'
+      ? sites
+      : sites.filter(function(s) { return s.clup === filter; });
+    renderRows(filtered);
+  }
+
+  /* ── Init ── */
+  document.getElementById('report-date').textContent = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  renderRows(sites);
+</script>
+
+</body>
+</html>

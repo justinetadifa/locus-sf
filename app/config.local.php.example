@@ -1,0 +1,48 @@
+<?php
+return [
+    'app' => [
+        'name' => 'LOCUS-SF',
+        'environment' => 'local',
+        'debug' => true,
+        'auto_migrate' => true,
+        'auto_seed' => true,
+    ],
+    'db' => [
+        'host' => '127.0.0.1',
+        'port' => 3306,
+        'name' => 'sfcelerate_bizstart',
+        'user' => 'root',
+        'pass' => '',
+    ],
+    'services' => [
+        'location' => [
+            'locationiq_key' => '',
+        ],
+        'market' => [
+            'alpha_vantage_key' => '',
+        ],
+        'news' => [
+            'newsapi_key' => '',
+            'query' => '("San Fernando" OR "La Union" OR Philippines) AND (business OR investment OR property OR infrastructure)',
+        ],
+        'ai' => [
+            'provider' => '',
+            'gemini_key' => '',
+            'gemini_model' => 'gemini-2.5-flash',
+            'openrouter_key' => '',
+            'openrouter_model' => '',
+        ],
+        'media' => [
+            'cloudinary' => [
+                'cloud_name' => '',
+                'api_key' => '',
+                'api_secret' => '',
+                'folder' => 'sfcelerate-bizstart/properties',
+            ],
+        ],
+        'weather' => [
+            'openweather_key' => '',
+            'units' => 'metric',
+        ],
+    ],
+];

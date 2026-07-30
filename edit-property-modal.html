@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Property — Admin Listing Editor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .tab-panel { animation: tabFadeIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .seg-active { box-shadow: 0 2px 10px 0 rgba(99,102,241,0.18); }
+    .panel-scroll::-webkit-scrollbar { width: 5px; }
+    .panel-scroll::-webkit-scrollbar-track { background: transparent; }
+    .panel-scroll::-webkit-scrollbar-thumb { background: #e0e7ef; border-radius: 99px; }
+    .price-badge { animation: badgePop 200ms cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes badgePop {
+      from { opacity: 0; transform: scale(0.86) translateY(4px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+    #modal-backdrop { animation: backdropIn 180ms ease both; }
+    @keyframes backdropIn { from { opacity: 0; } to { opacity: 1; } }
+    #modal-card { animation: modalIn 280ms cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center p-4">
+
+<div id="modal-backdrop" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 flex items-center justify-center p-4">
+  <div id="modal-card" class="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl shadow-black/20 flex flex-col max-h-[92vh] overflow-hidden z-50">
+
+    <!-- HEADER -->
+    <div class="flex items-start justify-between px-7 pt-7 pb-5 border-b border-slate-100 flex-shrink-0">
+      <div>
+        <p class="text-[10px] font-bold tracking-[0.18em] text-indigo-500 uppercase mb-1">Admin Listing Editor</p>
+        <h2 class="text-xl font-extrabold text-slate-900 tracking-tight leading-tight">Edit Property</h2>
+        <p id="header-subtitle" class="text-xs text-slate-400 mt-0.5 font-medium">Property 10 — Business Park Ready</p>
+      </div>
+      <div class="flex items-center gap-1.5 mt-1">
+        <div id="dot-0" class="w-2 h-2 rounded-full bg-indigo-500 transition-all duration-300"></div>
+        <div id="dot-1" class="w-2 h-2 rounded-full bg-slate-200 transition-all duration-300"></div>
+        <div id="dot-2" class="w-2 h-2 rounded-full bg-slate-200 transition-all duration-300"></div>
+        <div id="dot-3" class="w-2 h-2 rounded-full bg-slate-200 transition-all duration-300"></div>
+        <button onclick="closeModal()" class="ml-3 w-8 h-8 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 transition-all duration-150 text-sm font-bold">&#x2715;</button>
+      </div>
+    </div>
+
+    <!-- TAB SWITCHER -->
+    <div class="px-7 pt-4 pb-0 flex-shrink-0">
+      <div class="flex bg-slate-100 rounded-2xl p-1 gap-0.5" role="tablist">
+        <button onclick="switchTab(0)" id="tab-0" role="tab"
+          class="tab-btn flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs font-semibold transition-all duration-200 bg-white text-indigo-600 shadow-sm">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Basic Info
+        </button>
+        <button onclick="switchTab(1)" id="tab-1" role="tab"
+          class="tab-btn flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs font-semibold transition-all duration-200 text-slate-500 hover:text-slate-700">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Location
+        </button>
+        <button onclick="switchTab(2)" id="tab-2" role="tab"
+          class="tab-btn flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs font-semibold transition-all duration-200 text-slate-500 hover:text-slate-700">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Financials
+        </button>
+        <button onclick="switchTab(3)" id="tab-3" role="tab"
+          class="tab-btn flex-1 flex items-center justify-center gap-1.5 py-2 px-2 rounded-xl text-xs font-semibold transition-all duration-200 text-slate-500 hover:text-slate-700">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          Verification
+        </button>
+      </div>
+    </div>
+
+    <!-- PANELS -->
+    <div class="flex-1 overflow-hidden relative">
+
+      <!-- TAB 0: BASIC INFO -->
+      <div id="panel-0" class="tab-panel panel-scroll absolute inset-0 overflow-y-auto px-7 py-5 space-y-5">
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Property Name</label>
+          <input type="text" id="property-name" value="Property 10 - Business Park Ready"
+            oninput="document.getElementById('header-subtitle').textContent = this.value || 'New Property'"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 placeholder-slate-300 transition-all duration-150 focus:bg-white focus:border-indigo-400" />
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">City</label>
+            <input type="text" value="San Fernando, La Union"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 transition-all duration-150 focus:bg-white focus:border-indigo-400" />
+          </div>
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Barangay</label>
+            <input type="text" value="Barangay IV"
+              class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 transition-all duration-150 focus:bg-white focus:border-indigo-400" />
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Property Type</label>
+          <div id="seg-type" class="flex flex-wrap gap-2">
+            <button type="button" onclick="selectSeg('seg-type',this)" data-val="commercial"
+              class="seg-btn seg-active px-4 py-2 rounded-xl border border-indigo-400 bg-indigo-50 text-xs font-bold text-indigo-700 transition-all duration-150">Commercial</button>
+            <button type="button" onclick="selectSeg('seg-type',this)" data-val="industrial"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 hover:text-slate-700 transition-all duration-150">Industrial</button>
+            <button type="button" onclick="selectSeg('seg-type',this)" data-val="residential"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 hover:text-slate-700 transition-all duration-150">Residential</button>
+            <button type="button" onclick="selectSeg('seg-type',this)" data-val="mixed"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 hover:text-slate-700 transition-all duration-150">Mixed-Use</button>
+            <button type="button" onclick="selectSeg('seg-type',this)" data-val="agricultural"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 hover:text-slate-700 transition-all duration-150">Agricultural</button>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">City Corridor</label>
+          <div id="seg-corridor" class="flex flex-wrap gap-2">
+            <button type="button" onclick="selectSeg('seg-corridor',this)" data-val="downtown"
+              class="seg-btn seg-active px-4 py-2 rounded-xl border border-indigo-400 bg-indigo-50 text-xs font-bold text-indigo-700 transition-all duration-150">Downtown</button>
+            <button type="button" onclick="selectSeg('seg-corridor',this)" data-val="poro-point"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">Poro Point</button>
+            <button type="button" onclick="selectSeg('seg-corridor',this)" data-val="city-center"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">City Center</button>
+            <button type="button" onclick="selectSeg('seg-corridor',this)" data-val="civic-belt"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">Civic Belt</button>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Listing Status</label>
+          <div id="seg-status" class="flex gap-2 flex-wrap">
+            <button type="button" onclick="selectStatus(this)" data-val="available"
+              class="seg-btn seg-active px-4 py-2 rounded-xl border border-emerald-400 bg-emerald-50 text-xs font-bold text-emerald-700 transition-all duration-150">&#x25CF; Available</button>
+            <button type="button" onclick="selectStatus(this)" data-val="under-review"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">&#x25D0; Under Review</button>
+            <button type="button" onclick="selectStatus(this)" data-val="unavailable"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">&#x25CB; Unavailable</button>
+            <button type="button" onclick="selectStatus(this)" data-val="reserved"
+              class="seg-btn px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">&#x25D1; Reserved</button>
+          </div>
+        </div>
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Description</label>
+          <textarea rows="3"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-800 placeholder-slate-300 resize-none transition-all duration-150 focus:bg-white focus:border-indigo-400"
+            placeholder="Brief description of the property...">Strategic commercial lot in the downtown corridor with established road access and utility connections.</textarea>
+        </div>
+      </div>
+
+      <!-- TAB 1: LOCATION -->
+      <div id="panel-1" class="tab-panel panel-scroll absolute inset-0 overflow-y-auto px-7 py-5 space-y-5 hidden">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Latitude</label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">N</span>
+              <input type="number" step="any" value="16.6208"
+                class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 transition-all duration-150 focus:bg-white focus:border-indigo-400" />
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Longitude</label>
+            <div class="relative">
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400">E</span>
+              <input type="number" step="any" value="120.3218"
+                class="w-full pl-8 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 transition-all duration-150 focus:bg-white focus:border-indigo-400" />
+            </div>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-dashed border-indigo-200 bg-indigo-50/60 p-5 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-indigo-700">Live Map Preview</p>
+            <p class="text-xs text-indigo-500 mt-0.5">Coordinates are plotted in real-time on the property explorer map.</p>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center">
+            <label class="text-xs font-bold text-slate-500 tracking-wide uppercase">Road Access Score</label>
+            <span id="road-display" class="text-xs font-extrabold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">91 / 100</span>
+          </div>
+          <input type="range" min="0" max="100" value="91" id="road-slider"
+            oninput="document.getElementById('road-display').textContent = this.value + ' / 100'"
+            class="w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer accent-indigo-500" />
+          <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+            <span>No access</span><span>Excellent corridor</span>
+          </div>
+        </div>
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Nearby Anchors <span class="font-normal normal-case text-slate-400">(optional)</span></label>
+          <input type="text" placeholder="e.g. SFC Airport, SM City, PNR Terminal"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 placeholder-slate-300 transition-all duration-150 focus:bg-white focus:border-indigo-400" />
+        </div>
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Google Maps URL <span class="font-normal normal-case text-slate-400">(optional)</span></label>
+          <div class="relative">
+            <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+            <input type="url" placeholder="https://maps.google.com/..."
+              class="w-full pl-9 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 placeholder-slate-300 transition-all duration-150 focus:bg-white focus:border-indigo-400" />
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: FINANCIALS & METRICS -->
+      <div id="panel-2" class="tab-panel panel-scroll absolute inset-0 overflow-y-auto px-7 py-5 space-y-5 hidden">
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Asking Price (PHP)</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">&#x20B1;</span>
+            <input type="number" id="price-input" value="88000000"
+              oninput="formatPrice(this.value)"
+              class="w-full pl-8 pr-36 py-3.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-800 transition-all duration-150 focus:bg-white focus:border-indigo-400" />
+            <div id="price-badge" class="price-badge absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-extrabold text-emerald-700 whitespace-nowrap">
+              &#x20B1; 88.0M PHP
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400">Enter the full amount in PHP. The badge formats automatically.</p>
+        </div>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Land Area</label>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="rounded-xl border border-indigo-200 bg-indigo-50/50 p-3.5">
+              <div class="flex items-center gap-1.5 mb-2">
+                <span class="text-[10px] font-bold text-indigo-600 tracking-wide uppercase">Hectares (ha)</span>
+              </div>
+              <input type="number" id="area-ha" step="0.01" value="10.5"
+                oninput="syncAreaFromHa(this.value)"
+                class="w-full px-3 py-2.5 rounded-lg border border-indigo-200 bg-white text-sm font-bold text-slate-800 transition-all duration-150 focus:border-indigo-400" />
+            </div>
+            <div class="rounded-xl border border-slate-200 bg-slate-50/80 p-3.5">
+              <div class="flex items-center gap-1.5 mb-2">
+                <span class="text-[10px] font-bold text-slate-500 tracking-wide uppercase">Sq. Meters (sqm)</span>
+              </div>
+              <input type="number" id="area-sqm" step="1" value="105000"
+                oninput="syncAreaFromSqm(this.value)"
+                class="w-full px-3 py-2.5 rounded-lg border border-slate-200 bg-white text-sm font-bold text-slate-700 transition-all duration-150 focus:border-indigo-400" />
+            </div>
+          </div>
+          <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 border border-slate-200">
+            <svg class="w-3.5 h-3.5 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span id="area-helper-text" class="text-[11px] text-slate-500 font-medium">10.5 ha = 105,000 sqm &middot; approximately 0.1050 km&sup2;</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <label class="text-xs font-bold text-slate-500 tracking-wide uppercase">Market Score</label>
+              <span id="market-display" class="text-xs font-extrabold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">90</span>
+            </div>
+            <input type="range" min="0" max="100" value="90" id="market-slider"
+              oninput="document.getElementById('market-display').textContent = this.value"
+              class="w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer accent-indigo-500" />
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between items-center">
+              <label class="text-xs font-bold text-slate-500 tracking-wide uppercase">IAI Score</label>
+              <span id="iai-display" class="text-xs font-extrabold text-violet-600 bg-violet-50 px-2.5 py-1 rounded-lg">87</span>
+            </div>
+            <input type="range" min="0" max="100" value="87" id="iai-slider"
+              oninput="document.getElementById('iai-display').textContent = this.value"
+              class="w-full h-2 bg-slate-200 rounded-full appearance-none cursor-pointer accent-violet-500" />
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="rounded-xl border border-rose-100 bg-rose-50 p-2.5 text-center">
+            <span class="text-[10px] font-bold text-rose-400 uppercase tracking-wide">0&ndash;49</span>
+            <p class="text-xs text-rose-500 font-semibold mt-0.5">Weak</p>
+          </div>
+          <div class="rounded-xl border border-amber-100 bg-amber-50 p-2.5 text-center">
+            <span class="text-[10px] font-bold text-amber-500 uppercase tracking-wide">50&ndash;74</span>
+            <p class="text-xs text-amber-600 font-semibold mt-0.5">Moderate</p>
+          </div>
+          <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-2.5 text-center">
+            <span class="text-[10px] font-bold text-emerald-500 uppercase tracking-wide">75&ndash;100</span>
+            <p class="text-xs text-emerald-600 font-semibold mt-0.5">Strong</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: VERIFICATION -->
+      <div id="panel-3" class="tab-panel panel-scroll absolute inset-0 overflow-y-auto px-7 py-5 space-y-5 hidden">
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Approval State</label>
+          <div id="seg-approval" class="flex gap-2 flex-wrap">
+            <button type="button" onclick="selectSeg('seg-approval',this)" data-val="approved"
+              class="seg-btn seg-active px-5 py-2.5 rounded-xl border border-emerald-400 bg-emerald-50 text-xs font-bold text-emerald-700 transition-all duration-150">&#x2713; Approved</button>
+            <button type="button" onclick="selectSeg('seg-approval',this)" data-val="pending"
+              class="seg-btn px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">&#x25F7; Pending</button>
+            <button type="button" onclick="selectSeg('seg-approval',this)" data-val="rejected"
+              class="seg-btn px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">&#x2717; Rejected</button>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Seller Verification</label>
+          <div id="seg-seller" class="flex gap-2">
+            <button type="button" onclick="selectSeg('seg-seller',this)" data-val="verified"
+              class="seg-btn seg-active flex-1 py-3 rounded-xl border border-indigo-400 bg-indigo-50 text-xs font-bold text-indigo-700 transition-all duration-150">&#x2713; Verified</button>
+            <button type="button" onclick="selectSeg('seg-seller',this)" data-val="unverified"
+              class="seg-btn flex-1 py-3 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">&#x26A0; Unverified</button>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Documents Reviewed</label>
+          <div id="seg-docs" class="flex gap-2">
+            <button type="button" onclick="selectYesNo('seg-docs',this,true)" data-val="yes"
+              class="seg-btn seg-active flex-1 py-3 rounded-xl border border-emerald-400 bg-emerald-50 text-xs font-bold text-emerald-700 transition-all duration-150">&#x2713; Yes, Reviewed</button>
+            <button type="button" onclick="selectYesNo('seg-docs',this,false)" data-val="no"
+              class="seg-btn flex-1 py-3 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">&#x2717; Not Yet</button>
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Site Verified (On-site)</label>
+          <div id="seg-site" class="flex gap-2">
+            <button type="button" onclick="selectYesNo('seg-site',this,true)" data-val="yes"
+              class="seg-btn seg-active flex-1 py-3 rounded-xl border border-emerald-400 bg-emerald-50 text-xs font-bold text-emerald-700 transition-all duration-150">&#x2713; Yes, Verified</button>
+            <button type="button" onclick="selectYesNo('seg-site',this,false)" data-val="no"
+              class="seg-btn flex-1 py-3 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-500 hover:border-slate-300 transition-all duration-150">&#x2717; Not Yet</button>
+          </div>
+        </div>
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Last Confirmed Available</label>
+          <input type="datetime-local" value="2026-07-16T08:55"
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-medium text-slate-800 transition-all duration-150 focus:bg-white focus:border-indigo-400" />
+          <p class="text-[11px] text-slate-400">Timestamp of the last availability confirmation by admin.</p>
+        </div>
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-slate-500 tracking-wide uppercase">Verification Notes <span class="font-normal normal-case text-slate-400">(internal)</span></label>
+          <textarea rows="3" placeholder="Internal notes for the verification team..."
+            class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 placeholder-slate-300 resize-none transition-all duration-150 focus:bg-white focus:border-indigo-400"></textarea>
+        </div>
+      </div>
+
+    </div><!-- /panels -->
+
+    <!-- FIXED FOOTER -->
+    <div class="flex items-center justify-between px-7 py-4 border-t border-slate-100 bg-white flex-shrink-0">
+      <div class="flex items-center gap-2">
+        <button id="btn-prev" onclick="navigate(-1)"
+          class="hidden items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all duration-150">
+          &larr; Back
+        </button>
+        <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all duration-150">
+          Cancel
+        </button>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="tab-counter" class="text-[11px] font-medium text-slate-400 mr-1">Step 1 of 4</span>
+        <button id="btn-next" onclick="navigate(1)"
+          class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition-all duration-150">
+          Next Step &rarr;
+        </button>
+        <button id="btn-save" onclick="saveProperty()"
+          class="hidden items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white text-xs font-bold shadow-sm transition-all duration-150">
+          &#x2713; Save Property
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  let currentTab = 0;
+  const TOTAL_TABS = 4;
+
+  function switchTab(idx) {
+    document.getElementById('panel-' + currentTab).classList.add('hidden');
+    const oldTab = document.getElementById('tab-' + currentTab);
+    oldTab.classList.remove('bg-white','text-indigo-600','shadow-sm');
+    oldTab.classList.add('text-slate-500');
+    document.getElementById('dot-' + currentTab).className = 'w-2 h-2 rounded-full bg-slate-200 transition-all duration-300';
+
+    currentTab = idx;
+
+    const panel = document.getElementById('panel-' + currentTab);
+    panel.classList.remove('hidden');
+    panel.classList.remove('tab-panel');
+    void panel.offsetWidth;
+    panel.classList.add('tab-panel');
+
+    const newTab = document.getElementById('tab-' + currentTab);
+    newTab.classList.add('bg-white','text-indigo-600','shadow-sm');
+    newTab.classList.remove('text-slate-500');
+    document.getElementById('dot-' + currentTab).className = 'w-2 h-2 rounded-full bg-indigo-500 transition-all duration-300';
+
+    updateFooter();
+  }
+
+  function navigate(dir) {
+    const next = currentTab + dir;
+    if (next >= 0 && next < TOTAL_TABS) switchTab(next);
+  }
+
+  function updateFooter() {
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnSave = document.getElementById('btn-save');
+    const counter = document.getElementById('tab-counter');
+
+    counter.textContent = 'Step ' + (currentTab + 1) + ' of ' + TOTAL_TABS;
+
+    if (currentTab > 0) { btnPrev.classList.remove('hidden'); btnPrev.classList.add('flex'); }
+    else { btnPrev.classList.add('hidden'); btnPrev.classList.remove('flex'); }
+
+    if (currentTab < TOTAL_TABS - 1) {
+      btnNext.classList.remove('hidden'); btnNext.classList.add('flex');
+      btnSave.classList.add('hidden'); btnSave.classList.remove('flex');
+    } else {
+      btnNext.classList.add('hidden'); btnNext.classList.remove('flex');
+      btnSave.classList.remove('hidden'); btnSave.classList.add('flex');
+    }
+  }
+
+  function selectSeg(groupId, btn) {
+    const group = document.getElementById(groupId);
+    group.querySelectorAll('.seg-btn').forEach(function(b) {
+      b.classList.remove('seg-active','border-indigo-400','bg-indigo-50','text-indigo-700',
+                          'border-emerald-400','bg-emerald-50','text-emerald-700');
+      b.classList.add('border-slate-200','bg-white','text-slate-500');
+    });
+    btn.classList.remove('border-slate-200','bg-white','text-slate-500');
+    btn.classList.add('seg-active','border-indigo-400','bg-indigo-50','text-indigo-700');
+  }
+
+  function selectStatus(btn) {
+    var group = document.getElementById('seg-status');
+    var statusMap = {
+      'available':    { border:'border-emerald-400', bg:'bg-emerald-50', text:'text-emerald-700' },
+      'under-review': { border:'border-amber-400',   bg:'bg-amber-50',   text:'text-amber-700'   },
+      'unavailable':  { border:'border-rose-400',    bg:'bg-rose-50',    text:'text-rose-700'    },
+      'reserved':     { border:'border-violet-400',  bg:'bg-violet-50',  text:'text-violet-700'  }
+    };
+    group.querySelectorAll('.seg-btn').forEach(function(b) {
+      b.classList.remove('seg-active',
+        'border-emerald-400','bg-emerald-50','text-emerald-700',
+        'border-amber-400','bg-amber-50','text-amber-700',
+        'border-rose-400','bg-rose-50','text-rose-700',
+        'border-violet-400','bg-violet-50','text-violet-700');
+      b.classList.add('border-slate-200','bg-white','text-slate-500');
+    });
+    var chosen = statusMap[btn.dataset.val];
+    if (chosen) {
+      btn.classList.remove('border-slate-200','bg-white','text-slate-500');
+      btn.classList.add('seg-active', chosen.border, chosen.bg, chosen.text);
+    }
+  }
+
+  function selectYesNo(groupId, btn, isYes) {
+    var group = document.getElementById(groupId);
+    group.querySelectorAll('.seg-btn').forEach(function(b) {
+      b.classList.remove('seg-active',
+        'border-emerald-400','bg-emerald-50','text-emerald-700',
+        'border-rose-400','bg-rose-50','text-rose-700');
+      b.classList.add('border-slate-200','bg-white','text-slate-500');
+    });
+    btn.classList.remove('border-slate-200','bg-white','text-slate-500');
+    if (isYes) btn.classList.add('seg-active','border-emerald-400','bg-emerald-50','text-emerald-700');
+    else       btn.classList.add('seg-active','border-rose-400','bg-rose-50','text-rose-700');
+  }
+
+  function formatPrice(rawVal) {
+    var badge = document.getElementById('price-badge');
+    var n = parseFloat(rawVal);
+    if (!rawVal || isNaN(n)) {
+      badge.textContent = '—';
+      badge.className = 'price-badge absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-xs font-extrabold text-slate-400 whitespace-nowrap';
+      return;
+    }
+    var formatted;
+    if (n >= 1000000000)      formatted = '\u20B1 ' + (n/1000000000).toFixed(2) + 'B PHP';
+    else if (n >= 1000000)    formatted = '\u20B1 ' + (n/1000000).toFixed(1) + 'M PHP';
+    else if (n >= 1000)       formatted = '\u20B1 ' + (n/1000).toFixed(1) + 'K PHP';
+    else                       formatted = '\u20B1 ' + n.toLocaleString() + ' PHP';
+    badge.textContent = formatted;
+    badge.className = 'absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-xs font-extrabold text-emerald-700 whitespace-nowrap';
+    badge.classList.remove('price-badge');
+    void badge.offsetWidth;
+    badge.classList.add('price-badge');
+  }
+
+  function syncAreaFromHa(val) {
+    var ha = parseFloat(val) || 0;
+    var sqm = Math.round(ha * 10000);
+    document.getElementById('area-sqm').value = sqm;
+    updateAreaHelper(ha, sqm);
+  }
+
+  function syncAreaFromSqm(val) {
+    var sqm = parseFloat(val) || 0;
+    var ha = +(sqm / 10000).toFixed(4);
+    document.getElementById('area-ha').value = ha;
+    updateAreaHelper(ha, sqm);
+  }
+
+  function updateAreaHelper(ha, sqm) {
+    var km2 = (ha / 100).toFixed(4);
+    document.getElementById('area-helper-text').textContent =
+      ha + ' ha = ' + sqm.toLocaleString() + ' sqm \u00B7 approximately ' + km2 + ' km\u00B2';
+  }
+
+  function closeModal() {
+    var backdrop = document.getElementById('modal-backdrop');
+    var card = document.getElementById('modal-card');
+    backdrop.style.animation = 'backdropIn 160ms ease reverse both';
+    card.style.animation = 'modalIn 180ms cubic-bezier(0.22,1,0.36,1) reverse both';
+    setTimeout(function() { backdrop.style.display = 'none'; }, 180);
+  }
+
+  function saveProperty() {
+    var btn = document.getElementById('btn-save');
+    btn.textContent = 'Saving\u2026';
+    btn.disabled = true;
+    setTimeout(function() {
+      btn.textContent = '\u2713 Saved!';
+      btn.classList.add('from-emerald-500','to-emerald-500');
+      btn.classList.remove('from-indigo-600','to-violet-600');
+      setTimeout(closeModal, 900);
+    }, 1000);
+  }
+
+  updateFooter();
+</script>
+</body>
+</html>

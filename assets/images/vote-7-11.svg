@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-labelledby="title desc">
+  <title id="title">7/11 Vote Option</title>
+  <desc id="desc">A stylized placeholder card for the 7/11 vote option.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff7e6"/>
+      <stop offset="100%" stop-color="#ffe1b4"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="220" rx="28" fill="url(#bg)"/>
+  <rect x="42" y="34" width="236" height="152" rx="26" fill="#ffffff" stroke="#f1d8b7"/>
+  <rect x="58" y="48" width="204" height="20" rx="10" fill="#e84a27"/>
+  <rect x="58" y="72" width="204" height="18" rx="9" fill="#0a8f4d"/>
+  <text x="160" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="72" font-weight="700" fill="#e84a27">7/11</text>
+  <text x="160" y="182" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="4" fill="#0f1720">COMMUNITY DEMAND</text>
+</svg>

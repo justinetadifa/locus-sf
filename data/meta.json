@@ -1,0 +1,156 @@
+{
+  "barangays": [
+    "Barangay I",
+    "Barangay II",
+    "Barangay III",
+    "Barangay IV",
+    "Ilocanos Sur",
+    "Ilocanos Norte",
+    "Pagdaraoan",
+    "Catbangen",
+    "Parian",
+    "Madaydegdeg",
+    "Canaoay",
+    "Poro",
+    "San Agustin",
+    "San Francisco",
+    "Carlatan",
+    "Dalumpinas Este",
+    "Dalumpinas Oeste",
+    "Lingsat",
+    "Abut",
+    "Bangcusay",
+    "Bato",
+    "Biday",
+    "Mameltac",
+    "Namtutan",
+    "Saoay",
+    "Pagdalagan",
+    "Pagudpud",
+    "San Vicente",
+    "Sevilla",
+    "Birunget",
+    "Bungro",
+    "Narra Este",
+    "Narra Oeste",
+    "Sagayad",
+    "Sibuan-Otong",
+    "Tanquigan",
+    "Cabaroan",
+    "Dallangayan Oeste",
+    "Santiago Sur",
+    "Tanqui",
+    "Cadaclan",
+    "Camansi",
+    "Dallangayan Este",
+    "Langcuas",
+    "Pias",
+    "Santiago Norte",
+    "Cabarsican",
+    "Masicong",
+    "Nagyubuyuban",
+    "Pacpaco",
+    "Pao Norte",
+    "Pao Sur",
+    "Sacyud",
+    "Apaleng",
+    "Bacsil",
+    "Bangbangolan",
+    "Baraoas",
+    "Calabugao",
+    "Puspus"
+  ],
+  "dueDiligenceItems": [
+    {
+      "key": "title",
+      "label": "TITLE AND OWNERSHIP VERIFIED"
+    },
+    {
+      "key": "zoning",
+      "label": "ZONING AND LAND USE CONFIRMED"
+    },
+    {
+      "key": "survey",
+      "label": "SURVEY PLAN AND BOUNDARIES CHECKED"
+    },
+    {
+      "key": "rightofway",
+      "label": "RIGHT OF WAY AND ACCESS CONFIRMED"
+    },
+    {
+      "key": "utilities",
+      "label": "UTILITIES AVAILABILITY CONFIRMED"
+    },
+    {
+      "key": "hazards",
+      "label": "FLOOD AND HAZARD SCREENING DONE"
+    },
+    {
+      "key": "environment",
+      "label": "ENVIRONMENTAL REVIEW COMPLETE"
+    },
+    {
+      "key": "permits",
+      "label": "PERMITS AND CLEARANCES CHECKED"
+    },
+    {
+      "key": "tax",
+      "label": "TAX DECLARATION VERIFIED"
+    },
+    {
+      "key": "valuation",
+      "label": "VALUATION AND COMPS REVIEWED"
+    }
+  ],
+  "votePresets": [
+    "7/11",
+    "PRINTING SHOP",
+    "CAFE",
+    "RESORT AND TOURISM",
+    "RESTAURANT OR FOOD PARK",
+    "PHARMACY",
+    "CLINIC OR DIAGNOSTICS",
+    "WAREHOUSE OR LOGISTICS",
+    "OFFICE OR BPO",
+    "HARDWARE AND CONSTRUCTION SUPPLY",
+    "GROCERY OR MINI MART"
+  ],
+  "services": {
+    "maps": {
+      "provider": "coverage-summary-fallback",
+      "mode": "fallback",
+      "enabled": false,
+      "note": "Interactive map visualization is not enabled in this local demo yet. Coverage summary is shown instead.",
+      "capabilities": {
+        "geocode": false,
+        "staticMaps": false
+      }
+    },
+    "media": {
+      "provider": "local-public-assets",
+      "mode": "fallback",
+      "enabled": false,
+      "note": "Using packaged property media stored inside the project for local XAMPP runs."
+    },
+    "marketData": {
+      "provider": "seeded-market-data",
+      "mode": "fallback",
+      "note": "Using seeded market benchmarks so the PHP/MySQL build works offline.",
+      "benchmarks": {
+        "debtRate": 0.102,
+        "exitCapRate": 0.088,
+        "inflation": 0.041,
+        "tourismGrowth": 0.067
+      },
+      "highlights": [
+        "La Union tourism demand remains a core resort catalyst.",
+        "Highway-adjacent parcels continue to lead logistics fit scores.",
+        "Business-park ready inventory supports mixed-use and BPO demand."
+      ]
+    }
+  },
+  "dashboard": {
+    "activeInquiries": 47,
+    "globalReach": 8
+  }
+}

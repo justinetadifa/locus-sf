@@ -1,0 +1,95 @@
+{
+  "conversations": [
+    {
+      "propertyId": 1,
+      "title": "Fabro Lot Investor Thread",
+      "createdByEmail": "maria.santos@sfcelerate.local",
+      "messages": [
+        {
+          "senderName": "Maria Santos",
+          "role": "investor",
+          "text": "Requesting title documents and road-right-of-way confirmation."
+        },
+        {
+          "senderName": "Carlos Reyes",
+          "role": "owner",
+          "text": "Title copy is ready. We can share the survey plan and tax declaration next."
+        },
+        {
+          "senderName": "Denise Lim",
+          "role": "admin",
+          "text": "Traffic and logistics fit remain strong. Due diligence is the current blocker."
+        }
+      ]
+    },
+    {
+      "propertyId": 2,
+      "title": "LaFinns Resort Land Discussion",
+      "createdByEmail": "denise.lim@sfcelerate.local",
+      "messages": [
+        {
+          "senderName": "Denise Lim",
+          "role": "admin",
+          "text": "Tourism growth assumptions look attractive, but we need hazard screening."
+        },
+        {
+          "senderName": "Carlos Reyes",
+          "role": "owner",
+          "text": "Flood and environmental reports can be shared after the initial site visit."
+        }
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "Fabro Logistics Base Case",
+      "propertyId": 1,
+      "createdByEmail": "maria.santos@sfcelerate.local",
+      "budget": 80000000,
+      "sector": "logistics",
+      "size": 8.5,
+      "weights": {
+        "access": 30,
+        "facilities": 25,
+        "area": 20,
+        "price": 15,
+        "sector": 10
+      },
+      "assumptions": {
+        "horizon": 5,
+        "risk": "balanced",
+        "capex": 12000000
+      },
+      "results": {
+        "recommendation": "strong fit",
+        "readiness": "high"
+      },
+      "createdBy": "Maria Santos"
+    },
+    {
+      "name": "LaFinns Tourism Upside",
+      "propertyId": 2,
+      "createdByEmail": "denise.lim@sfcelerate.local",
+      "budget": 110000000,
+      "sector": "hotel",
+      "size": 10,
+      "weights": {
+        "access": 20,
+        "facilities": 20,
+        "area": 20,
+        "price": 10,
+        "sector": 30
+      },
+      "assumptions": {
+        "horizon": 7,
+        "risk": "aggressive",
+        "capex": 25000000
+      },
+      "results": {
+        "recommendation": "tourism-led upside",
+        "readiness": "medium"
+      },
+      "createdBy": "Denise Lim"
+    }
+  ]
+}

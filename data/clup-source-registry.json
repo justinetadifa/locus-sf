@@ -1,0 +1,645 @@
+{
+  "schema_version": "1.0.0",
+  "registry_id": "locus-sf-clup-source-registry",
+  "jurisdiction": {
+    "country": "Philippines",
+    "province": "La Union",
+    "local_government_unit": "City of San Fernando",
+    "city_classification": "component city",
+    "classification_source_id": "ra-8509"
+  },
+  "research_cutoff_date": "2026-07-15",
+  "purpose": "Authoritative-source inventory and evidence gate for preliminary CLUP and zoning decision support in LOCUS-SF.",
+  "legal_position": {
+    "decision_support_only": true,
+    "not_a_locational_clearance": true,
+    "not_a_zoning_certificate": true,
+    "not_a_permit": true,
+    "not_an_official_lgu_determination": true,
+    "required_notice": "LOCUS-SF results are preliminary planning screens. Final zoning compatibility and locational clearance require review and action by the authorized LGU offices."
+  },
+  "current_evidence_posture": {
+    "official_base_ordinance_copy_identified": true,
+    "identified_amendment_copies": 2,
+    "complete_amendment_chain_certified": false,
+    "current_operative_ordinance_chain_certified": false,
+    "complete_adopted_clup_imported": false,
+    "authenticated_official_zoning_map_imported": false,
+    "authenticated_zoning_gis_imported": false,
+    "parcel_cadastral_crosswalk_imported": false,
+    "official_overlay_maps_imported": false,
+    "provincial_review_or_approval_record_imported": false,
+    "effectivity_posting_and_publication_records_complete": false,
+    "explicit_map_statement": "No authenticated official zoning map, zoning GIS dataset, georeferenced zoning raster, or parcel-level zoning geometry has been imported into LOCUS-SF.",
+    "maximum_supported_claim": "Source-cited preliminary screening based on verified ordinance text and explicitly identified amendments; not parcel-level zoning verification."
+  },
+  "plan_horizon": {
+    "ordinance_source_id": "city-ordinance-2018-06",
+    "clup_period_start": 2015,
+    "clup_period_end": 2024,
+    "expired_as_of_research_cutoff": true,
+    "caveat": "The 2015-2024 planning horizon has elapsed. Horizon expiry does not by itself prove repeal or replacement of the zoning ordinance; current operative status must be certified by the City and Province."
+  },
+  "sources": [
+    {
+      "source_id": "sp-earchives",
+      "authority_level": "local_official",
+      "publisher": "Sangguniang Panlungsod, City of San Fernando, La Union",
+      "title": "Sangguniang Panlungsod eArchives",
+      "document_type": "official_document_archive",
+      "url": "https://archives.sanfernandocity.gov.ph/",
+      "document_or_version_date": null,
+      "date_signal": "Live official archive verified on 2026-07-15.",
+      "verified_facts": [
+        "The archive hosts the official PDF copies registered below for City Ordinances 2018-06, 2020-21, and 2025-16."
+      ],
+      "verification_caveats": [
+        "Archive availability does not independently prove that every amendment, approval record, publication record, or map attachment has been located.",
+        "Use direct archive-document URLs and retained file hashes for production evidence packages."
+      ]
+    },
+    {
+      "source_id": "city-ordinance-2018-06",
+      "authority_level": "local_official",
+      "publisher": "Sangguniang Panlungsod, City of San Fernando, La Union",
+      "title": "An Ordinance Adopting the Zoning Regulations of the City of San Fernando, La Union and Providing for Their Administration, Enforcement and Amendment",
+      "document_type": "zoning_ordinance",
+      "document_number": "City Ordinance 2018-06",
+      "url": "https://archives.sanfernandocity.gov.ph/upload/202009033E4NGDW9OUBLGLXKCYOT105312AM.pdf",
+      "dates": {
+        "third_reading_or_enactment_date": "2018-06-20",
+        "approval_date": "2018-06-29",
+        "effectivity_date": null,
+        "archive_upload_date_signal": "2020-09-03"
+      },
+      "clup_horizon": "2015-2024",
+      "verified_facts": [
+        "Section 1 identifies the enactment as the 2018 Zoning Ordinance of the City of San Fernando, La Union.",
+        "Section 3 relates the ordinance to the City's CLUP for 2015-2024.",
+        "The ordinance defines base zones, overlay zones, zone-specific uses, development controls, variances and exceptions, locational-clearance administration, enforcement, and a Local Zoning Board of Appeals.",
+        "Section 9 makes duly authenticated Official Zoning Maps an integral part of the ordinance."
+      ],
+      "verification_caveats": [
+        "The duly authenticated Official Zoning Maps referenced by Section 9 have not been imported or publicly verified in this registry.",
+        "The CLUP horizon stated in the ordinance ended in 2024.",
+        "A complete effectivity, posting, publication, provincial-review, and amendment-chain package has not been imported.",
+        "The ordinance text alone cannot establish the zoning of a candidate parcel."
+      ],
+      "evidence_flags": {
+        "official_archive_copy_verified": true,
+        "document_content_inspected": true,
+        "authenticated_map_attachment_available": false,
+        "production_checksum_recorded": false,
+        "operative_status_certified": false
+      }
+    },
+    {
+      "source_id": "city-ordinance-2020-21",
+      "authority_level": "local_official",
+      "publisher": "Sangguniang Panlungsod, City of San Fernando, La Union",
+      "title": "Ordinance Amending City Ordinance 2018-06",
+      "document_type": "zoning_ordinance_amendment",
+      "document_number": "City Ordinance 2020-21",
+      "url": "https://archives.sanfernandocity.gov.ph/upload/20210531D6ACAFUWW6FMOJEIK85U142958PM.pdf",
+      "dates": {
+        "session_or_enactment_date": "2020-11-10",
+        "approval_date": "2020-11-23",
+        "effectivity_date": null,
+        "archive_upload_date_signal": "2021-05-31"
+      },
+      "verified_facts": [
+        "The amendment concerns Lot 17979 under TCT FP-1573 in Barangay Narra Oeste.",
+        "The stated area is 4.3079 hectares.",
+        "The stated change is from Non-Strategic Agricultural Zone to Residential Zone 1."
+      ],
+      "verification_caveats": [
+        "A certified cadastral polygon and title-to-map crosswalk have not been imported.",
+        "Effectivity, posting, publication, and provincial-review records have not been imported.",
+        "This identified amendment is not proof that the amendment registry is complete."
+      ],
+      "evidence_flags": {
+        "official_archive_copy_verified": true,
+        "document_content_inspected": true,
+        "parcel_geometry_imported": false,
+        "production_checksum_recorded": false,
+        "operative_status_certified": false
+      }
+    },
+    {
+      "source_id": "city-ordinance-2025-16",
+      "authority_level": "local_official",
+      "publisher": "Sangguniang Panlungsod, City of San Fernando, La Union",
+      "title": "Ordinance Amending Paragraph 15 of Section 10.B and Adding Paragraph 4 under Commercial Zone 1 of City Ordinance 2018-06",
+      "document_type": "zoning_ordinance_amendment",
+      "document_number": "City Ordinance 2025-16",
+      "url": "https://archives.sanfernandocity.gov.ph/upload/20260305YLL3UF2JB63LJ5SNXUR7121425PM.pdf",
+      "dates": {
+        "third_reading_or_enactment_date": "2025-04-08",
+        "approval_date": "2025-04-14",
+        "effectivity_date": null,
+        "archive_upload_date_signal": "2026-03-05"
+      },
+      "verified_facts": [
+        "The amendment concerns Lots 15557, 15558, 15559, 15560, 15561, 15605, and 15606 under CAD 539-D in Barangay Namtutan.",
+        "The stated change is from Agricultural Zone to Commercial Zone 1.",
+        "The signed operative provisions state an affected area of 1.933 hectares."
+      ],
+      "verification_caveats": [
+        "The document contains inconsistent affected-area figures; see contradiction area-2025-16.",
+        "A certified cadastral polygon and lot-to-map crosswalk have not been imported.",
+        "The ordinance states effectivity requirements, but proof that all posting, publication, and Local Government Code requirements were completed has not been imported.",
+        "The archive filename's 2026 date is an upload signal and must not be treated as the enactment date."
+      ],
+      "evidence_flags": {
+        "official_archive_copy_verified": true,
+        "document_content_inspected": true,
+        "parcel_geometry_imported": false,
+        "production_checksum_recorded": false,
+        "operative_status_certified": false
+      }
+    },
+    {
+      "source_id": "sp-session-2025-03-11",
+      "authority_level": "local_official",
+      "publisher": "Sangguniang Panlungsod, City of San Fernando, La Union",
+      "title": "11th Regular Session, CY 2025 - March 11, 2025",
+      "document_type": "official_session_account",
+      "url": "https://sp.sanfernandocity.gov.ph/11th-regular-session-cy-2025-march-11-2025/",
+      "document_or_version_date": "2025-03-11",
+      "verified_facts": [
+        "The session account records the then-proposed Namtutan zoning amendment and an affected-area figure of 2.258394 hectares."
+      ],
+      "verification_caveats": [
+        "This is a legislative-session account, not the final signed operative text.",
+        "Draft or session numbering must not be substituted for the final enacted ordinance number.",
+        "The source participates in the documented area discrepancy for City Ordinance 2025-16."
+      ]
+    },
+    {
+      "source_id": "city-clup-update-contract-2024",
+      "authority_level": "local_official",
+      "publisher": "City Government of San Fernando, La Union",
+      "title": "Official City Announcement Recording the Contract to Update the CLUP and Zoning Ordinance",
+      "document_type": "official_city_announcement",
+      "url": "https://www.sanfernandocity.gov.ph/city-government-holds-the-first-localized-handa-pilipinas-program-of-the-philippines/",
+      "dates": {
+        "contract_signing_event_date": "2024-12-06",
+        "page_publication_date": null
+      },
+      "verified_facts": [
+        "The City reports signing a contract with Palafox for updating the CLUP and Zoning Ordinance on December 6, 2024."
+      ],
+      "verification_caveats": [
+        "An update contract is not evidence that a replacement CLUP or Zoning Ordinance has been adopted, approved, published, or made effective.",
+        "The page URL slug does not describe the CLUP update; provenance is the official City domain and inspected page content."
+      ]
+    },
+    {
+      "source_id": "city-executive-orders-clup-team",
+      "authority_level": "local_official",
+      "publisher": "City Government of San Fernando, La Union",
+      "title": "City Executive Orders Index",
+      "document_type": "official_executive_order_index",
+      "url": "https://www.sanfernandocity.gov.ph/executive-order/",
+      "document_or_version_date": "2025-2026",
+      "linked_documents": [
+        {
+          "document_number": "EO 9-2025",
+          "purpose": "Creating and mobilizing the City Planning Team for the CLUP and Zoning Ordinance update.",
+          "url": "https://drive.google.com/file/d/1-HdKBCDtj1efpTIE9AcvYGbyilQvweVI/view?usp=drive_link"
+        },
+        {
+          "document_number": "EO 7-2026",
+          "purpose": "Reorganizing the City Planning Team.",
+          "url": "https://drive.google.com/file/d/1WsnZT5eGKAZXvpqKIT2LQEaSd2BNhNQ4/view?usp=sharing"
+        },
+        {
+          "document_number": "EO 41-2026",
+          "purpose": "Further amending the composition of the City Planning Team.",
+          "url": "https://drive.google.com/file/d/1gelE_krSRfoHgh-E3H5lffBC7n8hU6PQ/view?usp=drive_link"
+        }
+      ],
+      "verified_facts": [
+        "The official index records continuing organizational work on the CLUP and Zoning Ordinance update through 2026."
+      ],
+      "verification_caveats": [
+        "Planning-team executive orders do not enact or approve a CLUP or Zoning Ordinance.",
+        "The linked files are hosted on Google Drive but are linked from the official City index."
+      ]
+    },
+    {
+      "source_id": "cpdo-locational-clearance-buildings-2024",
+      "authority_level": "local_official",
+      "publisher": "City Planning and Development Office, City of San Fernando, La Union",
+      "title": "Issuance of Locational Clearances/Zoning Compliance Certificate for Buildings/Structures",
+      "document_type": "citizens_charter_service",
+      "url": "https://cc.sanfernandocity.gov.ph/2024/05/23/issuance-of-locational-clearances-zoning-compliance-certificate-for-buildings-structures-application/",
+      "document_or_version_date": "2024-05-23",
+      "related_urls": {
+        "requirements": "https://cc.sanfernandocity.gov.ph/wp-content/uploads/2024/05/Issuance-of-Locational-ClearancesZoning-Compliance-Certificate-for-Buildings-Structures-REQUIREMENTS-CPDO.pdf",
+        "steps": "https://cc.sanfernandocity.gov.ph/wp-content/uploads/2024/05/Issuance-of-Locational-ClearancesZoning-Compliance-Certificate-for-Buildings-Structures-STEPS-CPDO.pdf"
+      },
+      "verified_facts": [
+        "The official process includes documentary evaluation, a zoning compatibility check, site inspection and report, fee assessment and payment where applicable, processing of the decision or certificate, and release.",
+        "The requirements vary with project circumstances and can include ownership evidence, plans, barangay clearance, highway clearance, and environmental compliance documents."
+      ],
+      "verification_caveats": [
+        "The page cites City Zoning Ordinance 2001-007, which conflicts with the newer official archive record for City Ordinance 2018-06 and its amendments; see contradiction ordinance-reference-citizens-charter.",
+        "Published service times are administrative service standards, not proof that any candidate project is compliant.",
+        "LOCUS-SF cannot reproduce the official site inspection or authorized decision."
+      ]
+    },
+    {
+      "source_id": "cpdo-locational-clearance-new-business-2024",
+      "authority_level": "local_official",
+      "publisher": "City Planning and Development Office, City of San Fernando, La Union",
+      "title": "Issuance of Locational Clearances/Zoning Compliance Certificates for New Business Applicants",
+      "document_type": "citizens_charter_service",
+      "url": "https://cc.sanfernandocity.gov.ph/2024/05/23/issuance-of-locational-clearances-zoning-compliance-certificates-for-new-business-applicant/",
+      "document_or_version_date": "2024-05-23",
+      "related_urls": {
+        "steps": "https://cc.sanfernandocity.gov.ph/wp-content/uploads/2024/05/Issuance-of-Locational-ClearancesZoning-Compliance-Certificates-for-New-Business-Applicant-STEPS-CPDO.pdf"
+      },
+      "verified_facts": [
+        "The official process includes checking the address and conformity with the CLUP and Zoning Ordinance before certificate preparation, approval, and release."
+      ],
+      "verification_caveats": [
+        "The workflow confirms the need for authorized CPDO action and cannot be replaced by a software score."
+      ]
+    },
+    {
+      "source_id": "cpdo-office-contact",
+      "authority_level": "local_official",
+      "publisher": "City Government of San Fernando, La Union",
+      "title": "City Departments - City Planning and Development Office",
+      "document_type": "official_office_directory",
+      "url": "https://www.sanfernandocity.gov.ph/city-departments/",
+      "document_or_version_date": null,
+      "verified_facts": [
+        "The City directory identifies the City Planning and Development Office and publishes cpdo@sanfernandocity.gov.ph and local numbers 120 and 156 as contact channels."
+      ],
+      "verification_caveats": [
+        "Contact details should be rechecked on the official page before display or use."
+      ]
+    },
+    {
+      "source_id": "eo-72-1993",
+      "authority_level": "national_official",
+      "publisher": "Supreme Court E-Library / Lawphil",
+      "title": "Executive Order No. 72, s. 1993",
+      "document_type": "executive_order",
+      "document_number": "Executive Order No. 72",
+      "url": "https://lawphil.net/executive/execord/eo1993/eo_72_1993.html",
+      "document_or_version_date": "1993-03-25",
+      "verified_facts": [
+        "The order provides for CLUP implementation through zoning ordinances and provincial review and approval for component cities and municipalities.",
+        "It addresses devolution of locational-clearance functions subject to stated exceptions."
+      ],
+      "verification_caveats": [
+        "This national framework does not identify a parcel's local zoning or replace the City's enacted ordinance and authenticated maps."
+      ]
+    },
+    {
+      "source_id": "ra-7160",
+      "authority_level": "national_official",
+      "publisher": "Supreme Court E-Library / Lawphil",
+      "title": "Republic Act No. 7160 - Local Government Code of 1991",
+      "document_type": "statute",
+      "document_number": "Republic Act No. 7160",
+      "url": "https://lawphil.net/statutes/repacts/ra1991/ra_7160_1991.html",
+      "document_or_version_date": "1991",
+      "verified_facts": [
+        "The Code establishes relevant LGU authority concerning comprehensive land-use planning, zoning ordinances, and land reclassification subject to legal limits."
+      ],
+      "verification_caveats": [
+        "Zoning or local reclassification must not be represented as equivalent to Department of Agrarian Reform land-use conversion."
+      ]
+    },
+    {
+      "source_id": "ra-8509",
+      "authority_level": "national_official",
+      "publisher": "Supreme Court E-Library / Lawphil",
+      "title": "Republic Act No. 8509 - Charter of the City of San Fernando",
+      "document_type": "statute",
+      "document_number": "Republic Act No. 8509",
+      "url": "https://lawphil.net/statutes/repacts/ra1998/ra_8509_1998.html",
+      "document_or_version_date": "1998-02-13",
+      "verified_facts": [
+        "The law establishes San Fernando, La Union as a component city and continues it under the Province of La Union."
+      ],
+      "verification_caveats": [
+        "The City's component-city status makes the applicable provincial review and approval record material to the CLUP/ZO evidence chain."
+      ]
+    },
+    {
+      "source_id": "ra-11201",
+      "authority_level": "national_official",
+      "publisher": "Supreme Court E-Library / Lawphil",
+      "title": "Republic Act No. 11201 - Department of Human Settlements and Urban Development Act",
+      "document_type": "statute",
+      "document_number": "Republic Act No. 11201",
+      "url": "https://lawphil.net/statutes/repacts/ra2019/ra_11201_2019.html",
+      "document_or_version_date": "2019-02-14",
+      "verified_facts": [
+        "The law transfers relevant land-use planning, monitoring, and zoning standards functions formerly associated with HLURB to DHSUD."
+      ],
+      "verification_caveats": [
+        "National agency standards do not substitute for the locally enacted zoning ordinance, authenticated local maps, or LGU determination."
+      ]
+    },
+    {
+      "source_id": "dhsud-clup-guidebooks",
+      "authority_level": "national_official_guidance",
+      "publisher": "Department of Human Settlements and Urban Development",
+      "title": "CLUP Guidebooks and Model Zoning Ordinance",
+      "document_type": "official_technical_guidance",
+      "url": "https://dhsud.gov.ph/resources/manuals-guidebooks/",
+      "document_or_version_date": "2013-2014",
+      "related_urls": {
+        "volume_1_planning_process_2013": "https://dhsud.gov.ph/wp-content/uploads/Publication/Guidebooks/HLURB_CLUP_Vol_1.pdf",
+        "volume_2_sectoral_analysis_2014": "https://dhsud.gov.ph/wp-content/uploads/Publication/Guidebooks/HLURB_CLUP_Vol_2.pdf",
+        "volume_3_model_zoning_ordinance_2014": "https://www.dhsud.gov.ph/wp-content/uploads/Publication/Guidebooks/HLURB_CLUP_Vol_3.pdf"
+      },
+      "verified_facts": [
+        "The official guidebooks describe the CLUP process, sectoral analysis, base and overlay zones, zoning administration, and a model zoning ordinance.",
+        "The guidance supports geospatially precise boundary documentation and coordination between zoning and building administration."
+      ],
+      "verification_caveats": [
+        "The Model Zoning Ordinance is guidance and is not San Fernando's local law.",
+        "The guidebooks cannot be used to invent local allowable-use rules absent the enacted local ordinance."
+      ]
+    },
+    {
+      "source_id": "dhsud-mc-2021-005",
+      "authority_level": "national_official_guidance",
+      "publisher": "Department of Human Settlements and Urban Development",
+      "title": "Revised Guidelines on the Review and Approval of Comprehensive Land Use Plans and Zoning Ordinances",
+      "document_type": "memorandum_circular",
+      "document_number": "DHSUD Memorandum Circular No. 2021-005",
+      "url": "https://dhsud.gov.ph/wp-content/uploads/Laws_Issuances/06_Memorandum_Circulars/2021/Memorandum_Circular_No.2021-005.pdf",
+      "document_or_version_date": "2021-08-06",
+      "verified_facts": [
+        "The circular provides revised review and approval guidance for CLUPs and zoning ordinances, including those of component cities."
+      ],
+      "verification_caveats": [
+        "The circular is procedural guidance and does not prove that San Fernando's specific plan or ordinance completed every required review and approval step."
+      ]
+    }
+  ],
+  "amendments": [
+    {
+      "amendment_id": "2020-21",
+      "source_id": "city-ordinance-2020-21",
+      "amends_source_id": "city-ordinance-2018-06",
+      "location": {
+        "barangay": "Narra Oeste",
+        "lot_numbers": [
+          "17979"
+        ],
+        "title_reference": "TCT FP-1573",
+        "stated_area_hectares": 4.3079,
+        "authenticated_geometry_imported": false
+      },
+      "change": {
+        "from": "Non-Strategic Agricultural Zone",
+        "to": "Residential Zone 1"
+      },
+      "screening_rule": "Do not apply this amendment by barangay name or proximity. It requires a verified lot/title match and authenticated official zoning geometry or certification."
+    },
+    {
+      "amendment_id": "2025-16",
+      "source_id": "city-ordinance-2025-16",
+      "amends_source_id": "city-ordinance-2018-06",
+      "location": {
+        "barangay": "Namtutan",
+        "lot_numbers": [
+          "15557",
+          "15558",
+          "15559",
+          "15560",
+          "15561",
+          "15605",
+          "15606"
+        ],
+        "survey_reference": "CAD 539-D",
+        "registry_area_hectares": 1.933,
+        "registry_area_basis": "signed operative provisions",
+        "authenticated_geometry_imported": false
+      },
+      "change": {
+        "from": "Agricultural Zone",
+        "to": "Commercial Zone 1"
+      },
+      "screening_rule": "Do not apply this amendment by barangay name or proximity. It requires a verified lot/cadastral match, resolution of the area discrepancy, and authenticated official zoning geometry or certification."
+    }
+  ],
+  "known_contradictions": [
+    {
+      "contradiction_id": "ordinance-reference-citizens-charter",
+      "severity": "high",
+      "topic": "ordinance_version",
+      "sources": [
+        "cpdo-locational-clearance-buildings-2024",
+        "city-ordinance-2018-06",
+        "city-ordinance-2020-21",
+        "city-ordinance-2025-16"
+      ],
+      "observations": [
+        "The 2024 CPDO Citizens' Charter service page cites City Zoning Ordinance 2001-007.",
+        "The official SP archive contains City Ordinance 2018-06 and later amendments from 2020 and 2025."
+      ],
+      "resolution_status": "unresolved",
+      "required_resolution": "Obtain a certified current-ordinance and amendment-chain statement from CPDO/OSSP, including repeal, supersession, effectivity, posting, publication, and provincial-review records.",
+      "engine_effect": "Block any claim that a rule package is conclusively current."
+    },
+    {
+      "contradiction_id": "area-2025-16",
+      "severity": "high",
+      "topic": "amendment_area",
+      "sources": [
+        "city-ordinance-2025-16",
+        "sp-session-2025-03-11"
+      ],
+      "observations": [
+        "The signed operative provisions state 1.933 hectares.",
+        "The ordinance explanatory note states 2.1917 hectares.",
+        "The official SP session account states 2.258394 hectares."
+      ],
+      "registry_value": 1.933,
+      "registry_value_basis": "signed operative provisions, retained without suppressing the conflicting figures",
+      "resolution_status": "unresolved",
+      "required_resolution": "Obtain a certified metes-and-bounds or cadastral plan and written clarification from the issuing LGU office.",
+      "engine_effect": "Block geometry-derived parcel compliance for this amendment until resolved."
+    },
+    {
+      "contradiction_id": "expired-horizon-current-status",
+      "severity": "high",
+      "topic": "plan_currency",
+      "sources": [
+        "city-ordinance-2018-06",
+        "city-clup-update-contract-2024",
+        "city-executive-orders-clup-team"
+      ],
+      "observations": [
+        "City Ordinance 2018-06 relates to a CLUP with a 2015-2024 horizon.",
+        "Official City records show an update process beginning in 2024 and continuing through 2026.",
+        "No official public adoption, approval, effectivity, and publication package for a replacement plan or ordinance was verified by the research cutoff."
+      ],
+      "resolution_status": "unresolved",
+      "required_resolution": "Request certification of the currently operative CLUP, Zoning Ordinance, authenticated maps, and all amendments from CPDO/OSSP and the Province of La Union.",
+      "engine_effect": "Display an expired-horizon warning and keep current-law status unverified."
+    }
+  ],
+  "required_evidence_flags": [
+    {
+      "flag": "base_ordinance_official_copy",
+      "required": true,
+      "available": true,
+      "status": "verified_source_copy",
+      "source_ids": [
+        "city-ordinance-2018-06"
+      ]
+    },
+    {
+      "flag": "complete_amendment_and_supersession_register",
+      "required": true,
+      "available": false,
+      "status": "two_amendments_identified_but_completeness_not_certified",
+      "source_ids": [
+        "city-ordinance-2020-21",
+        "city-ordinance-2025-16"
+      ]
+    },
+    {
+      "flag": "certified_current_operative_status",
+      "required": true,
+      "available": false,
+      "status": "not_imported",
+      "source_ids": []
+    },
+    {
+      "flag": "complete_adopted_clup_volumes",
+      "required": true,
+      "available": false,
+      "status": "not_imported",
+      "source_ids": []
+    },
+    {
+      "flag": "authenticated_official_zoning_maps",
+      "required": true,
+      "available": false,
+      "status": "not_imported",
+      "source_ids": []
+    },
+    {
+      "flag": "authenticated_zoning_gis_with_crs_and_metadata",
+      "required": true,
+      "available": false,
+      "status": "not_imported",
+      "source_ids": []
+    },
+    {
+      "flag": "parcel_cadastral_geometry_and_lot_crosswalk",
+      "required": true,
+      "available": false,
+      "status": "not_imported",
+      "source_ids": []
+    },
+    {
+      "flag": "authenticated_overlay_and_hazard_maps",
+      "required": true,
+      "available": false,
+      "status": "not_imported",
+      "source_ids": []
+    },
+    {
+      "flag": "provincial_review_and_approval_record",
+      "required": true,
+      "available": false,
+      "status": "not_imported",
+      "source_ids": [
+        "eo-72-1993",
+        "ra-8509",
+        "dhsud-mc-2021-005"
+      ]
+    },
+    {
+      "flag": "effectivity_posting_and_publication_evidence",
+      "required": true,
+      "available": false,
+      "status": "not_imported_or_incomplete",
+      "source_ids": []
+    },
+    {
+      "flag": "variance_exception_and_lzba_decision_register",
+      "required": true,
+      "available": false,
+      "status": "not_imported",
+      "source_ids": []
+    },
+    {
+      "flag": "dar_land_use_conversion_evidence_when_applicable",
+      "required": "conditional",
+      "available": false,
+      "status": "not_imported",
+      "source_ids": [
+        "ra-7160"
+      ]
+    },
+    {
+      "flag": "source_document_checksums",
+      "required": true,
+      "available": false,
+      "status": "not_recorded",
+      "source_ids": []
+    },
+    {
+      "flag": "candidate_specific_cpdo_review_and_site_inspection",
+      "required": true,
+      "available": false,
+      "status": "must_be_obtained_per_application",
+      "source_ids": [
+        "cpdo-locational-clearance-buildings-2024",
+        "cpdo-locational-clearance-new-business-2024"
+      ]
+    }
+  ],
+  "engine_governance": {
+    "default_when_required_evidence_is_missing": "UNVERIFIED",
+    "pass_rule": "PASS may be used only as a preliminary screen after the current rule package, authenticated official map, parcel match, exact proposed use, applicable overlays, and amendment chain are all verified and no disqualifying condition is found.",
+    "conditional_rule": "CONDITIONAL is limited to uses expressly allowed subject to identifiable ordinance conditions or outstanding mandatory evidence. It must not be used to imply automatic entitlement to a variance, exception, rezoning, reclassification, or land-use conversion.",
+    "fail_rule": "FAIL may be used as a preliminary screen when a verified current rule expressly prohibits or excludes the exact proposed use for the authenticated parcel and applicable overlays.",
+    "strategic_corridor_rule": "Strategic growth-corridor evidence may affect suitability or priority scoring but must never override zoning legality.",
+    "basemap_rule": "Leaflet, OpenStreetMap, geocoded points, road corridors, and barangay labels are visualization or discovery aids only and are not official zoning evidence.",
+    "amendment_rule": "Parcel-specific amendments require exact lot/title/cadastral matching; barangay-level or proximity-based application is prohibited.",
+    "display_requirements": [
+      "Show source document number and direct official URL.",
+      "Show evidence state and unresolved flags beside every compliance result.",
+      "Show the rule-package version and research cutoff date.",
+      "Show the expired 2015-2024 horizon warning.",
+      "Show all material source contradictions.",
+      "Display the required decision-support-only notice on screen and in exports."
+    ]
+  },
+  "update_control": {
+    "draft_documents_must_not_replace_active_rules": true,
+    "replacement_activation_requirements": [
+      "Official adopted CLUP and enacted Zoning Ordinance copies",
+      "Applicable provincial review and approval record",
+      "Proof of effectivity, posting, and publication",
+      "Duly authenticated Official Zoning Maps",
+      "Complete amendment and supersession chain",
+      "Recorded source checksums and provenance metadata"
+    ],
+    "date_fields_must_remain_separate": [
+      "document_date",
+      "enactment_date",
+      "approval_date",
+      "effectivity_date",
+      "publication_date",
+      "archive_upload_date",
+      "registry_verification_date"
+    ],
+    "next_required_review": "Immediately upon receipt of certified records or official adoption of the CLUP/Zoning Ordinance update; otherwise at least quarterly while the update remains in progress."
+  }
+}

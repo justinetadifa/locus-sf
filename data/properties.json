@@ -1,0 +1,411 @@
+[
+  {
+    "id": 1,
+    "name": "Fabro Building Prime Lot",
+    "lat": 16.6195,
+    "lng": 120.3205,
+    "area": 8.5,
+    "price": 75000000,
+    "pricePerSqm": 882,
+    "status": "Available",
+    "type": "logistics",
+    "corridor": "highway",
+    "tags": [
+      "Highway Access",
+      "Commercial Zone",
+      "High Traffic"
+    ],
+    "facilities": [
+      "SM City",
+      "Provincial Capitol",
+      "Hospital"
+    ],
+    "roadAccess": 95,
+    "image": "FabroBldg.png",
+    "description": "Prime commercial lot with excellent highway access",
+    "barangay": "Catbangen",
+    "ownerContact": {
+      "name": "Fabro Holdings",
+      "email": "fabroholdings@example.com",
+      "phone": "+63 917 000 0101",
+      "responseSla": "24 HOURS"
+    },
+    "imageUrl": "assets/images/FabroBldg.png",
+    "media": [
+      {
+        "source": "assets/images/FabroBldg.png",
+        "altText": "Fabro Building Prime Lot listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "LaFinns Beach Resort Land",
+    "lat": 16.618,
+    "lng": 120.3195,
+    "area": 12.3,
+    "price": 95000000,
+    "pricePerSqm": 772,
+    "status": "Available",
+    "type": "hotel",
+    "corridor": "coastal",
+    "tags": [
+      "Beachfront",
+      "Tourism Hub",
+      "Scenic Views"
+    ],
+    "facilities": [
+      "Beach Access",
+      "Resort Area",
+      "Airport 15km"
+    ],
+    "roadAccess": 85,
+    "image": "LaFinns.png",
+    "description": "Beachfront property perfect for resort development",
+    "barangay": "Poro",
+    "ownerContact": {
+      "name": "LaFinns Resort Group",
+      "email": "lafinns@example.com",
+      "phone": "+63 917 000 0102",
+      "responseSla": "48 HOURS"
+    },
+    "imageUrl": "assets/images/LaFinns.png",
+    "media": [
+      {
+        "source": "assets/images/LaFinns.png",
+        "altText": "LaFinns Beach Resort Land listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Feraren Commercial Complex",
+    "lat": 16.621,
+    "lng": 120.322,
+    "area": 6.7,
+    "price": 58000000,
+    "pricePerSqm": 866,
+    "status": "Reserved",
+    "type": "commercial",
+    "corridor": "downtown",
+    "tags": [
+      "City Center",
+      "Retail Zone",
+      "Foot Traffic"
+    ],
+    "facilities": [
+      "Mall",
+      "Banks",
+      "Restaurants"
+    ],
+    "roadAccess": 90,
+    "image": "FerarenProperty.png",
+    "description": "Downtown commercial property with high foot traffic",
+    "barangay": "Barangay II",
+    "ownerContact": {
+      "name": "Feraren Realty",
+      "email": "feraren@example.com",
+      "phone": "+63 917 000 0103",
+      "responseSla": "12 HOURS"
+    },
+    "imageUrl": "assets/images/FerarenProperty.png",
+    "media": [
+      {
+        "source": "assets/images/FerarenProperty.png",
+        "altText": "Feraren Commercial Complex listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Property 1 - Industrial Zone",
+    "lat": 16.6225,
+    "lng": 120.3235,
+    "area": 15.2,
+    "price": 110000000,
+    "pricePerSqm": 724,
+    "status": "Available",
+    "type": "logistics",
+    "corridor": "highway",
+    "tags": [
+      "Industrial",
+      "Warehouse Ready",
+      "Wide Lot"
+    ],
+    "facilities": [
+      "Port 5km",
+      "Highway",
+      "Power Station"
+    ],
+    "roadAccess": 92,
+    "image": "Property1.png",
+    "description": "Large industrial lot ideal for logistics operations",
+    "barangay": "Pagdalagan",
+    "ownerContact": {
+      "name": "Northlink Industrial Assets",
+      "email": "northlink@example.com",
+      "phone": "+63 917 000 0104",
+      "responseSla": "24 HOURS"
+    },
+    "imageUrl": "assets/images/Property1.png",
+    "media": [
+      {
+        "source": "assets/images/Property1.png",
+        "altText": "Property 1 - Industrial Zone listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Property 3 - Tech Park Site",
+    "lat": 16.617,
+    "lng": 120.3185,
+    "area": 9.8,
+    "price": 82000000,
+    "pricePerSqm": 837,
+    "status": "Available",
+    "type": "bpo",
+    "corridor": "highway",
+    "tags": [
+      "BPO Zone",
+      "Fiber Ready",
+      "Modern"
+    ],
+    "facilities": [
+      "University 2km",
+      "IT Park",
+      "Transport Hub"
+    ],
+    "roadAccess": 88,
+    "image": "Property3.png",
+    "description": "Modern site ready for BPO or tech development",
+    "barangay": "Madaydegdeg",
+    "ownerContact": {
+      "name": "Innovate Land Corp",
+      "email": "innovate@example.com",
+      "phone": "+63 917 000 0105",
+      "responseSla": "18 HOURS"
+    },
+    "imageUrl": "assets/images/Property3.png",
+    "media": [
+      {
+        "source": "assets/images/Property3.png",
+        "altText": "Property 3 - Tech Park Site listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Property 4 - Residential Development",
+    "lat": 16.619,
+    "lng": 120.3175,
+    "area": 7.5,
+    "price": 65000000,
+    "pricePerSqm": 867,
+    "status": "Available",
+    "type": "commercial",
+    "corridor": "downtown",
+    "tags": [
+      "Residential",
+      "Subdivision Ready",
+      "Utilities"
+    ],
+    "facilities": [
+      "Schools",
+      "Shopping",
+      "Parks"
+    ],
+    "roadAccess": 87,
+    "image": "Property4.png",
+    "description": "Perfect for residential subdivision development",
+    "barangay": null,
+    "ownerContact": {
+      "name": "Residential Estates PH",
+      "email": "residential@example.com",
+      "phone": "+63 917 000 0106",
+      "responseSla": "24 HOURS"
+    },
+    "imageUrl": "assets/images/Property4.png",
+    "media": [
+      {
+        "source": "assets/images/Property4.png",
+        "altText": "Property 4 - Residential Development listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Property 5 - Mixed Use Complex",
+    "lat": 16.62,
+    "lng": 120.321,
+    "area": 11.2,
+    "price": 92000000,
+    "pricePerSqm": 821,
+    "status": "Available",
+    "type": "commercial",
+    "corridor": "highway",
+    "tags": [
+      "Mixed Use",
+      "High ROI",
+      "Prime Location"
+    ],
+    "facilities": [
+      "Highway",
+      "Commercial District",
+      "Transit"
+    ],
+    "roadAccess": 93,
+    "image": "Property5.png",
+    "description": "Mixed-use development site with excellent returns",
+    "barangay": null,
+    "ownerContact": {
+      "name": "MixedUse Ventures",
+      "email": "mixeduse@example.com",
+      "phone": "+63 917 000 0107",
+      "responseSla": "24 HOURS"
+    },
+    "imageUrl": "assets/images/Property5.png",
+    "media": [
+      {
+        "source": "assets/images/Property5.png",
+        "altText": "Property 5 - Mixed Use Complex listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Property 6 - Coastal Development",
+    "lat": 16.6165,
+    "lng": 120.3165,
+    "area": 14.8,
+    "price": 125000000,
+    "pricePerSqm": 845,
+    "status": "Available",
+    "type": "hotel",
+    "corridor": "coastal",
+    "tags": [
+      "Waterfront",
+      "Resort",
+      "Premium"
+    ],
+    "facilities": [
+      "Beach",
+      "Marina Potential",
+      "Scenic"
+    ],
+    "roadAccess": 82,
+    "image": "Property6.png",
+    "description": "Premium coastal property for luxury resort",
+    "barangay": "Apaleng",
+    "ownerContact": {
+      "name": "Coastal Horizon Development",
+      "email": "coastal@example.com",
+      "phone": "+63 917 000 0108",
+      "responseSla": "48 HOURS"
+    },
+    "imageUrl": "assets/images/Property6.png",
+    "media": [
+      {
+        "source": "assets/images/Property6.png",
+        "altText": "Property 6 - Coastal Development listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Property 8 - Agriculture to Commercial",
+    "lat": 16.6235,
+    "lng": 120.3245,
+    "area": 18.5,
+    "price": 135000000,
+    "pricePerSqm": 730,
+    "status": "Available",
+    "type": "logistics",
+    "corridor": "highway",
+    "tags": [
+      "Large Lot",
+      "Convertible",
+      "Investment"
+    ],
+    "facilities": [
+      "Highway Access",
+      "Rural-Urban Edge"
+    ],
+    "roadAccess": 85,
+    "image": "Property8.png",
+    "description": "Large convertible lot at urban expansion zone",
+    "barangay": null,
+    "ownerContact": {
+      "name": "Expansion Belt Assets",
+      "email": "expansion@example.com",
+      "phone": "+63 917 000 0109",
+      "responseSla": "36 HOURS"
+    },
+    "imageUrl": "assets/images/Property8.png",
+    "media": [
+      {
+        "source": "assets/images/Property8.png",
+        "altText": "Property 8 - Agriculture to Commercial listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Property 10 - Business Park Ready",
+    "lat": 16.6175,
+    "lng": 120.319,
+    "area": 10.5,
+    "price": 88000000,
+    "pricePerSqm": 838,
+    "status": "Available",
+    "type": "commercial",
+    "corridor": "downtown",
+    "tags": [
+      "Business Park",
+      "Office Ready",
+      "Premium"
+    ],
+    "facilities": [
+      "CBD",
+      "Banks",
+      "Hotels Nearby"
+    ],
+    "roadAccess": 91,
+    "image": "Property10.png",
+    "description": "Ready for business park or office development",
+    "barangay": "Barangay IV",
+    "ownerContact": {
+      "name": "Business Park Holdings",
+      "email": "businesspark@example.com",
+      "phone": "+63 917 000 0110",
+      "responseSla": "12 HOURS"
+    },
+    "imageUrl": "assets/images/Property10.png",
+    "media": [
+      {
+        "source": "assets/images/Property10.png",
+        "altText": "Property 10 - Business Park Ready listing image",
+        "kind": "image",
+        "sortOrder": 0
+      }
+    ]
+  }
+]

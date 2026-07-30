@@ -1,0 +1,3599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOCUS-SF - Investment Intelligence Platform</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --blue: #1BB1F5;
+      --orange: #F7821A;
+      --yellow: #FFC319;
+
+      --bg: #F6F8FB;
+      --surface: #FFFFFF;
+      --surface-2: #F2F5FA;
+
+      --text: #0A1423;
+      --muted: rgba(10, 20, 35, 0.62);
+
+      --line: rgba(10, 20, 35, 0.10);
+      --line-strong: rgba(10, 20, 35, 0.16);
+
+      --shadow-sm: 0 10px 30px rgba(10, 20, 35, 0.08);
+      --shadow-md: 0 20px 60px rgba(10, 20, 35, 0.12);
+
+      --r14: 14px;
+      --r16: 16px;
+      --r20: 20px;
+
+      --focus: 0 0 0 4px rgba(27, 177, 245, 0.18);
+
+      --ok: #16A34A;
+      --warn: #F7821A;
+      --bad: #EF4444;
+    }
+
+    *{ margin:0; padding:0; box-sizing:border-box; }
+
+    body{
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x:hidden;
+    }
+
+    header{
+      position: fixed;
+      top:0; left:0; right:0;
+      z-index: 1100;
+      background: rgba(255,255,255,0.90);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-content{
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 280px;
+    }
+
+    .brand-mark{
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position: relative;
+    }
+
+    .brand-logo{
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      display:block;
+    }
+
+    .brand-mark-fallback{
+      width: 22px;
+      height: 22px;
+      border-radius: 12px;
+      background: var(--blue);
+      box-shadow: 0 10px 26px rgba(27, 177, 245, 0.22);
+      display:none;
+    }
+
+    .brand-name{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+    }
+
+    .logo{
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .logo-sub{
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      font-weight: 600;
+    }
+
+    .header-nav{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content:flex-end;
+    }
+
+    .nav-btn{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      white-space:nowrap;
+      text-transform: uppercase;
+    }
+
+    .nav-btn:hover{
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+      border-color: var(--line-strong);
+    }
+
+    .nav-btn:focus{ outline:none; box-shadow: var(--focus); }
+
+    .nav-btn.primary{
+      border: none;
+      background: var(--blue);
+      color: #FFFFFF;
+      box-shadow: 0 16px 34px rgba(27, 177, 245, 0.24);
+    }
+
+    .nav-btn.primary:hover{
+      box-shadow: 0 22px 54px rgba(27, 177, 245, 0.28);
+    }
+
+    .nav-dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--blue);
+      box-shadow: 0 10px 22px rgba(27, 177, 245, 0.20);
+    }
+
+    .nav-btn.primary .nav-dot{
+      background: #FFFFFF;
+      box-shadow:none;
+    }
+
+    .main-container{
+      margin-top: 74px;
+      min-height: calc(100vh - 74px);
+    }
+
+    .dashboard-grid{
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 18px;
+      display:grid;
+      grid-template-columns: 380px 1fr;
+      gap: 16px;
+    }
+
+    .sidebar{
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
+
+    .map-section{
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
+
+    .card{
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--line);
+      border-radius: var(--r20);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+
+    .card:hover{
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--line-strong);
+    }
+
+    .card-title{
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      margin-bottom: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      text-transform: uppercase;
+    }
+
+    .title-left{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+
+    .title-mark{
+      width: 14px;
+      height: 14px;
+      border-radius: 6px;
+      background: var(--yellow);
+      box-shadow: 0 12px 26px rgba(255, 195, 25, 0.22);
+      border: 1px solid rgba(10,20,35,0.08);
+    }
+
+    .tiny{
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .form-group{ margin-bottom: 12px; }
+
+    .form-label{
+      display:block;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .form-input, .form-select, .form-textarea{
+      width:100%;
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 12px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease;
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .form-textarea{
+      min-height: 84px;
+      resize: vertical;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus{
+      outline:none;
+      border-color: rgba(27,177,245,0.55);
+      box-shadow: var(--focus);
+    }
+
+    .btn-row{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius: 16px;
+      padding: 12px 14px;
+      cursor:pointer;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      text-transform: uppercase;
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:focus{ outline:none; box-shadow: var(--focus); }
+
+    .btn-primary{
+      background: var(--blue);
+      color: #FFFFFF;
+      box-shadow: 0 16px 34px rgba(27, 177, 245, 0.22);
+    }
+
+    .btn-secondary{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-warn{
+      background: var(--orange);
+      color: #FFFFFF;
+      box-shadow: 0 16px 34px rgba(247, 130, 26, 0.18);
+    }
+
+    .btn-soft{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      flex: 1;
+      text-transform: uppercase;
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      min-width: 140px;
+    }
+
+    .btn-soft:hover{
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--line-strong);
+    }
+
+    .btn-dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #FFFFFF;
+      box-shadow:none;
+    }
+
+    .btn-secondary .btn-dot{ background: var(--orange); }
+    .btn-warn .btn-dot{ background: #FFFFFF; }
+    .btn-primary .btn-dot{ background: #FFFFFF; }
+
+    .filter-tags{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-tag{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 10px;
+      font-size: 11px;
+      font-weight: 900;
+      cursor:pointer;
+      color: rgba(10,20,35,0.68);
+      letter-spacing: 0.12em;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, color 0.16s ease, background 0.16s ease;
+      user-select:none;
+      text-transform: uppercase;
+    }
+
+    .filter-tag:hover{
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+      border-color: var(--line-strong);
+      color: var(--text);
+    }
+
+    .filter-tag.active{
+      background: rgba(27, 177, 245, 0.10);
+      border-color: rgba(27, 177, 245, 0.26);
+      color: var(--text);
+    }
+
+    .slider-block{
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: var(--r16);
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .slider-row{
+      display:grid;
+      grid-template-columns: 1fr 70px;
+      gap: 10px;
+      align-items:center;
+    }
+
+    .slider-name{
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      align-items:center;
+      text-transform: uppercase;
+    }
+
+    .slider-val{
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: 0.12em;
+      text-align:right;
+    }
+
+    input[type="range"]{
+      width: 100%;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+
+    .weights-footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      margin-top: 2px;
+      text-transform: uppercase;
+    }
+
+    .analytics-grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card{
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--line);
+      border-radius: var(--r20);
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+      min-height: 92px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .stat-card:hover{
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--line-strong);
+    }
+
+    .stat-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .stat-label{
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .stat-mark{
+      width: 12px;
+      height: 12px;
+      border-radius: 6px;
+      background: var(--blue);
+      box-shadow: 0 12px 26px rgba(27,177,245,0.18);
+    }
+
+    .stat-value{
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      color: var(--text);
+    }
+
+    .stat-change{
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    #map{
+      height: 560px;
+      border-radius: var(--r20);
+      overflow:hidden;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--line);
+      background: #FFFFFF;
+    }
+
+    .properties-container{
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--line);
+      border-radius: var(--r20);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .properties-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .properties-title{
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .results-sub{
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+
+    .view-toggle{
+      display:flex;
+      gap: 8px;
+    }
+
+    .toggle-btn{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      color: rgba(10,20,35,0.68);
+      padding: 9px 10px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, color 0.16s ease, background 0.16s ease;
+      user-select:none;
+      text-transform: uppercase;
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .toggle-btn:hover{
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+      border-color: var(--line-strong);
+      color: var(--text);
+    }
+
+    .toggle-btn.active{
+      background: rgba(27, 177, 245, 0.10);
+      border-color: rgba(27, 177, 245, 0.26);
+      color: var(--text);
+    }
+
+    .properties-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 12px;
+    }
+
+    .properties-list{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    .property-card{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: var(--r20);
+      overflow:hidden;
+      cursor:pointer;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+      position: relative;
+      outline: none;
+    }
+
+    .property-card:hover{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--line-strong);
+    }
+
+    .property-card.list{
+      display:flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .property-image{
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--line);
+      display:block;
+    }
+
+    .property-card.list .property-image{
+      width: 250px;
+      height: 160px;
+      border-bottom: none;
+      border-right: 1px solid var(--line);
+    }
+
+    .pill{
+      position:absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: rgba(10,20,35,0.70);
+      box-shadow: var(--shadow-sm);
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+
+    .pill .p{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--yellow);
+    }
+
+    .score-badge{
+      position:absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(10, 20, 35, 0.90);
+      color: #FFFFFF;
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      box-shadow: var(--shadow-sm);
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+
+    .score-dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .property-content{
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    .property-title{
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .property-location{
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 6px;
+      line-height: 1.3;
+    }
+
+    .property-specs{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .spec-item{
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .spec-label{
+      font-size: 10px;
+      font-weight: 900;
+      color: var(--muted);
+      letter-spacing: 0.14em;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .spec-value{
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .property-tags{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag{
+      background: rgba(255, 195, 25, 0.14);
+      border: 1px solid rgba(255, 195, 25, 0.30);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: rgba(10,20,35,0.82);
+      text-transform: uppercase;
+    }
+
+    .property-actions{
+      display:flex;
+      gap: 10px;
+      margin-top: 2px;
+      flex-wrap: wrap;
+    }
+
+    .compare-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: rgba(10,20,35,0.68);
+      text-transform: uppercase;
+    }
+
+    .compare-row input{
+      width: 16px;
+      height: 16px;
+      cursor:pointer;
+      accent-color: var(--blue);
+    }
+
+    .modal{
+      display:none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 20, 35, 0.55);
+      backdrop-filter: blur(10px);
+      z-index: 2200;
+      padding: 22px;
+      overflow-y:auto;
+    }
+
+    .modal.active{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .modal-content{
+      width: 100%;
+      max-width: 1200px;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid var(--line);
+      border-radius: var(--r20);
+      box-shadow: var(--shadow-md);
+      padding: 16px;
+    }
+
+    .modal-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .modal-title{
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .modal-sub{
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+
+    .close-modal{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      cursor:pointer;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--text);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .close-modal:hover{
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+      border-color: var(--line-strong);
+    }
+
+    .pack-grid{
+      display:grid;
+      grid-template-columns: 390px 1fr;
+      gap: 12px;
+    }
+
+    .pack-panel{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: var(--r20);
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .pack-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .pack-h{
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .pack-chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      background: rgba(27,177,245,0.10);
+      border: 1px solid rgba(27,177,245,0.26);
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .pack-chip .c{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .pack-section{
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: var(--r16);
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .pack-section h4{
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .pack-kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .kpi{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .kpi .k{
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .kpi .v{
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .dd-progress{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      height: 12px;
+      overflow:hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dd-bar{
+      height: 100%;
+      width: 0%;
+      background: var(--blue);
+    }
+
+    .dd-list{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    .dd-item{
+      background: #FFFFFF;
+      border: 1px solid var(--line);
+      border-radius: var(--r16);
+      padding: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+
+    .dd-left{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+
+    .dd-check{
+      width: 18px;
+      height: 18px;
+      cursor:pointer;
+      accent-color: var(--blue);
+    }
+
+    .dd-name{
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.10em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .dd-status{
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      text-transform: uppercase;
+    }
+
+    .dd-dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--warn);
+    }
+
+    #toastHost{
+      position: fixed;
+      top: 92px;
+      right: 18px;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast{
+      background: rgba(255,255,255,0.96);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+      border-radius: var(--r20);
+      padding: 12px 12px;
+      min-width: 280px;
+      max-width: 360px;
+      display:flex;
+      gap: 10px;
+      align-items:flex-start;
+      animation: toastIn 0.16s ease-out;
+    }
+
+    @keyframes toastIn{
+      from{ transform: translateY(-6px); opacity: 0; }
+      to{ transform: translateY(0); opacity: 1; }
+    }
+
+    .toast-dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--ok);
+      margin-top: 4px;
+      flex: 0 0 auto;
+    }
+
+    .toast-title{
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      color: var(--text);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .toast-msg{
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.10em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .leaflet-popup-content-wrapper{
+      background: rgba(255,255,255,0.96);
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+      color: var(--text);
+    }
+
+    .leaflet-popup-tip{
+      background: rgba(255,255,255,0.96);
+      border: 1px solid var(--line);
+    }
+
+    .fab-container{
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      z-index: 1500;
+    }
+
+    .fab{
+      width: 78px;
+      height: 56px;
+      border-radius: 18px;
+      border: none;
+      cursor:pointer;
+      background: var(--blue);
+      color: #FFFFFF;
+      box-shadow: 0 18px 42px rgba(27, 177, 245, 0.22);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      text-transform: uppercase;
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .fab:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 26px 70px rgba(27, 177, 245, 0.28);
+    }
+
+    @media (max-width: 1200px){
+      .dashboard-grid{ grid-template-columns: 1fr; }
+      .analytics-grid{ grid-template-columns: repeat(2, 1fr); }
+      #map{ height: 440px; }
+      .pack-grid{ grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px){
+      .header-content{ padding: 12px 14px; }
+      .brand{ min-width: unset; }
+      .header-nav{ justify-content:flex-start; }
+      .analytics-grid{ grid-template-columns: 1fr; }
+      #map{ height: 380px; }
+      .property-card.list{ flex-direction:column; }
+      .property-card.list .property-image{
+        width:100%;
+        height: 190px;
+        border-right:none;
+        border-bottom: 1px solid var(--line);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-content">
+      <div class="brand">
+        <div class="brand-mark" title="LOCUS-SF">
+          <img src="sfc_logo.png" alt="LOCUS-SF Logo" class="brand-logo" onerror="onLogoError(this)">
+          <div class="brand-mark-fallback" id="brandFallback"></div>
+        </div>
+        <div class="brand-name">
+          <div class="logo">SFCELERATE</div>
+          <div class="logo-sub">INVESTMENT INTELLIGENCE PLATFORM</div>
+        </div>
+      </div>
+
+      <nav class="header-nav">
+        <button class="nav-btn" onclick="showAnalytics()"><span class="nav-dot"></span>ANALYTICS</button>
+        <button class="nav-btn" onclick="showComparison()"><span class="nav-dot" style="background: var(--orange); box-shadow: 0 10px 22px rgba(247,130,26,0.18);"></span>COMPARE</button>
+        <button class="nav-btn" onclick="downloadReport()"><span class="nav-dot" style="background: var(--yellow); box-shadow: 0 10px 22px rgba(255,195,25,0.18);"></span>EXPORT</button>
+        <button class="nav-btn primary" onclick="openInvestorPortal()"><span class="nav-dot"></span>INVESTOR PORTAL</button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <div class="dashboard-grid">
+
+      <div class="sidebar">
+        <div class="card">
+          <div class="card-title">
+            <div class="title-left">
+              <div class="title-mark"></div>
+              DECISION PACK
+            </div>
+            <div class="tiny" id="decisionPackHint">SELECT A PROPERTY</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">INVESTMENT INTENT</label>
+            <select class="form-select" id="dpIntent">
+              <option value="logistics">LOGISTICS HUB</option>
+              <option value="hotel">RESORT AND TOURISM</option>
+              <option value="commercial">COMMERCIAL</option>
+              <option value="bpo">OFFICE AND BPO</option>
+              <option value="manufacturing">MANUFACTURING</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">TIME HORIZON</label>
+            <select class="form-select" id="dpHorizon">
+              <option value="3">3 YEARS</option>
+              <option value="5" selected>5 YEARS</option>
+              <option value="10">10 YEARS</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">RISK PROFILE</label>
+            <select class="form-select" id="dpRisk">
+              <option value="conservative">CONSERVATIVE</option>
+              <option value="balanced" selected>BALANCED</option>
+              <option value="aggressive">AGGRESSIVE</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ASSIGN BARANGAY</label>
+            <input class="form-input" id="dpBarangay" list="barangayList" placeholder="SELECT BARANGAY FOR THIS PROPERTY" />
+            <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+              <button class="btn-soft" onclick="saveSelectedPropertyBarangay()">
+                <span class="btn-dot" style="background: var(--blue);"></span>SAVE BARANGAY
+              </button>
+              <button class="btn-soft" onclick="clearSelectedPropertyBarangay()">
+                <span class="btn-dot" style="background: var(--orange);"></span>CLEAR
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">NOTES</label>
+            <textarea class="form-textarea" id="dpNotes" placeholder="KEY ASSUMPTIONS, TARGET TENANTS, OR CONCEPT"></textarea>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="openDecisionPack()">
+              <span class="btn-dot"></span>GENERATE DECISION PACK
+            </button>
+            <button class="btn btn-secondary" onclick="openDueDiligence()">
+              <span class="btn-dot"></span>DUE DILIGENCE CHECKLIST
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="title-left">
+              <div class="title-mark" style="background: var(--blue); box-shadow: 0 12px 26px rgba(27,177,245,0.18);"></div>
+              INVESTMENT LAB
+            </div>
+            <div class="tiny" id="labHint">SELECT A PROPERTY</div>
+          </div>
+
+          <button class="btn btn-primary" onclick="openInvestmentLab()">
+            <span class="btn-dot"></span>OPEN INVESTMENT LAB
+          </button>
+
+          <div style="margin-top: 12px;">
+            <div class="tiny">INCLUDES</div>
+            <div class="tiny" style="margin-top: 6px;">CAPITAL STACK, SENSITIVITY, READINESS</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="title-left">
+              <div class="title-mark" style="background: var(--blue); box-shadow: 0 12px 26px rgba(27,177,245,0.18);"></div>
+              SCENARIO BUILDER
+            </div>
+            <div class="tiny">FILTER THEN RANK</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">BUDGET RANGE (PHP)</label>
+            <input type="number" class="form-input" id="budgetInput" placeholder="50000000" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">TARGET SECTOR</label>
+            <select class="form-select" id="sectorInput">
+              <option value="">ALL SECTORS</option>
+              <option value="logistics">LOGISTICS HUB</option>
+              <option value="hotel">RESORT AND TOURISM</option>
+              <option value="bpo">OFFICE AND BPO</option>
+              <option value="manufacturing">MANUFACTURING</option>
+              <option value="commercial">COMMERCIAL</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">MINIMUM LAND SIZE (HECTARES)</label>
+            <input type="number" class="form-input" id="sizeInput" placeholder="5" />
+          </div>
+
+          <button class="btn btn-primary" onclick="runScenario()">
+            <span class="btn-dot"></span>FIND TOP MATCHES
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="title-left">
+              <div class="title-mark" style="background: var(--orange); box-shadow: 0 12px 26px rgba(247,130,26,0.16);"></div>
+              SMART FILTERS
+            </div>
+            <div class="tiny">CLEAN AND FAST</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">PROPERTY TYPE</label>
+            <div class="filter-tags" id="typeFilters">
+              <div class="filter-tag active" data-filter="all">ALL</div>
+              <div class="filter-tag" data-filter="logistics">LOGISTICS</div>
+              <div class="filter-tag" data-filter="hotel">HOTEL</div>
+              <div class="filter-tag" data-filter="commercial">COMMERCIAL</div>
+              <div class="filter-tag" data-filter="bpo">BPO</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">LOCATION CORRIDOR</label>
+            <div class="filter-tags" id="corridorFilters">
+              <div class="filter-tag active" data-filter="all">ALL</div>
+              <div class="filter-tag" data-filter="highway">HIGHWAY</div>
+              <div class="filter-tag" data-filter="downtown">DOWNTOWN</div>
+              <div class="filter-tag" data-filter="coastal">COASTAL</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">BARANGAY SEARCH</label>
+            <input class="form-input" id="barangaySearch" list="barangayList" placeholder="TYPE A BARANGAY NAME" />
+            <div style="display:flex; gap:10px; margin-top:10px;">
+              <button class="btn-soft" onclick="clearBarangayFilter()">
+                <span class="btn-dot" style="background: var(--orange);"></span>CLEAR BARANGAY
+              </button>
+              <button class="btn-soft" onclick="applyBarangayFilter()">
+                <span class="btn-dot" style="background: var(--blue);"></span>APPLY
+              </button>
+            </div>
+            <div class="tiny" style="margin-top:10px;">ASSIGN BARANGAY PER PROPERTY FIRST</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">VIEW</label>
+            <div class="filter-tags">
+              <div class="filter-tag active" id="viewGrid" onclick="setViewMode('grid')">GRID</div>
+              <div class="filter-tag" id="viewList" onclick="setViewMode('list')">LIST</div>
+            </div>
+          </div>
+
+          <datalist id="barangayList"></datalist>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="title-left">
+              <div class="title-mark" style="background: var(--yellow); box-shadow: 0 12px 26px rgba(255,195,25,0.18);"></div>
+              WEIGHTED SCORING
+            </div>
+            <div class="tiny">LIVE RANKING</div>
+          </div>
+
+          <div class="slider-block">
+            <div class="slider-row">
+              <div>
+                <div class="slider-name">
+                  <span>ACCESS</span>
+                  <span class="slider-val" id="wAccessVal">30</span>
+                </div>
+                <input type="range" id="wAccess" min="0" max="50" value="30" oninput="onWeightsChange()" />
+              </div>
+              <div class="tiny" style="text-align:right;">WEIGHT</div>
+            </div>
+
+            <div class="slider-row">
+              <div>
+                <div class="slider-name">
+                  <span>FACILITIES</span>
+                  <span class="slider-val" id="wFacilitiesVal">25</span>
+                </div>
+                <input type="range" id="wFacilities" min="0" max="50" value="25" oninput="onWeightsChange()" />
+              </div>
+              <div class="tiny" style="text-align:right;">WEIGHT</div>
+            </div>
+
+            <div class="slider-row">
+              <div>
+                <div class="slider-name">
+                  <span>AREA FIT</span>
+                  <span class="slider-val" id="wAreaVal">20</span>
+                </div>
+                <input type="range" id="wArea" min="0" max="50" value="20" oninput="onWeightsChange()" />
+              </div>
+              <div class="tiny" style="text-align:right;">WEIGHT</div>
+            </div>
+
+            <div class="slider-row">
+              <div>
+                <div class="slider-name">
+                  <span>PRICE VALUE</span>
+                  <span class="slider-val" id="wPriceVal">15</span>
+                </div>
+                <input type="range" id="wPrice" min="0" max="50" value="15" oninput="onWeightsChange()" />
+              </div>
+              <div class="tiny" style="text-align:right;">WEIGHT</div>
+            </div>
+
+            <div class="slider-row">
+              <div>
+                <div class="slider-name">
+                  <span>SECTOR MATCH</span>
+                  <span class="slider-val" id="wSectorVal">10</span>
+                </div>
+                <input type="range" id="wSector" min="0" max="50" value="10" oninput="onWeightsChange()" />
+              </div>
+              <div class="tiny" style="text-align:right;">WEIGHT</div>
+            </div>
+
+            <div class="weights-footer">
+              <span>TOTAL</span>
+              <span id="wTotal">100</span>
+            </div>
+
+            <button class="btn-soft" onclick="resetWeights()"><span class="btn-dot" style="background: var(--blue);"></span>RESET WEIGHTS</button>
+          </div>
+
+          <div style="margin-top: 10px;">
+            <div class="tiny">TIP</div>
+            <div class="tiny" style="margin-top: 6px;">MOVE SLIDERS TO RERANK RESULTS</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-section">
+        <div class="analytics-grid">
+          <div class="stat-card">
+            <div class="stat-top">
+              <div class="stat-label">TOTAL PROPERTIES</div>
+              <div class="stat-mark"></div>
+            </div>
+            <div class="stat-value" id="statTotal">10</div>
+            <div class="stat-change">ACTIVE INVENTORY</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <div class="stat-label">ACTIVE INQUIRIES</div>
+              <div class="stat-mark" style="background: var(--orange); box-shadow: 0 12px 26px rgba(247,130,26,0.16);"></div>
+            </div>
+            <div class="stat-value" id="statInquiries">47</div>
+            <div class="stat-change">PIPELINE SIGNAL</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <div class="stat-label">GLOBAL REACH</div>
+              <div class="stat-mark" style="background: var(--yellow); box-shadow: 0 12px 26px rgba(255,195,25,0.16);"></div>
+            </div>
+            <div class="stat-value" id="statReach">8</div>
+            <div class="stat-change">COUNTRIES INTERESTED</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <div class="stat-label">WEIGHTED SCORE AVG</div>
+              <div class="stat-mark"></div>
+            </div>
+            <div class="stat-value" id="statAvg">84</div>
+            <div class="stat-change">QUALITY INDEX</div>
+          </div>
+        </div>
+
+        <div id="map"></div>
+
+        <div class="properties-container">
+          <div class="properties-header">
+            <div>
+              <div class="properties-title">INVESTMENT PROPERTIES</div>
+              <div class="results-sub" id="resultsSubtitle">SHOWING ALL PROPERTIES</div>
+            </div>
+
+            <div class="view-toggle">
+              <button class="toggle-btn active" id="toggleGridBtn" onclick="setViewMode('grid')">GRID</button>
+              <button class="toggle-btn" id="toggleListBtn" onclick="setViewMode('list')">LIST</button>
+            </div>
+          </div>
+
+          <div id="propertiesList" class="properties-grid"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal" id="comparisonModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">PROPERTY COMPARISON</div>
+          <div class="modal-sub">COMPARE UP TO THREE PROPERTIES</div>
+        </div>
+        <button class="close-modal" onclick="closeComparison()">CLOSE</button>
+      </div>
+      <div id="comparisonContent"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="ddModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">DUE DILIGENCE CHECKLIST</div>
+          <div class="modal-sub" id="ddSub">SELECT A PROPERTY TO START</div>
+        </div>
+        <button class="close-modal" onclick="closeDueDiligence()">CLOSE</button>
+      </div>
+
+      <div class="pack-panel" style="margin-bottom: 12px;">
+        <div class="pack-head">
+          <div class="pack-h">PROGRESS</div>
+          <div class="pack-chip"><span class="c"></span><span id="ddPct">0%</span></div>
+        </div>
+        <div class="dd-progress">
+          <div class="dd-bar" id="ddBar"></div>
+        </div>
+      </div>
+
+      <div class="dd-list" id="ddList"></div>
+
+      <div style="display:flex; gap:10px; margin-top: 12px; flex-wrap:wrap;">
+        <button class="btn btn-secondary" style="width:auto;" onclick="resetDueDiligence()">
+          <span class="btn-dot"></span>RESET CHECKLIST
+        </button>
+        <button class="btn btn-primary" style="width:auto;" onclick="exportDueDiligence()">
+          <span class="btn-dot"></span>EXPORT CHECKLIST
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="packModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">DECISION PACK</div>
+          <div class="modal-sub" id="packSub">GENERATE A ONE PAGE INVESTMENT MEMO</div>
+        </div>
+        <button class="close-modal" onclick="closeDecisionPack()">CLOSE</button>
+      </div>
+
+      <div class="pack-grid">
+        <div class="pack-panel">
+          <div class="pack-head">
+            <div class="pack-h">INPUTS</div>
+            <div class="pack-chip"><span class="c"></span>FAST MEMO</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">CAPEX ESTIMATE (PHP)</label>
+            <input type="number" class="form-input" id="dpCapex" placeholder="150000000">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ANNUAL REVENUE (PHP)</label>
+            <input type="number" class="form-input" id="dpRevenue" placeholder="60000000">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ANNUAL OPEX (PHP)</label>
+            <input type="number" class="form-input" id="dpOpex" placeholder="15000000">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">MODEL NOTES</label>
+            <textarea class="form-textarea" id="dpModelNotes" placeholder="RENT RATE, OCCUPANCY, ADR, OR LEASE TERMS"></textarea>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="renderDecisionPack()"><span class="btn-dot"></span>REFRESH MEMO</button>
+            <button class="btn btn-warn" onclick="printDecisionPack()"><span class="btn-dot"></span>PRINT OR SAVE PDF</button>
+          </div>
+
+          <div style="margin-top: 10px;">
+            <div class="tiny">NOTE</div>
+            <div class="tiny" style="margin-top: 6px;">SIMPLIFIED MODEL. NOT FINANCIAL ADVICE.</div>
+          </div>
+        </div>
+
+        <div class="pack-panel" id="packOutput"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="labModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">INVESTMENT LAB</div>
+          <div class="modal-sub" id="labSub">SELECT A PROPERTY TO START</div>
+        </div>
+        <button class="close-modal" onclick="closeInvestmentLab()">CLOSE</button>
+      </div>
+
+      <div class="pack-grid">
+        <div class="pack-panel">
+          <div class="pack-head">
+            <div class="pack-h">CAPITAL STACK</div>
+            <div class="pack-chip"><span class="c"></span><span id="readinessChip">READINESS 0/100</span></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">PROJECT CAPEX (PHP)</label>
+            <input type="number" class="form-input" id="labCapex" placeholder="150000000">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ANNUAL REVENUE (PHP)</label>
+            <input type="number" class="form-input" id="labRevenue" placeholder="60000000">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ANNUAL OPEX (PHP)</label>
+            <input type="number" class="form-input" id="labOpex" placeholder="15000000">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">EQUITY PERCENT</label>
+            <input type="range" min="10" max="100" value="40" id="labEquityPct" oninput="onLabChange()">
+            <div class="weights-footer" style="margin-top:8px;">
+              <span>EQUITY</span>
+              <span id="labEquityPctVal">40%</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">DEBT INTEREST RATE (ANNUAL)</label>
+            <input type="number" class="form-input" id="labInterest" placeholder="0.10" step="0.01">
+            <div class="tiny" style="margin-top:6px;">EXAMPLE 0.10 = 10%</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">EXIT CAP RATE</label>
+            <input type="number" class="form-input" id="labExitCap" placeholder="0.09" step="0.01">
+            <div class="tiny" style="margin-top:6px;">EXAMPLE 0.09 = 9%</div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-secondary" onclick="resetLab()"><span class="btn-dot"></span>RESET</button>
+            <button class="btn btn-primary" onclick="refreshLab()"><span class="btn-dot"></span>REFRESH</button>
+          </div>
+
+          <div style="margin-top: 12px;">
+            <div class="tiny">NOTE</div>
+            <div class="tiny" style="margin-top: 6px;">SIMPLIFIED MODEL. NOT FINANCIAL ADVICE.</div>
+          </div>
+        </div>
+
+        <div class="pack-panel">
+          <div class="pack-head">
+            <div class="pack-h">RETURNS AND RISK</div>
+            <div class="pack-chip"><span class="c"></span><span id="labWeightedScoreChip">WEIGHTED SCORE</span></div>
+          </div>
+
+          <div class="pack-section">
+            <h4>KEY OUTPUTS</h4>
+            <div class="pack-kpis">
+              <div class="kpi">
+                <div class="k">NET ANNUAL</div>
+                <div class="v" id="outNetAnnual">NEEDS INPUTS</div>
+              </div>
+              <div class="kpi">
+                <div class="k">DSCR</div>
+                <div class="v" id="outDSCR">NEEDS INPUTS</div>
+              </div>
+              <div class="kpi">
+                <div class="k">PAYBACK</div>
+                <div class="v" id="outPayback">NEEDS INPUTS</div>
+              </div>
+            </div>
+
+            <div class="pack-kpis" style="margin-top:10px;">
+              <div class="kpi">
+                <div class="k">EQUITY</div>
+                <div class="v" id="outEquity">NEEDS INPUTS</div>
+              </div>
+              <div class="kpi">
+                <div class="k">DEBT</div>
+                <div class="v" id="outDebt">NEEDS INPUTS</div>
+              </div>
+              <div class="kpi">
+                <div class="k">EXIT VALUE</div>
+                <div class="v" id="outExitValue">NEEDS INPUTS</div>
+              </div>
+            </div>
+
+            <div style="margin-top:10px; font-size:11px; font-weight:800; color: rgba(10,20,35,0.62); text-transform: uppercase; letter-spacing: 0.10em;">
+              DSCR = NET OPERATING INCOME / ANNUAL DEBT SERVICE
+            </div>
+          </div>
+
+          <div class="pack-section">
+            <h4>SENSITIVITY</h4>
+            <div class="tiny">MOVE SLIDER TO SEE PAYBACK CHANGE</div>
+
+            <div class="form-group" style="margin-top:10px;">
+              <label class="form-label">REVENUE CHANGE</label>
+              <input type="range" min="-30" max="30" value="0" id="sensRevenue" oninput="onLabChange()">
+              <div class="weights-footer" style="margin-top:8px;">
+                <span>DELTA</span>
+                <span id="sensRevenueVal">0%</span>
+              </div>
+            </div>
+
+            <div style="background:#FFFFFF;border:1px solid rgba(10,20,35,0.10);border-radius:16px;padding:12px;">
+              <canvas id="sensChart" height="140"></canvas>
+            </div>
+          </div>
+
+          <div class="pack-section">
+            <h4>READINESS BREAKDOWN</h4>
+            <div class="dd-progress">
+              <div class="dd-bar" id="readinessBar"></div>
+            </div>
+            <div class="tiny" style="margin-top:10px;" id="readinessText">COMPLETE INPUTS AND DUE DILIGENCE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CITIZEN VOTING MODAL -->
+  <div class="modal" id="voteModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">CITIZEN VOTING</div>
+          <div class="modal-sub" id="voteSub">SELECT A PROPERTY TO START</div>
+        </div>
+        <button class="close-modal" onclick="closeVote()">CLOSE</button>
+      </div>
+
+      <div class="pack-grid">
+        <div class="pack-panel">
+          <div class="pack-head">
+            <div class="pack-h">CAST YOUR VOTE</div>
+            <div class="pack-chip"><span class="c"></span>LOCAL DEMO</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">BUSINESS TYPE</label>
+            <select class="form-select" id="voteType"></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">CUSTOM SUGGESTION</label>
+            <input class="form-input" id="voteCustom" placeholder="E.G. PRINTING ZONE, 7/11, RESORT" />
+            <div class="tiny" style="margin-top:8px;">CUSTOM OVERRIDES DROPDOWN</div>
+          </div>
+
+          <button class="btn btn-primary" onclick="castVote()">
+            <span class="btn-dot"></span>SUBMIT VOTE
+          </button>
+
+          <div style="margin-top: 12px;">
+            <div class="tiny">NOTE</div>
+            <div class="tiny" style="margin-top: 6px;">CONNECT TO A DATABASE FOR REAL PUBLIC VOTING</div>
+          </div>
+        </div>
+
+        <div class="pack-panel">
+          <div class="pack-head">
+            <div class="pack-h">LIVE RESULTS</div>
+            <div class="pack-chip"><span class="c"></span><span id="voteTotal">0 VOTES</span></div>
+          </div>
+          <div id="voteResults"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT MODAL -->
+  <div class="modal" id="chatModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">CONNECT TO OWNER</div>
+          <div class="modal-sub" id="chatSub">SELECT A PROPERTY TO START</div>
+        </div>
+        <button class="close-modal" onclick="closeChat()">CLOSE</button>
+      </div>
+
+      <div class="pack-grid">
+        <div class="pack-panel">
+          <div class="pack-head">
+            <div class="pack-h">CHAT</div>
+            <div class="pack-chip"><span class="c"></span>LOCAL DEMO</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">SENDER</label>
+            <select class="form-select" id="chatRole">
+              <option value="investor">INVESTOR</option>
+              <option value="owner">OWNER</option>
+            </select>
+            <div class="tiny" style="margin-top:8px;">FOR DEMO TESTING ONLY</div>
+          </div>
+
+          <div id="chatThread" style="height: 320px; overflow:auto; background:#FFFFFF; border:1px solid rgba(10,20,35,0.10); border-radius:16px; padding:12px;"></div>
+
+          <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+            <input class="form-input" id="chatInput" placeholder="TYPE A MESSAGE" style="flex:1; min-width: 220px;" />
+            <button class="btn btn-primary" style="width:auto;" onclick="sendChatMessage()">
+              <span class="btn-dot"></span>SEND
+            </button>
+            <button class="btn btn-secondary" style="width:auto;" onclick="clearChatThread()">
+              <span class="btn-dot"></span>CLEAR
+            </button>
+          </div>
+
+          <div style="margin-top: 12px;">
+            <div class="tiny">NOTE</div>
+            <div class="tiny" style="margin-top: 6px;">REPLACE LOCAL STORAGE WITH REAL CHAT BACKEND</div>
+          </div>
+        </div>
+
+        <div class="pack-panel">
+          <div class="pack-head">
+            <div class="pack-h">OWNER CONTACT</div>
+            <div class="pack-chip"><span class="c"></span>PLACEHOLDER</div>
+          </div>
+
+          <div class="pack-section">
+            <h4>NEXT STEP</h4>
+            <div class="tiny">CONNECT THIS TO REAL OWNER DATA</div>
+            <div class="tiny" style="margin-top:8px;">EMAIL, PHONE, VERIFIED ID, RESPONSE SLA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastHost"></div>
+
+  <div class="fab-container">
+    <button class="fab" onclick="showComparison()" title="Compare">COMPARE</button>
+    <button class="fab" onclick="openDecisionPack()" title="Decision Pack">PACK</button>
+    <button class="fab" onclick="openInvestmentLab()" title="Investment Lab">LAB</button>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <script>
+    function onLogoError(img){
+      try{
+        img.style.display = "none";
+        const fallback = document.getElementById("brandFallback");
+        if (fallback) fallback.style.display = "block";
+      } catch {}
+    }
+
+    const BARANGAYS = [
+      "Barangay I","Barangay II","Barangay III","Barangay IV",
+      "Ilocanos Sur","Ilocanos Norte","Pagdaraoan",
+      "Catbangen","Parian","Madaydegdeg",
+      "Canaoay","Poro","San Agustin","San Francisco",
+      "Carlatan","Dalumpinas Este","Dalumpinas Oeste","Lingsat",
+      "Abut","Bangcusay","Bato","Biday","Mameltac","Namtutan","Saoay",
+      "Pagdalagan","Pagudpud","San Vicente","Sevilla",
+      "Birunget","Bungro","Narra Este","Narra Oeste","Sagayad","Sibuan-Otong","Tanquigan",
+      "Cabaroan","Dallangayan Oeste","Santiago Sur","Tanqui",
+      "Cadaclan","Camansi","Dallangayan Este","Langcuas","Pias","Santiago Norte",
+      "Cabarsican","Masicong","Nagyubuyuban","Pacpaco","Pao Norte","Pao Sur","Sacyud",
+      "Apaleng","Bacsil","Bangbangolan","Baraoas","Calabugao","Puspus"
+    ];
+
+    const LOCATIONS = [
+      {
+        id: 1,
+        name: "Fabro Building Prime Lot",
+        lat: 16.6195,
+        lng: 120.3205,
+        area: 8.5,
+        price: 75000000,
+        pricePerSqm: 8824,
+        status: "Available",
+        type: "logistics",
+        corridor: "highway",
+        tags: ["Highway Access", "Commercial Zone", "High Traffic"],
+        facilities: ["SM City", "Provincial Capitol", "Hospital"],
+        roadAccess: 95,
+        image: "FabroBldg.png",
+        description: "Prime commercial lot with excellent highway access"
+      },
+      {
+        id: 2,
+        name: "LaFinns Beach Resort Land",
+        lat: 16.6180,
+        lng: 120.3195,
+        area: 12.3,
+        price: 95000000,
+        pricePerSqm: 7724,
+        status: "Available",
+        type: "hotel",
+        corridor: "coastal",
+        tags: ["Beachfront", "Tourism Hub", "Scenic Views"],
+        facilities: ["Beach Access", "Resort Area", "Airport 15km"],
+        roadAccess: 85,
+        image: "LaFinns.png",
+        description: "Beachfront property perfect for resort development"
+      },
+      {
+        id: 3,
+        name: "Feraren Commercial Complex",
+        lat: 16.6210,
+        lng: 120.3220,
+        area: 6.7,
+        price: 58000000,
+        pricePerSqm: 8657,
+        status: "Reserved",
+        type: "commercial",
+        corridor: "downtown",
+        tags: ["City Center", "Retail Zone", "Foot Traffic"],
+        facilities: ["Mall", "Banks", "Restaurants"],
+        roadAccess: 90,
+        image: "FerarenProperty.png",
+        description: "Downtown commercial property with high foot traffic"
+      },
+      {
+        id: 4,
+        name: "Property 1 - Industrial Zone",
+        lat: 16.6225,
+        lng: 120.3235,
+        area: 15.2,
+        price: 110000000,
+        pricePerSqm: 7237,
+        status: "Available",
+        type: "logistics",
+        corridor: "highway",
+        tags: ["Industrial", "Warehouse Ready", "Wide Lot"],
+        facilities: ["Port 5km", "Highway", "Power Station"],
+        roadAccess: 92,
+        image: "Property1.png",
+        description: "Large industrial lot ideal for logistics operations"
+      },
+      {
+        id: 5,
+        name: "Property 3 - Tech Park Site",
+        lat: 16.6170,
+        lng: 120.3185,
+        area: 9.8,
+        price: 82000000,
+        pricePerSqm: 8367,
+        status: "Available",
+        type: "bpo",
+        corridor: "highway",
+        tags: ["BPO Zone", "Fiber Ready", "Modern"],
+        facilities: ["University 2km", "IT Park", "Transport Hub"],
+        roadAccess: 88,
+        image: "Property3.png",
+        description: "Modern site ready for BPO or tech development"
+      },
+      {
+        id: 6,
+        name: "Property 4 - Residential Development",
+        lat: 16.6190,
+        lng: 120.3175,
+        area: 7.5,
+        price: 65000000,
+        pricePerSqm: 8667,
+        status: "Available",
+        type: "commercial",
+        corridor: "downtown",
+        tags: ["Residential", "Subdivision Ready", "Utilities"],
+        facilities: ["Schools", "Shopping", "Parks"],
+        roadAccess: 87,
+        image: "Property4.png",
+        description: "Perfect for residential subdivision development"
+      },
+      {
+        id: 7,
+        name: "Property 5 - Mixed Use Complex",
+        lat: 16.6200,
+        lng: 120.3210,
+        area: 11.2,
+        price: 92000000,
+        pricePerSqm: 8214,
+        status: "Available",
+        type: "commercial",
+        corridor: "highway",
+        tags: ["Mixed Use", "High ROI", "Prime Location"],
+        facilities: ["Highway", "Commercial District", "Transit"],
+        roadAccess: 93,
+        image: "Property5.png",
+        description: "Mixed-use development site with excellent returns"
+      },
+      {
+        id: 8,
+        name: "Property 6 - Coastal Development",
+        lat: 16.6165,
+        lng: 120.3165,
+        area: 14.8,
+        price: 125000000,
+        pricePerSqm: 8446,
+        status: "Available",
+        type: "hotel",
+        corridor: "coastal",
+        tags: ["Waterfront", "Resort", "Premium"],
+        facilities: ["Beach", "Marina Potential", "Scenic"],
+        roadAccess: 82,
+        image: "Property6.png",
+        description: "Premium coastal property for luxury resort"
+      },
+      {
+        id: 9,
+        name: "Property 8 - Agriculture to Commercial",
+        lat: 16.6235,
+        lng: 120.3245,
+        area: 18.5,
+        price: 135000000,
+        pricePerSqm: 7297,
+        status: "Available",
+        type: "logistics",
+        corridor: "highway",
+        tags: ["Large Lot", "Convertible", "Investment"],
+        facilities: ["Highway Access", "Rural-Urban Edge"],
+        roadAccess: 85,
+        image: "Property8.png",
+        description: "Large convertible lot at urban expansion zone"
+      },
+      {
+        id: 10,
+        name: "Property 10 - Business Park Ready",
+        lat: 16.6175,
+        lng: 120.3190,
+        area: 10.5,
+        price: 88000000,
+        pricePerSqm: 8381,
+        status: "Available",
+        type: "commercial",
+        corridor: "downtown",
+        tags: ["Business Park", "Office Ready", "Premium"],
+        facilities: ["CBD", "Banks", "Hotels Nearby"],
+        roadAccess: 91,
+        image: "Property10.png",
+        description: "Ready for business park or office development"
+      }
+    ];
+
+    let selectedFilters = { type: "all", corridor: "all" };
+    let viewMode = "grid";
+    let compareList = [];
+    let selectedPropertyId = null;
+
+    let weights = { access: 30, facilities: 25, area: 20, price: 15, sector: 10 };
+
+    let selectedBarangay = null;
+
+    const DD_ITEMS = [
+      { key: "title", label: "TITLE AND OWNERSHIP VERIFIED" },
+      { key: "zoning", label: "ZONING AND LAND USE CONFIRMED" },
+      { key: "survey", label: "SURVEY PLAN AND BOUNDARIES CHECKED" },
+      { key: "rightofway", label: "RIGHT OF WAY AND ACCESS CONFIRMED" },
+      { key: "utilities", label: "UTILITIES AVAILABILITY CONFIRMED" },
+      { key: "hazards", label: "FLOOD AND HAZARD SCREENING DONE" },
+      { key: "environment", label: "ENVIRONMENTAL REVIEW COMPLETE" },
+      { key: "permits", label: "PERMITS AND CLEARANCES CHECKED" },
+      { key: "tax", label: "TAX DECLARATION VERIFIED" },
+      { key: "valuation", label: "VALUATION AND COMPS REVIEWED" }
+    ];
+
+    const VOTE_PRESETS = [
+      "PRINTING ZONE",
+      "CONVENIENCE STORE (7/11)",
+      "RESORT AND TOURISM",
+      "RESTAURANT OR FOOD PARK",
+      "PHARMACY",
+      "CLINIC OR DIAGNOSTICS",
+      "WAREHOUSE OR LOGISTICS",
+      "OFFICE OR BPO",
+      "HARDWARE AND CONSTRUCTION SUPPLY",
+      "GROCERY OR MINI MART"
+    ];
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function formatMoneyPHP(value){
+      const m = value / 1000000;
+      return "PHP " + m.toFixed(1) + "M";
+    }
+
+    function toast(title, message, kind = "ok"){
+      const host = document.getElementById("toastHost");
+      const el = document.createElement("div");
+      el.className = "toast";
+
+      const dot = document.createElement("div");
+      dot.className = "toast-dot";
+      const ok = getComputedStyle(document.documentElement).getPropertyValue("--ok").trim();
+      const warn = getComputedStyle(document.documentElement).getPropertyValue("--warn").trim();
+      const bad = getComputedStyle(document.documentElement).getPropertyValue("--bad").trim();
+      dot.style.background = kind === "ok" ? ok : (kind === "warn" ? warn : bad);
+
+      const content = document.createElement("div");
+
+      const t = document.createElement("div");
+      t.className = "toast-title";
+      t.textContent = title;
+
+      const m = document.createElement("div");
+      m.className = "toast-msg";
+      m.textContent = message;
+
+      content.appendChild(t);
+      content.appendChild(m);
+
+      el.appendChild(dot);
+      el.appendChild(content);
+      host.appendChild(el);
+
+      setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(-6px)";
+        el.style.transition = "opacity 0.2s ease, transform 0.2s ease";
+      }, 2600);
+
+      setTimeout(() => { el.remove(); }, 3000);
+    }
+
+    function getSelectedProperty(){
+      if (!selectedPropertyId) return null;
+      return LOCATIONS.find(p => p.id === selectedPropertyId) || null;
+    }
+
+    function scoreDotColor(score){
+      const blue = getComputedStyle(document.documentElement).getPropertyValue("--blue").trim();
+      const yellow = getComputedStyle(document.documentElement).getPropertyValue("--yellow").trim();
+      const orange = getComputedStyle(document.documentElement).getPropertyValue("--orange").trim();
+      const bad = getComputedStyle(document.documentElement).getPropertyValue("--bad").trim();
+      if (score >= 85) return blue;
+      if (score >= 75) return yellow;
+      if (score >= 65) return orange;
+      return bad;
+    }
+
+    function normalizeWeights(){
+      const sum = weights.access + weights.facilities + weights.area + weights.price + weights.sector;
+      if (sum <= 0) {
+        weights = { access: 30, facilities: 25, area: 20, price: 15, sector: 10 };
+        return;
+      }
+      const scale = 100 / sum;
+
+      weights.access = Math.round(weights.access * scale);
+      weights.facilities = Math.round(weights.facilities * scale);
+      weights.area = Math.round(weights.area * scale);
+      weights.price = Math.round(weights.price * scale);
+      weights.sector = Math.round(weights.sector * scale);
+
+      const fixedSum = weights.access + weights.facilities + weights.area + weights.price + weights.sector;
+      const diff = 100 - fixedSum;
+      weights.access += diff;
+    }
+
+    function onWeightsChange(){
+      weights.access = parseInt(document.getElementById("wAccess").value, 10);
+      weights.facilities = parseInt(document.getElementById("wFacilities").value, 10);
+      weights.area = parseInt(document.getElementById("wArea").value, 10);
+      weights.price = parseInt(document.getElementById("wPrice").value, 10);
+      weights.sector = parseInt(document.getElementById("wSector").value, 10);
+
+      normalizeWeights();
+      syncWeightsUI();
+      rerankAndRender(true);
+    }
+
+    function syncWeightsUI(){
+      document.getElementById("wAccessVal").textContent = String(weights.access);
+      document.getElementById("wFacilitiesVal").textContent = String(weights.facilities);
+      document.getElementById("wAreaVal").textContent = String(weights.area);
+      document.getElementById("wPriceVal").textContent = String(weights.price);
+      document.getElementById("wSectorVal").textContent = String(weights.sector);
+
+      document.getElementById("wAccess").value = String(weights.access);
+      document.getElementById("wFacilities").value = String(weights.facilities);
+      document.getElementById("wArea").value = String(weights.area);
+      document.getElementById("wPrice").value = String(weights.price);
+      document.getElementById("wSector").value = String(weights.sector);
+
+      document.getElementById("wTotal").textContent = "100";
+    }
+
+    function resetWeights(){
+      weights = { access: 30, facilities: 25, area: 20, price: 15, sector: 10 };
+      syncWeightsUI();
+      rerankAndRender(true);
+      toast("WEIGHTS RESET", "LIVE RANKING UPDATED", "ok");
+    }
+
+    function computeComponents(property, targetSector){
+      const access = clamp(property.roadAccess, 0, 100);
+
+      const maxFacilities = Math.max(...LOCATIONS.map(p => p.facilities.length));
+      const facilities = maxFacilities > 0 ? clamp((property.facilities.length / maxFacilities) * 100, 0, 100) : 0;
+
+      const areaFit = (property.area >= 5 && property.area <= 15) ? 100 : 60;
+
+      const allPpsm = LOCATIONS.map(p => p.pricePerSqm);
+      const minP = Math.min(...allPpsm);
+      const maxP = Math.max(...allPpsm);
+      const priceValue = (maxP === minP) ? 100 : clamp(((maxP - property.pricePerSqm) / (maxP - minP)) * 100, 0, 100);
+
+      const sectorMatch = targetSector ? (property.type === targetSector ? 100 : 55) : 75;
+
+      return { access, facilities, areaFit, priceValue, sectorMatch };
+    }
+
+    function calculateWeightedScore(property, targetSector){
+      const c = computeComponents(property, targetSector);
+
+      const score =
+        (c.access * weights.access) +
+        (c.facilities * weights.facilities) +
+        (c.areaFit * weights.area) +
+        (c.priceValue * weights.price) +
+        (c.sectorMatch * weights.sector);
+
+      return Math.round(score / 100);
+    }
+
+    function fillBarangayDatalist(){
+      const dl = document.getElementById("barangayList");
+      if (!dl) return;
+      dl.innerHTML = BARANGAYS.map(b => `<option value="${b}"></option>`).join("");
+    }
+
+    function barangayKey(propertyId){
+      return "sfc_barangay_" + String(propertyId);
+    }
+
+    function getPropertyBarangay(propertyId){
+      try{
+        const raw = localStorage.getItem(barangayKey(propertyId));
+        if (!raw) return null;
+        const val = String(raw).trim();
+        return val ? val : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function setPropertyBarangay(propertyId, barangay){
+      try{
+        if (!barangay) {
+          localStorage.removeItem(barangayKey(propertyId));
+          return;
+        }
+        localStorage.setItem(barangayKey(propertyId), String(barangay).trim());
+      } catch {}
+    }
+
+    function saveSelectedPropertyBarangay(){
+      const p = getSelectedProperty();
+      if (!p) {
+        toast("SELECT A PROPERTY", "CHOOSE A PROPERTY FIRST", "warn");
+        return;
+      }
+      const b = (document.getElementById("dpBarangay")?.value || "").trim();
+      if (!b) {
+        toast("MISSING", "ENTER A BARANGAY", "warn");
+        return;
+      }
+      if (!BARANGAYS.includes(b)) {
+        toast("NOT FOUND", "SELECT FROM THE LIST", "warn");
+        return;
+      }
+      setPropertyBarangay(p.id, b);
+      toast("SAVED", "BARANGAY ASSIGNED", "ok");
+      rerankAndRender(false);
+      renderDecisionPack();
+    }
+
+    function clearSelectedPropertyBarangay(){
+      const p = getSelectedProperty();
+      if (!p) {
+        toast("SELECT A PROPERTY", "CHOOSE A PROPERTY FIRST", "warn");
+        return;
+      }
+      setPropertyBarangay(p.id, null);
+      const input = document.getElementById("dpBarangay");
+      if (input) input.value = "";
+      toast("CLEARED", "BARANGAY REMOVED", "warn");
+      rerankAndRender(false);
+      renderDecisionPack();
+    }
+
+    function applyBarangayFilter(){
+      const b = (document.getElementById("barangaySearch")?.value || "").trim();
+      if (!b) {
+        toast("MISSING", "TYPE A BARANGAY", "warn");
+        return;
+      }
+      if (!BARANGAYS.includes(b)) {
+        toast("NOT FOUND", "SELECT FROM THE LIST", "warn");
+        return;
+      }
+      selectedBarangay = b;
+      toast("FILTER ON", b.toUpperCase(), "ok");
+      rerankAndRender(false);
+    }
+
+    function clearBarangayFilter(){
+      selectedBarangay = null;
+      const input = document.getElementById("barangaySearch");
+      if (input) input.value = "";
+      toast("FILTER OFF", "BARANGAY CLEARED", "warn");
+      rerankAndRender(false);
+    }
+
+    function filteredLocations(){
+      let list = [...LOCATIONS];
+      if (selectedFilters.type && selectedFilters.type !== "all") {
+        list = list.filter(p => p.type === selectedFilters.type);
+      }
+      if (selectedFilters.corridor && selectedFilters.corridor !== "all") {
+        list = list.filter(p => p.corridor === selectedFilters.corridor);
+      }
+      if (selectedBarangay) {
+        list = list.filter(p => getPropertyBarangay(p.id) === selectedBarangay);
+      }
+      return list;
+    }
+
+    function updateStats(){
+      const targetSector = (document.getElementById("sectorInput")?.value || "").trim() || null;
+      const scores = LOCATIONS.map(p => calculateWeightedScore(p, targetSector));
+      const sum = scores.reduce((a,b) => a + b, 0);
+      const avg = sum / scores.length;
+
+      document.getElementById("statTotal").textContent = String(LOCATIONS.length);
+      document.getElementById("statAvg").textContent = String(Math.round(avg));
+      document.getElementById("statInquiries").textContent = "47";
+      document.getElementById("statReach").textContent = "8";
+    }
+
+    function setResultsSubtitle(list){
+      const type = selectedFilters.type === "all" ? "ALL TYPES" : selectedFilters.type.toUpperCase();
+      const corridor = selectedFilters.corridor === "all" ? "ALL CORRIDORS" : selectedFilters.corridor.toUpperCase();
+      const brgy = selectedBarangay ? ("BARANGAY " + selectedBarangay.toUpperCase()) : "ALL BARANGAYS";
+      document.getElementById("resultsSubtitle").textContent =
+        "SHOWING " + list.length + " PROPERTIES. " + type + ". " + corridor + ". " + brgy + ".";
+    }
+
+    function updateViewButtons(){
+      const gridBtn = document.getElementById("toggleGridBtn");
+      const listBtn = document.getElementById("toggleListBtn");
+      const viewGrid = document.getElementById("viewGrid");
+      const viewList = document.getElementById("viewList");
+
+      if (viewMode === "grid") {
+        gridBtn.classList.add("active");
+        listBtn.classList.remove("active");
+        viewGrid.classList.add("active");
+        viewList.classList.remove("active");
+      } else {
+        listBtn.classList.add("active");
+        gridBtn.classList.remove("active");
+        viewList.classList.add("active");
+        viewGrid.classList.remove("active");
+      }
+    }
+
+    function setViewMode(mode){
+      viewMode = mode;
+      renderProperties();
+    }
+
+    function bindFilters(){
+      document.querySelectorAll("#typeFilters .filter-tag").forEach(tag => {
+        tag.addEventListener("click", function(){
+          document.querySelectorAll("#typeFilters .filter-tag").forEach(t => t.classList.remove("active"));
+          this.classList.add("active");
+          selectedFilters.type = this.dataset.filter;
+          rerankAndRender(false);
+        });
+      });
+
+      document.querySelectorAll("#corridorFilters .filter-tag").forEach(tag => {
+        tag.addEventListener("click", function(){
+          document.querySelectorAll("#corridorFilters .filter-tag").forEach(t => t.classList.remove("active"));
+          this.classList.add("active");
+          selectedFilters.corridor = this.dataset.filter;
+          rerankAndRender(false);
+        });
+      });
+
+      document.getElementById("sectorInput").addEventListener("change", function(){
+        rerankAndRender(false);
+      });
+    }
+
+    function rerankAndRender(showToast){
+      renderProperties();
+      updateMarkers();
+      updateStats();
+      if (showToast) toast("RERANKED", "WEIGHTS APPLIED", "ok");
+    }
+
+    function renderProperties(){
+      const container = document.getElementById("propertiesList");
+      const sectorVal = (document.getElementById("sectorInput")?.value || "").trim() || null;
+
+      let list = filteredLocations()
+        .map(p => ({ ...p, score: calculateWeightedScore(p, sectorVal) }))
+        .sort((a,b) => b.score - a.score);
+
+      setResultsSubtitle(list);
+
+      container.className = (viewMode === "grid") ? "properties-grid" : "properties-list";
+
+      container.innerHTML = list.map(p => {
+        const dot = scoreDotColor(p.score);
+        const isChecked = compareList.includes(p.id);
+        const cardClass = (viewMode === "grid") ? "property-card" : "property-card list";
+        const brgy = getPropertyBarangay(p.id);
+
+        return `
+          <div class="${cardClass}" onclick="selectLocation(${p.id})">
+            <img src="${p.image}" alt="${p.name}" class="property-image"
+              onerror="this.style.display='none';">
+
+            <div class="pill"><span class="p"></span>${p.status.toUpperCase()}</div>
+
+            <div class="score-badge">
+              <span class="score-dot" style="background:${dot};"></span>
+              <span>${p.score}</span>
+            </div>
+
+            <div class="property-content">
+              <div>
+                <div class="property-title">${p.name.toUpperCase()}</div>
+                <div class="property-location">
+                  SAN FERNANDO, LA UNION
+                  <span style="margin-left:8px; color: rgba(10,20,35,0.62);">| ${(brgy || "UNASSIGNED").toUpperCase()}</span>
+                </div>
+              </div>
+
+              <div class="property-specs">
+                <div class="spec-item">
+                  <div class="spec-label">AREA</div>
+                  <div class="spec-value">${p.area} HA</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">PRICE</div>
+                  <div class="spec-value">${formatMoneyPHP(p.price)}</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">PRICE PER SQM</div>
+                  <div class="spec-value">PHP ${p.pricePerSqm.toLocaleString()}</div>
+                </div>
+                <div class="spec-item">
+                  <div class="spec-label">ACCESS</div>
+                  <div class="spec-value">${p.roadAccess}%</div>
+                </div>
+              </div>
+
+              <div class="property-tags">
+                ${p.tags.slice(0, 3).map(tag => `<span class="tag">${tag.toUpperCase()}</span>`).join("")}
+              </div>
+
+              <div class="property-actions">
+                <button class="btn-soft" onclick="event.stopPropagation(); openDueDiligenceFor(${p.id})">
+                  <span class="btn-dot" style="background: var(--orange);"></span>DUE DILIGENCE
+                </button>
+                <button class="btn-soft" onclick="event.stopPropagation(); openDecisionPackFor(${p.id})">
+                  <span class="btn-dot" style="background: var(--blue);"></span>DECISION PACK
+                </button>
+                <button class="btn-soft" onclick="event.stopPropagation(); openVoteFor(${p.id})">
+                  <span class="btn-dot" style="background: var(--yellow);"></span>VOTE
+                </button>
+                <button class="btn-soft" onclick="event.stopPropagation(); openChatFor(${p.id})">
+                  <span class="btn-dot" style="background: var(--blue);"></span>CHAT
+                </button>
+              </div>
+
+              <div class="compare-row" onclick="event.stopPropagation();">
+                <div>ADD TO COMPARE</div>
+                <input type="checkbox" ${isChecked ? "checked" : ""} onchange="toggleCompare(${p.id}, event)">
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      updateViewButtons();
+      updateStats();
+    }
+
+    function toggleCompare(id, ev){
+      if (ev) ev.stopPropagation();
+
+      const index = compareList.indexOf(id);
+      if (index > -1) {
+        compareList.splice(index, 1);
+        toast("REMOVED", "FROM COMPARISON", "warn");
+        return;
+      }
+      if (compareList.length >= 3) {
+        toast("LIMIT", "MAX THREE PROPERTIES", "warn");
+        if (ev && ev.target) ev.target.checked = false;
+        return;
+      }
+      compareList.push(id);
+      toast("ADDED", "TO COMPARISON", "ok");
+    }
+
+    function showComparison(){
+      if (compareList.length < 2) {
+        toast("SELECT MORE", "PICK AT LEAST TWO", "warn");
+        return;
+      }
+
+      const sectorVal = (document.getElementById("sectorInput")?.value || "").trim() || null;
+      const properties = LOCATIONS
+        .filter(p => compareList.includes(p.id))
+        .map(p => ({...p, score: calculateWeightedScore(p, sectorVal)}));
+
+      const modal = document.getElementById("comparisonModal");
+      const content = document.getElementById("comparisonContent");
+
+      content.innerHTML = `
+        <div style="background:#FFFFFF; border:1px solid rgba(10,20,35,0.10); border-radius:16px; overflow:hidden;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr>
+                <th style="padding:12px; text-align:left; border-bottom:1px solid rgba(10,20,35,0.10); background: rgba(27,177,245,0.10); font-weight:900; letter-spacing:0.14em; font-size:11px; text-transform:uppercase;">FEATURE</th>
+                ${properties.map(p => `<th style="padding:12px; text-align:left; border-bottom:1px solid rgba(10,20,35,0.10); background: rgba(27,177,245,0.10); font-weight:900; letter-spacing:0.10em; font-size:11px; text-transform:uppercase;">${p.name.toUpperCase()}</th>`).join("")}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.12em; font-size:10px; text-transform:uppercase;">WEIGHTED SCORE</td>
+                ${properties.map(p => `<td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.10em; font-size:10px; text-transform:uppercase;">${p.score}/100</td>`).join("")}
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.12em; font-size:10px; text-transform:uppercase;">BARANGAY</td>
+                ${properties.map(p => `<td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.10em; font-size:10px; text-transform:uppercase;">${(getPropertyBarangay(p.id) || "UNASSIGNED").toUpperCase()}</td>`).join("")}
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.12em; font-size:10px; text-transform:uppercase;">AREA</td>
+                ${properties.map(p => `<td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.10em; font-size:10px; text-transform:uppercase;">${p.area} HA</td>`).join("")}
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.12em; font-size:10px; text-transform:uppercase;">PRICE</td>
+                ${properties.map(p => `<td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.10em; font-size:10px; text-transform:uppercase;">${formatMoneyPHP(p.price)}</td>`).join("")}
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.12em; font-size:10px; text-transform:uppercase;">PRICE PER SQM</td>
+                ${properties.map(p => `<td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.10em; font-size:10px; text-transform:uppercase;">PHP ${p.pricePerSqm.toLocaleString()}</td>`).join("")}
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.12em; font-size:10px; text-transform:uppercase;">TYPE</td>
+                ${properties.map(p => `<td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.10em; font-size:10px; text-transform:uppercase;">${p.type.toUpperCase()}</td>`).join("")}
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.12em; font-size:10px; text-transform:uppercase;">ACCESS</td>
+                ${properties.map(p => `<td style="padding:12px; border-bottom:1px solid rgba(10,20,35,0.10); font-weight:900; letter-spacing:0.10em; font-size:10px; text-transform:uppercase;">${p.roadAccess}%</td>`).join("")}
+              </tr>
+              <tr>
+                <td style="padding:12px; font-weight:900; letter-spacing:0.12em; font-size:10px; text-transform:uppercase;">FACILITIES</td>
+                ${properties.map(p => `<td style="padding:12px; font-weight:900; letter-spacing:0.10em; font-size:10px; text-transform:uppercase;">${p.facilities.join(", ").toUpperCase()}</td>`).join("")}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      modal.classList.add("active");
+    }
+
+    function closeComparison(){
+      document.getElementById("comparisonModal").classList.remove("active");
+    }
+
+    const map = L.map("map").setView([16.6195, 120.3205], 13);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors",
+      maxZoom: 19
+    }).addTo(map);
+
+    const markers = new Map();
+
+    const customIcon = L.divIcon({
+      className: "custom-marker",
+      html: `
+        <div style="
+          width: 30px; height: 30px; border-radius: 18px;
+          background: #FFFFFF;
+          border: 1px solid rgba(10,20,35,0.16);
+          box-shadow: 0 18px 42px rgba(10,20,35,0.14);
+          display:flex; align-items:center; justify-content:center;
+        ">
+          <div style="width: 14px; height: 14px; border-radius: 10px; background: #1BB1F5;"></div>
+        </div>
+      `,
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+
+    function buildPopupHtml(p, score){
+      const dot = scoreDotColor(score);
+      const brgy = getPropertyBarangay(p.id) || "UNASSIGNED";
+      return `
+        <div style="min-width: 240px;">
+          <div style="font-weight:900; letter-spacing:0.10em; font-size:12px; margin-bottom:8px; text-transform:uppercase;">${p.name.toUpperCase()}</div>
+          <div style="font-size:10px; font-weight:900; letter-spacing:0.12em; color: rgba(10,20,35,0.62); text-transform:uppercase;">
+            SAN FERNANDO, LA UNION | ${brgy.toUpperCase()}
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:11px; font-weight:800; letter-spacing:0.10em; color: rgba(10,20,35,0.62); text-transform:uppercase; margin-top:10px;">
+            <span style="display:inline-block;width:10px;height:10px;border-radius:999px;background:${dot};"></span>
+            <span>WEIGHTED SCORE ${score}/100</span>
+          </div>
+          <div style="margin-top:12px; display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+            <div style="background:#F2F5FA;border:1px solid rgba(10,20,35,0.10); border-radius:14px; padding:10px;">
+              <div style="font-size:10px; font-weight:900; letter-spacing:0.14em; color: rgba(10,20,35,0.62); margin-bottom:6px; text-transform:uppercase;">AREA</div>
+              <div style="font-size:10px; font-weight:900; letter-spacing:0.10em; text-transform:uppercase;">${p.area} HA</div>
+            </div>
+            <div style="background:#F2F5FA;border:1px solid rgba(10,20,35,0.10); border-radius:14px; padding:10px;">
+              <div style="font-size:10px; font-weight:900; letter-spacing:0.14em; color: rgba(10,20,35,0.62); margin-bottom:6px; text-transform:uppercase;">PRICE</div>
+              <div style="font-size:10px; font-weight:900; letter-spacing:0.10em; text-transform:uppercase;">${formatMoneyPHP(p.price)}</div>
+            </div>
+          </div>
+          <button
+            onclick="selectLocation(${p.id})"
+            style="
+              margin-top: 12px;
+              width: 100%;
+              border: none;
+              border-radius: 16px;
+              padding: 12px 14px;
+              cursor:pointer;
+              letter-spacing:0.14em;
+              font-weight:900;
+              text-transform:uppercase;
+              background: #1BB1F5;
+              color: #FFFFFF;
+              box-shadow: 0 18px 42px rgba(27, 177, 245, 0.20);
+            "
+          >
+            OPEN PROPERTY
+          </button>
+        </div>
+      `;
+    }
+
+    function initMarkers(){
+      const sectorVal = (document.getElementById("sectorInput")?.value || "").trim() || null;
+      LOCATIONS.forEach(p => {
+        const score = calculateWeightedScore(p, sectorVal);
+        const marker = L.marker([p.lat, p.lng], { icon: customIcon })
+          .addTo(map)
+          .bindPopup(buildPopupHtml(p, score));
+        markers.set(p.id, marker);
+      });
+    }
+
+    function updateMarkers(){
+      const sectorVal = (document.getElementById("sectorInput")?.value || "").trim() || null;
+      LOCATIONS.forEach(p => {
+        const marker = markers.get(p.id);
+        if (!marker) return;
+        const score = calculateWeightedScore(p, sectorVal);
+        marker.setPopupContent(buildPopupHtml(p, score));
+      });
+    }
+
+    function selectLocation(id){
+      const p = LOCATIONS.find(x => x.id === id);
+      if (!p) return;
+
+      selectedPropertyId = id;
+      document.getElementById("decisionPackHint").textContent = "SELECTED";
+      document.getElementById("labHint").textContent = "SELECTED";
+
+      const brgy = getPropertyBarangay(id);
+      const dpB = document.getElementById("dpBarangay");
+      if (dpB) dpB.value = brgy ? brgy : "";
+
+      map.setView([p.lat, p.lng], 16);
+      const marker = markers.get(id);
+      if (marker) marker.openPopup();
+
+      toast("PROPERTY SELECTED", p.name.toUpperCase(), "ok");
+    }
+
+    function runScenario(){
+      const budgetVal = document.getElementById("budgetInput").value;
+      const sectorVal = document.getElementById("sectorInput").value;
+      const sizeVal = document.getElementById("sizeInput").value;
+
+      let matches = [...LOCATIONS];
+
+      if (budgetVal) matches = matches.filter(p => p.price <= parseInt(budgetVal, 10));
+      if (sectorVal) matches = matches.filter(p => p.type === sectorVal);
+      if (sizeVal) matches = matches.filter(p => p.area >= parseFloat(sizeVal));
+
+      const targetSector = sectorVal || null;
+
+      matches = matches
+        .map(p => ({...p, score: calculateWeightedScore(p, targetSector)}))
+        .sort((a,b) => b.score - a.score);
+
+      if (matches.length === 0) {
+        toast("NO MATCHES", "ADJUST BUDGET OR SIZE", "warn");
+        return;
+      }
+
+      toast("MATCHES FOUND", "OPENING TOP RESULT", "ok");
+      selectLocation(matches[0].id);
+      rerankAndRender(false);
+    }
+
+    function openDecisionPack(){
+      if (!selectedPropertyId) {
+        toast("SELECT A PROPERTY", "CHOOSE A PROPERTY FIRST", "warn");
+        return;
+      }
+      document.getElementById("packModal").classList.add("active");
+      renderDecisionPack();
+    }
+
+    function openDecisionPackFor(id){
+      selectedPropertyId = id;
+      document.getElementById("decisionPackHint").textContent = "SELECTED";
+      document.getElementById("labHint").textContent = "SELECTED";
+
+      const brgy = getPropertyBarangay(id);
+      const dpB = document.getElementById("dpBarangay");
+      if (dpB) dpB.value = brgy ? brgy : "";
+
+      document.getElementById("packModal").classList.add("active");
+      renderDecisionPack();
+    }
+
+    function closeDecisionPack(){
+      document.getElementById("packModal").classList.remove("active");
+    }
+
+    function safeNumber(value){
+      const n = Number(value);
+      if (!Number.isFinite(n)) return null;
+      if (n < 0) return null;
+      return n;
+    }
+
+    function computeSimplePayback(landPrice, capex, revenue, opex){
+      const net = revenue - opex;
+      if (net <= 0) return null;
+      const total = landPrice + capex;
+      return total / net;
+    }
+
+    function renderDecisionPack(){
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      const intent = document.getElementById("dpIntent").value;
+      const horizon = document.getElementById("dpHorizon").value;
+      const risk = document.getElementById("dpRisk").value;
+      const notes = (document.getElementById("dpNotes").value || "").trim();
+
+      const capex = safeNumber(document.getElementById("dpCapex").value);
+      const revenue = safeNumber(document.getElementById("dpRevenue").value);
+      const opex = safeNumber(document.getElementById("dpOpex").value);
+      const modelNotes = (document.getElementById("dpModelNotes").value || "").trim();
+
+      const sectorVal = (document.getElementById("sectorInput")?.value || "").trim() || null;
+      const score = calculateWeightedScore(p, sectorVal);
+      const dot = scoreDotColor(score);
+
+      const payback = (capex !== null && revenue !== null && opex !== null)
+        ? computeSimplePayback(p.price, capex, revenue, opex)
+        : null;
+
+      const paybackText = (payback === null) ? "NEEDS INPUTS" : (payback.toFixed(1) + " YEARS");
+
+      const netAnnual = (revenue !== null && opex !== null) ? (revenue - opex) : null;
+      const netText = (netAnnual === null) ? "NEEDS INPUTS" : ("PHP " + netAnnual.toLocaleString());
+
+      const riskLabel =
+        risk === "conservative" ? "LOW VOLATILITY" :
+        risk === "balanced" ? "BALANCED" :
+        "HIGH GROWTH";
+
+      const intentLabel = intent.toUpperCase().replace("_", " ");
+
+      document.getElementById("packSub").textContent = p.name.toUpperCase() + " | SAN FERNANDO, LA UNION";
+
+      const ddState = loadDDState(p.id);
+      const ddPct = calcDDPct(ddState);
+
+      const brgy = getPropertyBarangay(p.id) || "UNASSIGNED";
+
+      const output = document.getElementById("packOutput");
+      output.innerHTML = `
+        <div class="pack-head">
+          <div class="pack-h">INVESTMENT MEMO</div>
+          <div class="pack-chip"><span class="c" style="background:${dot};"></span>WEIGHTED SCORE ${score}/100</div>
+        </div>
+
+        <div class="pack-section">
+          <h4>SITE DETAILS</h4>
+          <div style="font-size:11px; font-weight:900; letter-spacing:0.10em; text-transform:uppercase;">
+            BARANGAY ${brgy.toUpperCase()}
+          </div>
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.08em; color: rgba(10,20,35,0.62); margin-top: 10px; text-transform:uppercase;">
+            ${p.description.toUpperCase()}
+          </div>
+        </div>
+
+        <div class="pack-section">
+          <h4>DECISION SUMMARY</h4>
+          <div style="font-size:12px; font-weight:800; letter-spacing:0.04em; color: rgba(10,20,35,0.86); text-transform:uppercase;">
+            THIS SITE SUPPORTS A <span style="color: var(--blue);">${intentLabel}</span> STRATEGY OVER <span style="color: var(--orange);">${horizon} YEARS</span>.
+            RISK PROFILE IS <span style="color: var(--yellow);">${riskLabel}</span>.
+          </div>
+        </div>
+
+        <div class="pack-section">
+          <h4>KEY NUMBERS</h4>
+          <div class="pack-kpis">
+            <div class="kpi">
+              <div class="k">LAND PRICE</div>
+              <div class="v">${formatMoneyPHP(p.price).toUpperCase()}</div>
+            </div>
+            <div class="kpi">
+              <div class="k">NET ANNUAL</div>
+              <div class="v">${netText.toUpperCase()}</div>
+            </div>
+            <div class="kpi">
+              <div class="k">PAYBACK</div>
+              <div class="v">${paybackText.toUpperCase()}</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 10px; font-size:11px; font-weight:800; letter-spacing:0.10em; color: rgba(10,20,35,0.62); text-transform:uppercase;">
+            AREA ${p.area} HA. PRICE PER SQM PHP ${p.pricePerSqm.toLocaleString()}. ACCESS ${p.roadAccess}%.
+          </div>
+        </div>
+
+        <div class="pack-section">
+          <h4>DUE DILIGENCE STATUS</h4>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap: 12px;">
+            <div style="font-size:11px; font-weight:900; letter-spacing:0.12em; color: rgba(10,20,35,0.86); text-transform:uppercase;">
+              CHECKLIST COMPLETION
+            </div>
+            <div class="pack-chip"><span class="c"></span>${ddPct}% COMPLETE</div>
+          </div>
+          <div class="dd-progress" style="margin-top:10px;">
+            <div class="dd-bar" style="width:${ddPct}%;"></div>
+          </div>
+          <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+            <button class="btn btn-secondary" style="width:auto;" onclick="openDueDiligenceFor(${p.id})">
+              <span class="btn-dot"></span>OPEN CHECKLIST
+            </button>
+            <button class="btn btn-secondary" style="width:auto;" onclick="openVoteFor(${p.id})">
+              <span class="btn-dot"></span>OPEN VOTING
+            </button>
+            <button class="btn btn-secondary" style="width:auto;" onclick="openChatFor(${p.id})">
+              <span class="btn-dot"></span>CHAT OWNER
+            </button>
+          </div>
+        </div>
+
+        <div class="pack-section">
+          <h4>ASSUMPTIONS AND NOTES</h4>
+          <div style="font-size:11px; font-weight:800; letter-spacing:0.08em; color: rgba(10,20,35,0.86); text-transform:uppercase;">
+            ${notes ? notes.toUpperCase() : "NO NOTES PROVIDED."}
+          </div>
+
+          <div style="margin-top:10px; font-size:11px; font-weight:800; letter-spacing:0.08em; color: rgba(10,20,35,0.62); text-transform:uppercase;">
+            ${modelNotes ? modelNotes.toUpperCase() : "NO MODEL NOTES PROVIDED."}
+          </div>
+        </div>
+      `;
+
+      toast("DECISION PACK UPDATED", "MEMO REFRESHED", "ok");
+    }
+
+    function printDecisionPack(){
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      const pack = document.getElementById("packOutput");
+      if (!pack || !pack.innerHTML.trim()) {
+        toast("GENERATE FIRST", "REFRESH MEMO BEFORE PRINTING", "warn");
+        return;
+      }
+
+      const w = window.open("", "_blank");
+      if (!w) {
+        toast("POPUP BLOCKED", "ALLOW POPUPS TO PRINT", "warn");
+        return;
+      }
+
+      w.document.write(`
+        <html>
+          <head>
+            <title>DECISION PACK</title>
+            <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+            <style>
+              body{ font-family: "Manrope", Arial, sans-serif; padding: 24px; color: #0A1423; }
+              .wrap{ max-width: 960px; margin: 0 auto; }
+              .box{ border: 1px solid rgba(10,20,35,0.12); border-radius: 16px; padding: 14px; }
+              h1{ font-size: 16px; letter-spacing: 0.14em; margin: 0 0 6px 0; text-transform: uppercase; }
+              .sub{ font-size: 11px; letter-spacing: 0.12em; color: rgba(10,20,35,0.62); margin-bottom: 14px; text-transform: uppercase; font-weight: 800; }
+            </style>
+          </head>
+          <body>
+            <div class="wrap">
+              <div class="box">
+                <h1>DECISION PACK</h1>
+                <div class="sub">${p.name.toUpperCase()} | SAN FERNANDO, LA UNION</div>
+                ${pack.innerHTML}
+              </div>
+            </div>
+          </body>
+        </html>
+      `);
+
+      w.document.close();
+      w.focus();
+      w.print();
+    }
+
+    function openDueDiligence(){
+      if (!selectedPropertyId) {
+        toast("SELECT A PROPERTY", "CHOOSE A PROPERTY FIRST", "warn");
+        return;
+      }
+      openDueDiligenceFor(selectedPropertyId);
+    }
+
+    function openDueDiligenceFor(id){
+      selectedPropertyId = id;
+      document.getElementById("decisionPackHint").textContent = "SELECTED";
+      document.getElementById("labHint").textContent = "SELECTED";
+      document.getElementById("ddModal").classList.add("active");
+      renderDueDiligence();
+    }
+
+    function closeDueDiligence(){
+      document.getElementById("ddModal").classList.remove("active");
+    }
+
+    function ddStorageKey(propertyId){
+      return "sfc_dd_" + String(propertyId);
+    }
+
+    function loadDDState(propertyId){
+      try{
+        const raw = localStorage.getItem(ddStorageKey(propertyId));
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") return parsed;
+        return {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveDDState(propertyId, state){
+      try{
+        localStorage.setItem(ddStorageKey(propertyId), JSON.stringify(state));
+      } catch {}
+    }
+
+    function calcDDPct(state){
+      const total = DD_ITEMS.length;
+      const done = DD_ITEMS.filter(it => !!state[it.key]).length;
+      if (total === 0) return 0;
+      return Math.round((done / total) * 100);
+    }
+
+    function renderDueDiligence(){
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      document.getElementById("ddSub").textContent = p.name.toUpperCase() + " | SAN FERNANDO, LA UNION";
+
+      const state = loadDDState(p.id);
+      const pct = calcDDPct(state);
+
+      document.getElementById("ddPct").textContent = pct + "%";
+      document.getElementById("ddBar").style.width = pct + "%";
+
+      const list = document.getElementById("ddList");
+      list.innerHTML = DD_ITEMS.map(it => {
+        const checked = !!state[it.key];
+        const dotColor = checked ? "var(--ok)" : "var(--warn)";
+        const statusText = checked ? "VERIFIED" : "PENDING";
+
+        return `
+          <div class="dd-item">
+            <div class="dd-left">
+              <input class="dd-check" type="checkbox" ${checked ? "checked" : ""} onchange="toggleDD('${it.key}', this.checked)">
+              <div class="dd-name">${it.label}</div>
+            </div>
+            <div class="dd-status">
+              <span class="dd-dot" style="background:${dotColor};"></span>
+              <span>${statusText}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function toggleDD(key, checked){
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      const state = loadDDState(p.id);
+      state[key] = !!checked;
+      saveDDState(p.id, state);
+
+      renderDueDiligence();
+      toast("CHECKLIST UPDATED", "STATUS SAVED", "ok");
+
+      const packOpen = document.getElementById("packModal").classList.contains("active");
+      if (packOpen) renderDecisionPack();
+
+      const labOpen = document.getElementById("labModal").classList.contains("active");
+      if (labOpen) refreshLab();
+    }
+
+    function resetDueDiligence(){
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      saveDDState(p.id, {});
+      renderDueDiligence();
+      toast("RESET", "CHECKLIST CLEARED", "warn");
+
+      const packOpen = document.getElementById("packModal").classList.contains("active");
+      if (packOpen) renderDecisionPack();
+
+      const labOpen = document.getElementById("labModal").classList.contains("active");
+      if (labOpen) refreshLab();
+    }
+
+    function exportDueDiligence(){
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      const state = loadDDState(p.id);
+      const lines = [
+        "DUE DILIGENCE CHECKLIST",
+        p.name.toUpperCase(),
+        "SAN FERNANDO, LA UNION",
+        "",
+        ...DD_ITEMS.map(it => (state[it.key] ? "[X] " : "[ ] ") + it.label),
+        ""
+      ];
+
+      const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "due_diligence_" + p.id + ".txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+
+      toast("EXPORTED", "CHECKLIST DOWNLOADED", "ok");
+    }
+
+    let sensChartInstance = null;
+
+    function openInvestmentLab(){
+      if (!selectedPropertyId) {
+        toast("SELECT A PROPERTY", "CHOOSE A PROPERTY FIRST", "warn");
+        return;
+      }
+      document.getElementById("labModal").classList.add("active");
+      const p = getSelectedProperty();
+      document.getElementById("labSub").textContent = p.name.toUpperCase() + " | SAN FERNANDO, LA UNION";
+      refreshLab();
+    }
+
+    function closeInvestmentLab(){
+      document.getElementById("labModal").classList.remove("active");
+    }
+
+    function onLabChange(){
+      const pct = parseInt(document.getElementById("labEquityPct").value, 10);
+      document.getElementById("labEquityPctVal").textContent = pct + "%";
+
+      const sens = parseInt(document.getElementById("sensRevenue").value, 10);
+      document.getElementById("sensRevenueVal").textContent = sens + "%";
+
+      refreshLab();
+    }
+
+    function resetLab(){
+      document.getElementById("labCapex").value = "";
+      document.getElementById("labRevenue").value = "";
+      document.getElementById("labOpex").value = "";
+      document.getElementById("labEquityPct").value = "40";
+      document.getElementById("labInterest").value = "";
+      document.getElementById("labExitCap").value = "";
+      document.getElementById("sensRevenue").value = "0";
+      onLabChange();
+      toast("RESET", "LAB INPUTS CLEARED", "warn");
+    }
+
+    function numOrNull(v){
+      const n = Number(v);
+      if (!Number.isFinite(n)) return null;
+      if (n < 0) return null;
+      return n;
+    }
+
+    function moneyText(n){
+      if (n === null) return "NEEDS INPUTS";
+      return "PHP " + Math.round(n).toLocaleString();
+    }
+
+    function yearsText(n){
+      if (n === null) return "NEEDS INPUTS";
+      return n.toFixed(1) + " YEARS";
+    }
+
+    function ratioText(n){
+      if (n === null) return "NEEDS INPUTS";
+      if (!Number.isFinite(n)) return "NEEDS INPUTS";
+      return n.toFixed(2);
+    }
+
+    function refreshLab(){
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      const capex = numOrNull(document.getElementById("labCapex").value);
+      const revenueBase = numOrNull(document.getElementById("labRevenue").value);
+      const opex = numOrNull(document.getElementById("labOpex").value);
+
+      const equityPct = parseInt(document.getElementById("labEquityPct").value, 10) / 100;
+
+      const interest = numOrNull(document.getElementById("labInterest").value);
+      const exitCap = numOrNull(document.getElementById("labExitCap").value);
+
+      const sens = parseInt(document.getElementById("sensRevenue").value, 10) / 100;
+      const revenue = revenueBase === null ? null : revenueBase * (1 + sens);
+
+      const totalCost = (capex === null) ? null : (p.price + capex);
+      const equity = (totalCost === null) ? null : totalCost * equityPct;
+      const debt = (totalCost === null) ? null : totalCost - equity;
+
+      const netAnnual = (revenue === null || opex === null) ? null : (revenue - opex);
+
+      const debtService = (debt === null || interest === null) ? null : (debt * interest);
+      const dscr = (netAnnual === null || debtService === null || debtService <= 0) ? null : (netAnnual / debtService);
+
+      const payback = (netAnnual === null || totalCost === null || netAnnual <= 0) ? null : (totalCost / netAnnual);
+
+      const exitValue = (netAnnual === null || exitCap === null || exitCap <= 0) ? null : (netAnnual / exitCap);
+
+      document.getElementById("outNetAnnual").textContent = moneyText(netAnnual).toUpperCase();
+      document.getElementById("outDSCR").textContent = ratioText(dscr).toUpperCase();
+      document.getElementById("outPayback").textContent = yearsText(payback).toUpperCase();
+      document.getElementById("outEquity").textContent = moneyText(equity).toUpperCase();
+      document.getElementById("outDebt").textContent = moneyText(debt).toUpperCase();
+      document.getElementById("outExitValue").textContent = moneyText(exitValue).toUpperCase();
+
+      const sectorVal = (document.getElementById("sectorInput")?.value || "").trim() || null;
+      const wScore = calculateWeightedScore(p, sectorVal);
+      document.getElementById("labWeightedScoreChip").textContent = "WEIGHTED SCORE " + wScore + "/100";
+
+      updateReadinessScore({ capex, revenueBase, opex, interest, exitCap }, p.id);
+      renderSensitivityChart(p, capex, revenueBase, opex);
+    }
+
+    function updateReadinessScore(inputs, propertyId){
+      const ddState = loadDDState(propertyId);
+      const ddPct = calcDDPct(ddState);
+
+      let score = 0;
+
+      if (inputs.capex !== null) score += 15;
+      if (inputs.revenueBase !== null) score += 15;
+      if (inputs.opex !== null) score += 15;
+      if (inputs.interest !== null) score += 10;
+      if (inputs.exitCap !== null) score += 10;
+
+      score += Math.round(ddPct * 0.35);
+
+      const finalScore = Math.max(0, Math.min(100, score));
+
+      document.getElementById("readinessChip").textContent = "READINESS " + finalScore + "/100";
+      document.getElementById("readinessBar").style.width = finalScore + "%";
+
+      let msg = "COMPLETE INPUTS AND DUE DILIGENCE";
+      if (finalScore >= 85) msg = "INVESTOR READY. EXPORT DECISION PACK";
+      else if (finalScore >= 70) msg = "STRONG. FINALIZE DUE DILIGENCE";
+      else if (finalScore >= 50) msg = "GOOD START. ADD ASSUMPTIONS";
+      else msg = "NEEDS BASELINE INPUTS";
+
+      document.getElementById("readinessText").textContent = msg;
+    }
+
+    function renderSensitivityChart(p, capex, revenueBase, opex){
+      const canvas = document.getElementById("sensChart");
+      if (!canvas) return;
+
+      const labels = [];
+      const values = [];
+
+      const totalCost = (capex === null) ? null : (p.price + capex);
+
+      for (let pct = -30; pct <= 30; pct += 10) {
+        labels.push(pct + "%");
+
+        if (totalCost === null || revenueBase === null || opex === null) {
+          values.push(null);
+          continue;
+        }
+
+        const revenue = revenueBase * (1 + pct / 100);
+        const netAnnual = revenue - opex;
+
+        if (netAnnual <= 0) {
+          values.push(null);
+          continue;
+        }
+
+        const payback = totalCost / netAnnual;
+        values.push(Number(payback.toFixed(2)));
+      }
+
+      const data = {
+        labels,
+        datasets: [{
+          label: "PAYBACK YEARS",
+          data: values,
+          borderWidth: 2,
+          tension: 0.25,
+          pointRadius: 3
+        }]
+      };
+
+      const options = {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { title: { display: true, text: "YEARS" } },
+          x: { title: { display: true, text: "REVENUE CHANGE" } }
+        }
+      };
+
+      if (sensChartInstance) {
+        sensChartInstance.data = data;
+        sensChartInstance.options = options;
+        sensChartInstance.update();
+        return;
+      }
+
+      sensChartInstance = new Chart(canvas, { type: "line", data, options });
+    }
+
+    function downloadReport(){
+      toast("EXPORT", "CONNECT PDF EXPORT HERE", "warn");
+    }
+
+    function showAnalytics(){
+      toast("ANALYTICS", "CONNECT REAL DATA HERE", "warn");
+    }
+
+    function openInvestorPortal(){
+      toast("PORTAL", "LINK TO LOGIN PAGE HERE", "warn");
+    }
+
+    function voteStorageKey(propertyId){
+      return "sfc_votes_" + String(propertyId);
+    }
+
+    function loadVotes(propertyId){
+      try{
+        const raw = localStorage.getItem(voteStorageKey(propertyId));
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") return parsed;
+        return {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveVotes(propertyId, votes){
+      try{
+        localStorage.setItem(voteStorageKey(propertyId), JSON.stringify(votes));
+      } catch {}
+    }
+
+    function normalizeVoteLabel(s){
+      return String(s || "")
+        .trim()
+        .replace(/\s+/g, " ")
+        .toUpperCase();
+    }
+
+    function openVoteFor(id){
+      selectedPropertyId = id;
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      document.getElementById("voteSub").textContent = p.name.toUpperCase() + " | SAN FERNANDO, LA UNION";
+
+      const sel = document.getElementById("voteType");
+      sel.innerHTML = VOTE_PRESETS.map(v => `<option value="${v}">${v}</option>`).join("");
+
+      const custom = document.getElementById("voteCustom");
+      if (custom) custom.value = "";
+
+      document.getElementById("voteModal").classList.add("active");
+      renderVoteResults();
+    }
+
+    function closeVote(){
+      document.getElementById("voteModal").classList.remove("active");
+    }
+
+    function castVote(){
+      const p = getSelectedProperty();
+      if (!p) {
+        toast("SELECT A PROPERTY", "CHOOSE A PROPERTY FIRST", "warn");
+        return;
+      }
+
+      const custom = normalizeVoteLabel(document.getElementById("voteCustom")?.value || "");
+      const preset = normalizeVoteLabel(document.getElementById("voteType")?.value || "");
+      const label = custom || preset;
+
+      if (!label) {
+        toast("MISSING", "SELECT OR TYPE A BUSINESS", "warn");
+        return;
+      }
+
+      const votes = loadVotes(p.id);
+      votes[label] = (votes[label] || 0) + 1;
+      saveVotes(p.id, votes);
+
+      toast("VOTED", label, "ok");
+      renderVoteResults();
+    }
+
+    function renderVoteResults(){
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      const votes = loadVotes(p.id);
+      const entries = Object.entries(votes).sort((a,b) => b[1] - a[1]);
+
+      const total = entries.reduce((sum, x) => sum + x[1], 0);
+      document.getElementById("voteTotal").textContent = total + " VOTES";
+
+      const host = document.getElementById("voteResults");
+      if (!entries.length) {
+        host.innerHTML = `
+          <div class="pack-section">
+            <h4>NO VOTES YET</h4>
+            <div class="tiny">BE THE FIRST TO VOTE</div>
+          </div>
+        `;
+        return;
+      }
+
+      const top = entries.slice(0, 8);
+
+      host.innerHTML = `
+        <div class="pack-section">
+          <h4>TOP PICKS</h4>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            ${top.map(([label, count]) => {
+              const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+              return `
+                <div style="background:#FFFFFF; border:1px solid rgba(10,20,35,0.10); border-radius:16px; padding:12px;">
+                  <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
+                    <div style="font-size:11px; font-weight:900; letter-spacing:0.10em; text-transform:uppercase;">${label}</div>
+                    <div style="font-size:11px; font-weight:900; letter-spacing:0.10em; text-transform:uppercase;">${count} (${pct}%)</div>
+                  </div>
+                  <div class="dd-progress" style="margin-top:10px;">
+                    <div class="dd-bar" style="width:${pct}%;"></div>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function chatStorageKey(propertyId){
+      return "sfc_chat_" + String(propertyId);
+    }
+
+    function loadChat(propertyId){
+      try{
+        const raw = localStorage.getItem(chatStorageKey(propertyId));
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+        return [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveChat(propertyId, thread){
+      try{
+        localStorage.setItem(chatStorageKey(propertyId), JSON.stringify(thread));
+      } catch {}
+    }
+
+    function openChatFor(id){
+      selectedPropertyId = id;
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      document.getElementById("chatSub").textContent = p.name.toUpperCase() + " | SAN FERNANDO, LA UNION";
+      document.getElementById("chatModal").classList.add("active");
+
+      renderChatThread();
+
+      const input = document.getElementById("chatInput");
+      if (input) {
+        input.value = "";
+        setTimeout(() => input.focus(), 0);
+      }
+    }
+
+    function closeChat(){
+      document.getElementById("chatModal").classList.remove("active");
+    }
+
+    function renderChatThread(){
+      const p = getSelectedProperty();
+      if (!p) return;
+
+      const thread = loadChat(p.id);
+      const host = document.getElementById("chatThread");
+
+      if (!thread.length) {
+        host.innerHTML = `
+          <div class="tiny">NO MESSAGES YET</div>
+          <div class="tiny" style="margin-top:8px;">SEND A MESSAGE TO START</div>
+        `;
+        return;
+      }
+
+      host.innerHTML = thread.map(msg => {
+        const who = (msg.role || "investor").toUpperCase();
+        const text = String(msg.text || "").toUpperCase();
+        return `
+          <div style="padding:10px; border:1px solid rgba(10,20,35,0.10); border-radius:16px; margin-bottom:10px; background: rgba(27,177,245,0.06);">
+            <div style="font-size:10px; font-weight:900; letter-spacing:0.14em; color: rgba(10,20,35,0.62); text-transform:uppercase;">${who}</div>
+            <div style="font-size:11px; font-weight:900; letter-spacing:0.08em; margin-top:6px; text-transform:uppercase;">${text}</div>
+          </div>
+        `;
+      }).join("");
+
+      host.scrollTop = host.scrollHeight;
+    }
+
+    function sendChatMessage(){
+      const p = getSelectedProperty();
+      if (!p) {
+        toast("SELECT A PROPERTY", "CHOOSE A PROPERTY FIRST", "warn");
+        return;
+      }
+
+      const role = (document.getElementById("chatRole")?.value || "investor").trim();
+      const input = document.getElementById("chatInput");
+      const textRaw = (input?.value || "").trim();
+      if (!textRaw) {
+        toast("MISSING", "TYPE A MESSAGE", "warn");
+        return;
+      }
+
+      const thread = loadChat(p.id);
+      thread.push({
+        role,
+        text: textRaw,
+        ts: Date.now()
+      });
+      saveChat(p.id, thread);
+
+      if (input) input.value = "";
+      renderChatThread();
+      toast("SENT", "MESSAGE SAVED", "ok");
+    }
+
+    function clearChatThread(){
+      const p = getSelectedProperty();
+      if (!p) return;
+      saveChat(p.id, []);
+      renderChatThread();
+      toast("CLEARED", "CHAT REMOVED", "warn");
+    }
+
+    function init(){
+      fillBarangayDatalist();
+      bindFilters();
+      syncWeightsUI();
+      initMarkers();
+      renderProperties();
+      updateStats();
+
+      document.getElementById("comparisonModal").addEventListener("click", function(e){
+        if (e.target === this) closeComparison();
+      });
+      document.getElementById("ddModal").addEventListener("click", function(e){
+        if (e.target === this) closeDueDiligence();
+      });
+      document.getElementById("packModal").addEventListener("click", function(e){
+        if (e.target === this) closeDecisionPack();
+      });
+      document.getElementById("labModal").addEventListener("click", function(e){
+        if (e.target === this) closeInvestmentLab();
+      });
+      document.getElementById("voteModal").addEventListener("click", function(e){
+        if (e.target === this) closeVote();
+      });
+      document.getElementById("chatModal").addEventListener("click", function(e){
+        if (e.target === this) closeChat();
+      });
+
+      document.addEventListener("keydown", function(e){
+        if (e.key === "Escape") {
+          closeComparison();
+          closeDueDiligence();
+          closeDecisionPack();
+          closeInvestmentLab();
+          closeVote();
+          closeChat();
+        }
+
+        if (e.key === "Enter") {
+          const chatOpen = document.getElementById("chatModal").classList.contains("active");
+          if (chatOpen) sendChatMessage();
+        }
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
