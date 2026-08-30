@@ -6,7 +6,7 @@ require __DIR__ . '/app/Support/web.php';
 $context = sfc_web_context();
 sfc_require_role('admin', sfc_path('/admin-login.php'));
 $context = sfc_web_context();
-sfc_render_head('Admin Dashboard | LOCUS-SF', $context, ['page' => 'admin-dashboard', 'role' => 'admin']);
+sfc_render_head('Admin Dashboard | SFCelerate', $context, ['page' => 'admin-dashboard', 'role' => 'admin']);
 sfc_render_header($context, 'admin');
 ?>
 <main class="page-shell dashboard-page">

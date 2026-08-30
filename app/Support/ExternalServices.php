@@ -391,7 +391,7 @@ final class ExternalServices
         foreach (array_slice($highlights, 0, $limit) as $highlight) {
             $items[] = [
                 'title' => (string) $highlight,
-                'source' => 'LOCUS-SF Research',
+                'source' => 'SFCelerate Research',
                 'publishedAt' => gmdate(DATE_ATOM),
                 'url' => null,
                 'description' => 'Seeded investor digest shown until a NewsAPI key is configured.',
@@ -626,7 +626,7 @@ PROMPT;
             ],
             [
                 'Authorization' => 'Bearer ' . $apiKey,
-                'X-Title' => (string) ($this->config['app']['name'] ?? 'LOCUS-SF'),
+                'X-Title' => (string) ($this->config['app']['name'] ?? 'SFCelerate'),
             ]
         );
         return trim((string) ($payload['choices'][0]['message']['content'] ?? ''));

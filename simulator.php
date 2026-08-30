@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/app/Support/web.php';
 $context = sfc_web_context();
-sfc_render_head('Scenario Simulator | LOCUS-SF', $context, ['page' => 'scenario-simulator', 'role' => $context['user']['role'] ?? 'guest']);
+sfc_render_head('Scenario Simulator | SFCelerate', $context, ['page' => 'scenario-simulator', 'role' => $context['user']['role'] ?? 'guest']);
 sfc_render_header($context, 'simulator');
 ?>
 <main class="page-shell dashboard-page">

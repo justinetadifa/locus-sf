@@ -6,7 +6,7 @@ require __DIR__ . '/app/Support/web.php';
 $context = sfc_web_context();
 sfc_require_role('admin', sfc_path('/admin-login.php'));
 $context = sfc_web_context();
-sfc_render_head('Admin Listings | LOCUS-SF', $context, ['page' => 'admin-properties', 'role' => 'admin']);
+sfc_render_head('Admin Listings | SFCelerate', $context, ['page' => 'admin-properties', 'role' => 'admin']);
 sfc_render_header($context, 'admin-properties');
 ?>
 <main class="page-shell admin-listings-page">

@@ -5,7 +5,7 @@ require __DIR__ . '/app/Support/web.php';
 
 $context = sfc_web_context();
 $propertyId = (int) ($_GET['id'] ?? 0);
-sfc_render_head('Area Intelligence Dossier | LOCUS-SF', $context, ['page' => 'property-details', 'role' => $context['user']['role'] ?? 'guest', 'property-id' => (string) $propertyId]);
+sfc_render_head('Area Intelligence Dossier | SFCelerate', $context, ['page' => 'property-details', 'role' => $context['user']['role'] ?? 'guest', 'property-id' => (string) $propertyId]);
 sfc_render_header($context, 'explorer');
 ?>
 <main class="page-shell details-page">

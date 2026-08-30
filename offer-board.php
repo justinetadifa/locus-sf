@@ -4,7 +4,7 @@ declare(strict_types=1);
 require __DIR__ . '/app/Support/web.php';
 
 $context = sfc_web_context();
-sfc_render_head('Offer Board | LOCUS-SF', $context, ['page' => 'offer-board', 'role' => $context['user']['role'] ?? 'guest']);
+sfc_render_head('Offer Board | SFCelerate', $context, ['page' => 'offer-board', 'role' => $context['user']['role'] ?? 'guest']);
 sfc_render_header($context, 'offer-board');
 ?>
 <main class="page-shell showcase-page">

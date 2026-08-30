@@ -5,7 +5,7 @@ require __DIR__ . '/app/Support/web.php';
 
 $context = sfc_web_context();
 $heroImage = $context['assetBase'] . '/images/sfcpanoramicView.png';
-sfc_render_head('LOCUS-SF', $context, ['page' => 'landing', 'role' => $context['user']['role'] ?? 'guest']);
+sfc_render_head('SFCelerate', $context, ['page' => 'landing', 'role' => $context['user']['role'] ?? 'guest']);
 sfc_render_header($context, 'landing');
 ?>
 <main class="page-shell landing-shell landing-editorial-shell landing-calm-shell">

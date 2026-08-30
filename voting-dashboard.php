@@ -4,7 +4,7 @@ declare(strict_types=1);
 require __DIR__ . '/app/Support/web.php';
 
 $context = sfc_web_context();
-sfc_render_head('Voting Dashboard | LOCUS-SF', $context, ['page' => 'voting-dashboard', 'role' => $context['user']['role'] ?? 'guest']);
+sfc_render_head('Voting Dashboard | SFCelerate', $context, ['page' => 'voting-dashboard', 'role' => $context['user']['role'] ?? 'guest']);
 sfc_render_header($context, 'voting');
 ?>
 <main class="page-shell voting-page">

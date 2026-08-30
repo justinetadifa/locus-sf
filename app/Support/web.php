@@ -11,7 +11,7 @@ function sfc_web_context(): array
     }
 
     $config = require dirname(__DIR__) . '/config.php';
-    $appName = (string) ($config['app']['name'] ?? 'LOCUS-SF');
+    $appName = (string) ($config['app']['name'] ?? 'SFCelerate');
     $scriptName = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? '/index.php'));
     $basePath = rtrim(str_replace('/index.php', '', $scriptName), '/');
     if (preg_match('#/(admin-dashboard|seller-dashboard|investor-dashboard|admin-login|seller-login|investor-login|property-explorer|property-ranking|voting-dashboard|property-details|compare-decision|admin-properties|admin-showcase|offer-board|city-pipeline|simulator|reports|logout)\.php$#', $scriptName, $matches) === 1) {
@@ -220,10 +220,10 @@ function sfc_render_header(array $context, string $active = ''): void
           aria-controls="cityBriefModal"
           aria-label="Open San Fernando city brief"
         >
-          <img src="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/images/webLogoSfc.png" alt="LOCUS-SF" class="brand-logo">
+          <img src="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/images/webLogoSfc.png" alt="SFCelerate" class="brand-logo">
         </button>
         <a href="<?= htmlspecialchars(sfc_path('/index.php'), ENT_QUOTES, 'UTF-8') ?>" class="brand-copy brand-home-link">
-          <span class="brand-title">LOCUS-SF</span>
+          <span class="brand-title">SFCelerate</span>
           <span class="brand-subtitle"><?= htmlspecialchars($brandSubtitle, ENT_QUOTES, 'UTF-8') ?></span>
         </a>
       </div>

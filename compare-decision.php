@@ -4,7 +4,7 @@ declare(strict_types=1);
 require __DIR__ . '/app/Support/web.php';
 
 $context = sfc_web_context();
-sfc_render_head('Compare & Decision | LOCUS-SF', $context, ['page' => 'compare-decision', 'role' => $context['user']['role'] ?? 'guest']);
+sfc_render_head('Compare & Decision | SFCelerate', $context, ['page' => 'compare-decision', 'role' => $context['user']['role'] ?? 'guest']);
 sfc_render_header($context, 'compare');
 ?>
 <main class="page-shell compare-page">

@@ -6,7 +6,7 @@ require __DIR__ . '/app/Support/web.php';
 $context = sfc_web_context();
 sfc_require_role('investor', sfc_path('/investor-login.php'));
 $context = sfc_web_context();
-sfc_render_head('Investor Dashboard | LOCUS-SF', $context, ['page' => 'investor-dashboard', 'role' => 'investor']);
+sfc_render_head('Investor Dashboard | SFCelerate', $context, ['page' => 'investor-dashboard', 'role' => 'investor']);
 sfc_render_header($context, 'investor');
 ?>
 <main class="page-shell dashboard-page">

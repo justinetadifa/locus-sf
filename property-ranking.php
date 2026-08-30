@@ -4,7 +4,7 @@ declare(strict_types=1);
 require __DIR__ . '/app/Support/web.php';
 
 $context = sfc_web_context();
-sfc_render_head('Investment Priority Board | LOCUS-SF', $context, ['page' => 'property-ranking', 'role' => $context['user']['role'] ?? 'guest']);
+sfc_render_head('Investment Priority Board | SFCelerate', $context, ['page' => 'property-ranking', 'role' => $context['user']['role'] ?? 'guest']);
 sfc_render_header($context, 'ranking');
 ?>
 <main class="page-shell ranking-page ranking-page-shell">

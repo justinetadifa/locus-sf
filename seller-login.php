@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-sfc_render_head('Seller Login | LOCUS-SF', $context, ['page' => 'seller-login', 'role' => 'seller']);
+sfc_render_head('Seller Login | SFCelerate', $context, ['page' => 'seller-login', 'role' => 'seller']);
 sfc_render_header($context);
 ?>
 <main class="page-shell auth-page auth-page-seller">
@@ -65,7 +65,7 @@ sfc_render_header($context);
     </div>
 
     <div class="auth-surface">
-      <div class="auth-brand-line">LOCUS-SF | Seller</div>
+      <div class="auth-brand-line">SFCelerate | Seller</div>
       <div class="auth-role-switch">
         <a href="<?= htmlspecialchars(sfc_path('/investor-login.php'), ENT_QUOTES, 'UTF-8') ?>" class="auth-role-switch-link">Investor</a>
         <a href="<?= htmlspecialchars(sfc_path('/seller-login.php'), ENT_QUOTES, 'UTF-8') ?>" class="auth-role-switch-link is-active">Seller</a>

@@ -170,7 +170,7 @@ XML;
             . '<table style="width:100%%;border-collapse:collapse;font-size:13px;background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">%s</table>'
             . '</div>',
             $this->html((string) ($property['name'] ?? 'Property Opportunity')),
-            $this->html((string) ($property['description'] ?? 'Spatial site review export from LOCUS-SF.')),
+            $this->html((string) ($property['description'] ?? 'Spatial site review export from SFCelerate.')),
             $tableRows
         );
     }
@@ -251,7 +251,7 @@ XML;
             . '<p style="margin:0;line-height:1.6;">%s</p>'
             . '</div>',
             $this->html((string) ($overlay['name'] ?? 'Spatial Overlay')),
-            $this->html((string) ($overlay['description'] ?? 'Overlay exported from LOCUS-SF for Google Earth validation.'))
+            $this->html((string) ($overlay['description'] ?? 'Overlay exported from SFCelerate for Google Earth validation.'))
         );
     }
 
@@ -284,14 +284,14 @@ XML;
             return sprintf('%s | Google Earth Export', (string) ($properties[0]['name'] ?? 'Property'));
         }
 
-        return sprintf('LOCUS-SF | %s export', $this->labelize($scope !== '' ? $scope : 'properties'));
+        return sprintf('SFCelerate | %s export', $this->labelize($scope !== '' ? $scope : 'properties'));
     }
 
     private function defaultDocumentDescription(array $properties, string $scope): string
     {
         return sprintf(
             '<div style="font-family:Arial,sans-serif;color:#1f2937;">'
-            . '<strong>LOCUS-SF</strong><br>'
+            . '<strong>SFCelerate</strong><br>'
             . 'Google Earth export for %d property opportunity%s under the %s workflow.<br>'
             . 'Use this as a complementary spatial inspection layer for ranking, readiness, and validation.'
             . '</div>',
