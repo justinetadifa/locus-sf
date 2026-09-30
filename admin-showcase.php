@@ -6,7 +6,7 @@ require __DIR__ . '/app/Support/web.php';
 $context = sfc_web_context();
 sfc_require_role('admin', sfc_path('/admin-login.php'));
 $context = sfc_web_context();
-sfc_render_head('Admin Showcase Studio | SFCelerate', $context, ['page' => 'admin-showcase', 'role' => 'admin']);
+sfc_render_head('Admin Showcase Studio | LOCUS-SF', $context, ['page' => 'admin-showcase', 'role' => 'admin']);
 sfc_render_header($context, 'admin-showcase');
 ?>
 <main class="page-shell admin-showcase-page">

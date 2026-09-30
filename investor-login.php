@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-sfc_render_head('Investor Login | SFCelerate', $context, ['page' => 'investor-login', 'role' => 'investor']);
+sfc_render_head('Investor Login | LOCUS-SF', $context, ['page' => 'investor-login', 'role' => 'investor']);
 sfc_render_header($context);
 ?>
 <main class="page-shell auth-page auth-page-investor">
@@ -49,7 +49,7 @@ sfc_render_header($context);
     </div>
 
     <div class="auth-surface auth-surface-investor-refined">
-      <div class="auth-brand-line auth-brand-line-investor-refined">SFCelerate</div>
+      <div class="auth-brand-line auth-brand-line-investor-refined">LOCUS-SF</div>
       <div class="auth-role-switch">
         <a href="<?= htmlspecialchars(sfc_path('/investor-login.php'), ENT_QUOTES, 'UTF-8') ?>" class="auth-role-switch-link is-active">Investor</a>
         <a href="<?= htmlspecialchars(sfc_path('/admin-login.php'), ENT_QUOTES, 'UTF-8') ?>" class="auth-role-switch-link">Admin</a>

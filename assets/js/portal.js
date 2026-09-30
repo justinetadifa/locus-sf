@@ -4811,7 +4811,7 @@ function prospectusMarkup({
       <article class="prospectus-page">
         <header class="prospectus-hero">
           <div class="prospectus-hero-copy">
-            <div class="prospectus-kicker">SFCelerate | One-Click Prospectus</div>
+            <div class="prospectus-kicker">LOCUS-SF | One-Click Prospectus</div>
             <h1>${escapeHtml(property.name)}</h1>
             <p>${escapeHtml(propertyStory(property))}</p>
             <div class="prospectus-chip-row">
@@ -4950,7 +4950,7 @@ function prospectusMarkup({
         <footer class="prospectus-footer">
           <span>Data Valid as of ${escapeHtml(formatProspectusTimestamp(generatedAt || new Date().toISOString()))}</span>
           <span>${escapeHtml(property.city || "San Fernando, La Union")} | ${escapeHtml(property.barangay || "Barangay pending")}</span>
-          <span>SFCelerate Investment Brief</span>
+          <span>LOCUS-SF Investment Brief</span>
         </footer>
       </article>
     </section>
@@ -5313,7 +5313,7 @@ function buildVisitIcsContent(visit, property = null) {
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//SFCelerate//Ground Truth Visit//EN",
+    "PRODID:-//LOCUS-SF//Ground Truth Visit//EN",
     "BEGIN:VEVENT",
     `UID:sfc-visit-${visit?.id || "logistics"}@sfcelerate.local`,
     `DTSTAMP:${formatUtc(new Date())}`,
@@ -11875,6 +11875,8 @@ boot().catch((error) => {
   if (root) {
     root.innerHTML = emptyState("Unable to load this screen", error.message || "Unexpected error.");
   }
+}).finally(() => {
+  window.LOCUS_PRELOADER?.dismiss();
 });
 
 

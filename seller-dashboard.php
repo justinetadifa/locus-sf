@@ -6,7 +6,7 @@ require __DIR__ . '/app/Support/web.php';
 $context = sfc_web_context();
 sfc_require_role('seller', sfc_path('/seller-login.php'));
 $context = sfc_web_context();
-sfc_render_head('Seller Dashboard | SFCelerate', $context, ['page' => 'seller-dashboard', 'role' => 'seller']);
+sfc_render_head('Seller Dashboard | LOCUS-SF', $context, ['page' => 'seller-dashboard', 'role' => 'seller']);
 sfc_render_header($context, 'seller');
 ?>
 <main class="page-shell dashboard-page">
