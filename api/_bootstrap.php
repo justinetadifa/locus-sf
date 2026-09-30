@@ -30,7 +30,7 @@ register_shutdown_function(static function () use (&$apiDebug): void {
     }
 
     error_log(sprintf(
-        '[SFCelerate API fatal] %s in %s:%d',
+        '[LOCUS-SF API fatal] %s in %s:%d',
         (string) ($error['message'] ?? 'Unknown fatal error'),
         (string) ($error['file'] ?? 'unknown file'),
         (int) ($error['line'] ?? 0)
@@ -103,7 +103,7 @@ function api_handle(callable $callback): void
         respond_json(['error' => $exception->getMessage()], 404);
     } catch (Throwable $exception) {
         error_log(sprintf(
-            '[SFCelerate API exception] %s: %s in %s:%d',
+            '[LOCUS-SF API exception] %s: %s in %s:%d',
             get_class($exception),
             $exception->getMessage(),
             $exception->getFile(),

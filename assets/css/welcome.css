@@ -1,0 +1,564 @@
+/* Homepage-only LOCUS-SF welcome screen. */
+html.locus-welcome-active,
+html.locus-welcome-active body {
+  overflow: hidden;
+}
+
+.locus-welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  display: none;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  padding:
+    max(28px, env(safe-area-inset-top))
+    max(28px, env(safe-area-inset-right))
+    max(40px, env(safe-area-inset-bottom))
+    max(28px, env(safe-area-inset-left));
+  background: #101d2e;
+  color: #fff;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  isolation: isolate;
+  opacity: 1;
+  transition: opacity 250ms ease-out;
+}
+
+html.locus-welcome-active .locus-welcome {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+}
+
+.locus-welcome.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.locus-welcome__backdrop,
+.locus-welcome__shade {
+  position: absolute;
+  inset: 0;
+}
+
+.locus-welcome__backdrop {
+  z-index: -2;
+  background-color: #17263a;
+  background-image: url("../images/introlocus-sf.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: scale(1.035);
+  transform-origin: 56% 48%;
+  will-change: transform;
+}
+
+html.locus-welcome-active .locus-welcome__backdrop {
+  animation: locus-welcome-ken-burns 22s ease-in-out infinite alternate;
+}
+
+.locus-welcome__shade {
+  z-index: -1;
+  background:
+    radial-gradient(circle at 74% 43%, rgba(229, 164, 56, 0.05), transparent 27%),
+    linear-gradient(90deg, rgba(7, 19, 37, 0.8) 0%, rgba(7, 19, 37, 0.44) 38%, rgba(7, 19, 37, 0.08) 72%),
+    linear-gradient(0deg, rgba(5, 15, 30, 0.86) 0%, rgba(5, 15, 30, 0.3) 44%, rgba(5, 15, 30, 0.02) 74%);
+}
+
+.locus-welcome__brand {
+  position: absolute;
+  top: max(28px, env(safe-area-inset-top));
+  left: max(28px, env(safe-area-inset-left));
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-shadow: 0 2px 18px rgba(4, 12, 24, 0.34);
+  z-index: 2;
+}
+
+.locus-welcome__brand img {
+  display: block;
+  width: 46px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(4, 12, 24, 0.28));
+}
+
+.locus-welcome__content {
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+  min-width: 0;
+  width: min(100%, 720px);
+  margin-left: clamp(0px, 3vw, 48px);
+  margin-bottom: clamp(0px, 3.5vh, 32px);
+  text-shadow: 0 3px 24px rgba(3, 10, 20, 0.38);
+}
+
+.locus-welcome__content::before {
+  position: absolute;
+  inset: -34px -58px -38px -34px;
+  z-index: -1;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 34px;
+  background: linear-gradient(115deg, rgba(8, 21, 39, 0.3), rgba(8, 21, 39, 0.12) 62%, transparent 90%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px) saturate(112%);
+  -webkit-backdrop-filter: blur(10px) saturate(112%);
+  -webkit-mask-image: radial-gradient(ellipse at 32% 52%, #000 0%, rgba(0, 0, 0, 0.92) 56%, transparent 100%);
+  mask-image: radial-gradient(ellipse at 32% 52%, #000 0%, rgba(0, 0, 0, 0.92) 56%, transparent 100%);
+  content: "";
+  pointer-events: none;
+}
+
+.locus-welcome__location {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 20px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.5;
+}
+
+.locus-welcome__location::before {
+  width: 34px;
+  height: 2px;
+  border-radius: 999px;
+  background: #f3a928;
+  content: "";
+  flex: 0 0 auto;
+}
+
+.locus-welcome h1 {
+  display: grid;
+  gap: 0;
+  max-width: 12ch;
+  margin: 0;
+  color: #fff;
+  font-family: "Poppins", "Inter", sans-serif;
+  font-size: clamp(52px, 5.8vw, 88px);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+  text-shadow: 0 2px 1px rgba(2, 9, 18, 0.18), 0 14px 46px rgba(2, 9, 18, 0.48);
+  text-wrap: balance;
+}
+
+.locus-welcome h1 span {
+  white-space: nowrap;
+}
+
+.locus-welcome__description {
+  max-width: 570px;
+  margin: 26px 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(16px, 1.35vw, 19px);
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.65;
+}
+
+.locus-welcome__continue {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  min-height: 56px;
+  margin-top: 32px;
+  padding: 0 24px;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f5b43e, #e99c1b);
+  box-shadow: 0 16px 40px rgba(7, 15, 27, 0.26), 0 0 0 rgba(240, 166, 42, 0);
+  color: #172034;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-shadow: none;
+  transform: translateZ(0) scale(1);
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), filter 220ms ease, box-shadow 220ms ease, color 220ms ease;
+  will-change: transform;
+}
+
+.locus-welcome__continue::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 22%, rgba(255, 255, 255, 0.34) 48%, transparent 72%);
+  content: "";
+  pointer-events: none;
+  transform: translateX(-130%);
+  transition: transform 520ms ease;
+}
+
+.locus-welcome__continue span {
+  position: relative;
+  z-index: 1;
+}
+
+.locus-welcome__continue span:last-child {
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.locus-welcome__continue:hover {
+  box-shadow: 0 20px 50px rgba(7, 15, 27, 0.34), 0 0 28px rgba(240, 166, 42, 0.34);
+  color: #101a2d;
+  filter: brightness(1.08) saturate(1.04);
+  transform: translateZ(0) scale(1.035);
+}
+
+.locus-welcome__continue:hover::before {
+  transform: translateX(130%);
+}
+
+.locus-welcome__continue:hover span:last-child {
+  transform: translateX(3px);
+}
+
+.locus-welcome__continue:active {
+  filter: brightness(0.99);
+  transform: translateZ(0) scale(0.985);
+}
+
+.locus-welcome__continue:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 7px rgba(233, 161, 38, 0.5), 0 18px 46px rgba(7, 15, 27, 0.32);
+}
+
+html.locus-welcome-active .locus-welcome__brand {
+  animation: locus-welcome-rise 720ms 60ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html.locus-welcome-active .locus-welcome__location {
+  animation: locus-welcome-rise 720ms 160ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html.locus-welcome-active .locus-welcome h1 {
+  animation: locus-welcome-rise 820ms 270ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html.locus-welcome-active .locus-welcome__description {
+  animation: locus-welcome-rise 760ms 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html.locus-welcome-active .locus-welcome__continue {
+  animation: locus-welcome-rise 760ms 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.locus-welcome__geo {
+  --locus-geo-opacity: 0.58;
+  position: absolute;
+  top: 49%;
+  right: clamp(38px, 7vw, 112px);
+  z-index: 1;
+  width: clamp(280px, 29vw, 430px);
+  aspect-ratio: 1;
+  color: rgba(255, 205, 116, 0.66);
+  opacity: var(--locus-geo-opacity);
+  pointer-events: none;
+  transform: translateY(-52%);
+}
+
+html.locus-welcome-active .locus-welcome__geo {
+  animation: locus-welcome-geo-appear 1200ms 650ms ease-out both;
+}
+
+.locus-welcome__geo-grid {
+  position: absolute;
+  inset: -13%;
+  background-image:
+    linear-gradient(rgba(196, 224, 240, 0.11) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(196, 224, 240, 0.11) 1px, transparent 1px);
+  background-size: 42px 42px;
+  -webkit-mask-image: radial-gradient(circle, #000 0%, rgba(0, 0, 0, 0.58) 48%, transparent 74%);
+  mask-image: radial-gradient(circle, #000 0%, rgba(0, 0, 0, 0.58) 48%, transparent 74%);
+  animation: locus-welcome-grid-breathe 7s ease-in-out infinite alternate;
+}
+
+.locus-welcome__radar {
+  position: absolute;
+  inset: 8%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 215, 141, 0.2);
+  border-radius: 50%;
+  background:
+    linear-gradient(transparent calc(50% - 0.5px), rgba(202, 225, 237, 0.15) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(202, 225, 237, 0.15) 50%, transparent calc(50% + 0.5px)),
+    repeating-radial-gradient(circle, transparent 0 19.6%, rgba(255, 215, 141, 0.13) 20%, transparent 20.4% 40%);
+  box-shadow: inset 0 0 52px rgba(237, 178, 72, 0.025), 0 0 34px rgba(237, 178, 72, 0.04);
+}
+
+.locus-welcome__radar::before,
+.locus-welcome__radar::after {
+  position: absolute;
+  content: "";
+}
+
+.locus-welcome__radar::before {
+  inset: 12%;
+  border: 1px dashed rgba(212, 232, 242, 0.11);
+  border-radius: 50%;
+}
+
+.locus-welcome__radar::after {
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border: 1px solid rgba(255, 217, 147, 0.62);
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(244, 176, 53, 0.48);
+  transform: translate(-50%, -50%);
+}
+
+.locus-welcome__radar-sweep {
+  position: absolute;
+  inset: 2%;
+  border-radius: 50%;
+  background: conic-gradient(from -88deg, transparent 0deg 286deg, rgba(246, 189, 84, 0.015) 315deg, rgba(246, 189, 84, 0.2) 358deg, transparent 360deg);
+  -webkit-mask-image: radial-gradient(circle, transparent 0 5%, #000 34%, transparent 76%);
+  mask-image: radial-gradient(circle, transparent 0 5%, #000 34%, transparent 76%);
+  animation: locus-welcome-radar-sweep 9s linear infinite;
+}
+
+.locus-welcome__geo-node {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f7bd55;
+  box-shadow: 0 0 11px rgba(247, 189, 85, 0.9);
+}
+
+.locus-welcome__geo-node::after {
+  position: absolute;
+  inset: -6px;
+  border: 1px solid rgba(247, 189, 85, 0.5);
+  border-radius: 50%;
+  content: "";
+  animation: locus-welcome-node-ping 3s ease-out infinite;
+}
+
+.locus-welcome__geo-node--one { top: 27%; left: 61%; }
+.locus-welcome__geo-node--two { top: 63%; left: 72%; }
+.locus-welcome__geo-node--three { top: 69%; left: 34%; }
+.locus-welcome__geo-node--two::after { animation-delay: 1s; }
+.locus-welcome__geo-node--three::after { animation-delay: 2s; }
+
+.locus-welcome__geo-readout {
+  position: absolute;
+  right: 5%;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(222, 237, 245, 0.64);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-shadow: 0 2px 12px rgba(4, 12, 24, 0.7);
+}
+
+.locus-welcome__geo-readout i {
+  width: 18px;
+  height: 1px;
+  background: rgba(247, 189, 85, 0.58);
+}
+
+@keyframes locus-welcome-ken-burns {
+  from { transform: scale(1.035) translate3d(0, 0, 0); }
+  to { transform: scale(1.095) translate3d(-1.25%, -0.65%, 0); }
+}
+
+@keyframes locus-welcome-rise {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes locus-welcome-geo-appear {
+  from { opacity: 0; }
+  to { opacity: var(--locus-geo-opacity); }
+}
+
+@keyframes locus-welcome-radar-sweep {
+  to { transform: rotate(1turn); }
+}
+
+@keyframes locus-welcome-grid-breathe {
+  from { opacity: 0.42; }
+  to { opacity: 0.78; }
+}
+
+@keyframes locus-welcome-node-ping {
+  0% { opacity: 0; transform: scale(0.55); }
+  18% { opacity: 0.75; }
+  72%, 100% { opacity: 0; transform: scale(1.75); }
+}
+
+@media (max-width: 1040px) {
+  .locus-welcome__geo {
+    --locus-geo-opacity: 0.38;
+    right: 28px;
+    width: min(34vw, 340px);
+  }
+}
+
+@media (max-width: 900px) {
+  .locus-welcome__geo {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .locus-welcome {
+    padding:
+      max(22px, env(safe-area-inset-top))
+      max(22px, env(safe-area-inset-right))
+      max(28px, env(safe-area-inset-bottom))
+      max(22px, env(safe-area-inset-left));
+  }
+
+  .locus-welcome__backdrop {
+    background-position: 57% center;
+    transform-origin: 60% 48%;
+  }
+
+  .locus-welcome__shade {
+    background:
+      linear-gradient(90deg, rgba(7, 19, 37, 0.52), rgba(7, 19, 37, 0.12)),
+      linear-gradient(0deg, rgba(5, 15, 30, 0.9) 0%, rgba(5, 15, 30, 0.48) 47%, rgba(5, 15, 30, 0.04) 78%);
+  }
+
+  .locus-welcome__brand {
+    top: max(22px, env(safe-area-inset-top));
+    left: max(22px, env(safe-area-inset-left));
+    font-size: 13px;
+  }
+
+  .locus-welcome__brand img {
+    width: 42px;
+    height: 29px;
+  }
+
+  .locus-welcome__content {
+    width: 100%;
+    margin: 0;
+  }
+
+  .locus-welcome__content::before {
+    inset: -20px -14px -22px;
+    border-radius: 26px;
+    background: linear-gradient(135deg, rgba(8, 21, 39, 0.28), rgba(8, 21, 39, 0.08) 72%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+
+  .locus-welcome__location {
+    gap: 10px;
+    margin-bottom: 16px;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+  }
+
+  .locus-welcome__location::before {
+    width: 26px;
+  }
+
+  .locus-welcome h1 {
+    max-width: none;
+    font-size: clamp(38px, 10.8vw, 52px);
+    letter-spacing: -0.05em;
+    line-height: 1.01;
+  }
+
+  .locus-welcome__description {
+    max-width: 35ch;
+    margin-top: 20px;
+    font-size: 15px;
+    line-height: 1.58;
+  }
+
+  .locus-welcome__continue {
+    width: 100%;
+    margin-top: 26px;
+  }
+}
+
+@media (max-width: 370px) {
+  .locus-welcome h1 {
+    font-size: clamp(32px, 10.2vw, 38px);
+  }
+}
+
+@media (max-height: 620px) {
+  .locus-welcome__content {
+    margin-bottom: 0;
+  }
+
+  .locus-welcome__location {
+    margin-bottom: 12px;
+  }
+
+  .locus-welcome h1 {
+    font-size: clamp(38px, 9vh, 62px);
+  }
+
+  .locus-welcome__description {
+    margin-top: 14px;
+    line-height: 1.45;
+  }
+
+  .locus-welcome__continue {
+    min-height: 50px;
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 680px) and (max-height: 620px) {
+  .locus-welcome h1 {
+    font-size: clamp(32px, 10.2vw, 42px);
+  }
+}
+
+@media (max-height: 500px) {
+  html.locus-welcome-active .locus-welcome {
+    min-height: 500px;
+    overflow-y: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .locus-welcome,
+  .locus-welcome *,
+  .locus-welcome *::before,
+  .locus-welcome *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media print {
+  .locus-welcome {
+    display: none !important;
+  }
+}

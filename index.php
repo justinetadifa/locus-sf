@@ -5,10 +5,85 @@ require __DIR__ . '/app/Support/web.php';
 
 $context = sfc_web_context();
 $heroImage = $context['assetBase'] . '/images/sfcpanoramicView.png';
-sfc_render_head('SFCelerate', $context, ['page' => 'landing', 'role' => $context['user']['role'] ?? 'guest']);
+$welcomeBypass = (string) ($_GET['welcome'] ?? '') === 'off';
+$welcomeFallbackHref = sfc_path('/index.php?welcome=off#main-content');
+sfc_render_head('LOCUS-SF', $context, ['page' => 'landing', 'role' => $context['user']['role'] ?? 'guest']);
+?>
+<script>
+  window.LOCUS_PRELOADER?.dismiss(true);
+  (() => {
+    if (new URLSearchParams(window.location.search).get('welcome') === 'off') return;
+
+    const sessionKey = `locus-sf.welcome:${window.SFC_APP_CONFIG?.basePath || ''}`;
+    let dismissed = false;
+    try {
+      dismissed = window.sessionStorage.getItem(sessionKey) === '1';
+    } catch {
+      // A blocked storage API should not prevent the visitor from continuing.
+    }
+
+    if (!dismissed) document.documentElement.classList.add('locus-welcome-active');
+  })();
+</script>
+<?php if (!$welcomeBypass): ?>
+<section
+  class="locus-welcome"
+  data-locus-welcome
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="locusWelcomeTitle"
+  aria-describedby="locusWelcomeDescription"
+>
+  <div class="locus-welcome__backdrop" aria-hidden="true"></div>
+  <div class="locus-welcome__shade" aria-hidden="true"></div>
+
+  <div class="locus-welcome__geo" aria-hidden="true">
+    <div class="locus-welcome__geo-grid"></div>
+    <div class="locus-welcome__radar">
+      <span class="locus-welcome__radar-sweep"></span>
+      <span class="locus-welcome__geo-node locus-welcome__geo-node--one"></span>
+      <span class="locus-welcome__geo-node locus-welcome__geo-node--two"></span>
+      <span class="locus-welcome__geo-node locus-welcome__geo-node--three"></span>
+    </div>
+    <div class="locus-welcome__geo-readout">
+      <span>16.6159&deg; N</span>
+      <i></i>
+      <span>120.3166&deg; E</span>
+    </div>
+  </div>
+
+  <div class="locus-welcome__brand" aria-label="LOCUS-SF">
+    <img
+      src="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/images/webLogoSfc.png"
+      alt=""
+      width="48"
+      height="30"
+    >
+    <span>LOCUS-SF</span>
+  </div>
+
+  <div class="locus-welcome__content">
+    <p class="locus-welcome__location">SAN FERNANDO CITY, LA UNION</p>
+    <h1 id="locusWelcomeTitle">
+      <span>Every opportunity</span>
+      <span>starts with a place.</span>
+    </h1>
+    <p class="locus-welcome__description" id="locusWelcomeDescription">Explore local investment opportunities through property information and site comparison.</p>
+    <a
+      class="locus-welcome__continue"
+      href="<?= htmlspecialchars($welcomeFallbackHref, ENT_QUOTES, 'UTF-8') ?>"
+      data-locus-welcome-continue
+    >
+      <span>Continue to LOCUS-SF</span>
+      <span aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
+</section>
+<?php endif; ?>
+<?php
 sfc_render_header($context, 'landing');
 ?>
-<main class="page-shell landing-shell landing-editorial-shell landing-calm-shell">
+<main class="page-shell landing-shell landing-editorial-shell landing-calm-shell" id="main-content" tabindex="-1">
   <section class="hero-home hero-home-editorial hero-home-refined" data-hero-stage tabindex="0" style="--hero-image:url('<?= htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8') ?>')">
     <div class="hero-canvas" id="hero-canvas" aria-hidden="true">
       <div class="hero-home-backdrop"></div>
@@ -23,7 +98,7 @@ sfc_render_header($context, 'landing');
           </div>
           <span class="hero-node-badge" id="heroNodeBadge">Looking toward Poro Point</span>
         </div>
-        <h1>Read San Fernando opportunities with clarity.</h1>
+        <h1>Find your next opportunity in San Fernando.</h1>
         <p id="heroFocusSummary">Corridor fit, verified readiness, and local demand now sit inside one calmer first read of the city.</p>
 
         <div class="hero-focus-block">
@@ -72,58 +147,61 @@ sfc_render_header($context, 'landing');
             <div class="hero-opportunity-loading">Synchronizing live property brief...</div>
           </div>
 
-          <div class="hero-home-panel-body">
-            <section class="hero-score-block">
-              <div class="hero-score-copy">
-                <span id="heroMetricMeta">Logistics / Poro Point</span>
-                <strong class="hero-slab-score" id="heroIaiScore">87.0</strong>
-                <p id="heroMetricSummary">Property 1 - Industrial Zone is the clearest opportunity currently visible at Poro Point.</p>
-              </div>
-              <div class="hero-score-chips">
-                <span class="hero-slab-chip" id="heroFocusBadge">Logistics lens</span>
-                <span class="hero-slab-chip hero-slab-chip-quiet"><strong id="heroOpportunityCount">3</strong> candidate sites</span>
-              </div>
-            </section>
+          <details class="hero-more-details">
+            <summary>View scores &amp; city context</summary>
+            <div class="hero-home-panel-body">
+              <section class="hero-score-block">
+                <div class="hero-score-copy">
+                  <span id="heroMetricMeta">Logistics / Poro Point</span>
+                  <strong class="hero-slab-score" id="heroIaiScore">87.0</strong>
+                  <p id="heroMetricSummary">Property 1 - Industrial Zone is the clearest opportunity currently visible at Poro Point.</p>
+                </div>
+                <div class="hero-score-chips">
+                  <span class="hero-slab-chip" id="heroFocusBadge">Logistics lens</span>
+                  <span class="hero-slab-chip hero-slab-chip-quiet"><strong id="heroOpportunityCount">3</strong> candidate sites</span>
+                </div>
+              </section>
 
-            <div class="hero-proof-grid hero-proof-grid-refined" id="heroProofGrid">
-              <article class="hero-proof-card">
-                <span>Candidate Sites</span>
-                <strong>Loading</strong>
-              </article>
-              <article class="hero-proof-card">
-                <span>Verified</span>
-                <strong>Loading</strong>
-              </article>
-              <article class="hero-proof-card">
-                <span>Audits</span>
-                <strong>Loading</strong>
-              </article>
-              <article class="hero-proof-card">
-                <span>Ready</span>
-                <strong>Loading</strong>
-              </article>
-            </div>
-          </div>
-
-          <article class="hero-story-panel hero-story-panel-refined">
-            <div class="panel-kicker">Why It Leads</div>
-            <p id="heroStoryCopy">Property 1 - Industrial Zone now sits closest to the horizon because logistics demand is surfacing around Poro Point, giving the corridor its clearest current read.</p>
-          </article>
-
-          <div class="hero-spatial-dock hero-spatial-dock-refined">
-            <div class="hero-node-panel-head">
-              <div class="hero-node-panel-copy">
-                <div class="hero-node-dock-head">Spatial focus</div>
-                <strong id="heroNodeMeta">Poro Point horizon</strong>
-                <p id="heroOpportunitySummary">3 active listings currently orbit Poro Point on the city grid.</p>
+              <div class="hero-proof-grid hero-proof-grid-refined" id="heroProofGrid">
+                <article class="hero-proof-card">
+                  <span>Candidate Sites</span>
+                  <strong>Loading</strong>
+                </article>
+                <article class="hero-proof-card">
+                  <span>Verified</span>
+                  <strong>Loading</strong>
+                </article>
+                <article class="hero-proof-card">
+                  <span>Audits</span>
+                  <strong>Loading</strong>
+                </article>
+                <article class="hero-proof-card">
+                  <span>Ready</span>
+                  <strong>Loading</strong>
+                </article>
               </div>
             </div>
-            <div class="living-city-node-list" aria-label="Spatial trigger nodes">
-              <button type="button" class="living-city-node-pill" data-city-node="poro-point">Poro Point</button>
-              <button type="button" class="living-city-node-pill" data-city-node="city-center">City Center</button>
-              <button type="button" class="living-city-node-pill" data-city-node="civic-belt">Civic Belt</button>
+
+            <article class="hero-story-panel hero-story-panel-refined">
+              <div class="panel-kicker">Why It Leads</div>
+              <p id="heroStoryCopy">Property 1 - Industrial Zone now sits closest to the horizon because logistics demand is surfacing around Poro Point, giving the corridor its clearest current read.</p>
+            </article>
+
+            <div class="hero-spatial-dock hero-spatial-dock-refined">
+              <div class="hero-node-panel-head">
+                <div class="hero-node-panel-copy">
+                  <div class="hero-node-dock-head">Spatial focus</div>
+                  <strong id="heroNodeMeta">Poro Point horizon</strong>
+                  <p id="heroOpportunitySummary">3 active listings currently orbit Poro Point on the city grid.</p>
+                </div>
+              </div>
+              <div class="living-city-node-list" aria-label="Spatial trigger nodes">
+                <button type="button" class="living-city-node-pill" data-city-node="poro-point">Poro Point</button>
+                <button type="button" class="living-city-node-pill" data-city-node="city-center">City Center</button>
+                <button type="button" class="living-city-node-pill" data-city-node="civic-belt">Civic Belt</button>
+              </div>
             </div>
-          </div>
+          </details>
         </article>
       </aside>
     </div>
@@ -134,7 +212,7 @@ sfc_render_header($context, 'landing');
         <div class="landing-panel-head">
           <div class="section-heading section-heading-inline">
             <div class="eyebrow">Top Ranked Opportunities</div>
-            <h2>The strongest opportunities, arranged with more conviction.</h2>
+            <h2>Opportunities backed by local evidence.</h2>
           <p>These areas rise first only when investment attractiveness, corridor fit, readiness, and CLUP suitability align.</p>
           </div>
         <a href="<?= htmlspecialchars(sfc_path('/property-ranking.php'), ENT_QUOTES, 'UTF-8') ?>" class="btn-shell btn-shell-secondary">View Investment Board</a>
@@ -149,7 +227,7 @@ sfc_render_header($context, 'landing');
         <div class="landing-panel-head">
           <div class="section-heading section-heading-inline">
             <div class="eyebrow">Voting Signals</div>
-          <h2>Signals the city is starting to ask for.</h2>
+          <h2>See what the city needs next.</h2>
           <p>Investor and resident signals reveal which services or establishments are beginning to pull hardest in each area.</p>
           </div>
           <a href="<?= htmlspecialchars(sfc_path('/voting-dashboard.php'), ENT_QUOTES, 'UTF-8') ?>" class="btn-shell btn-shell-secondary">View Demand Signals</a>

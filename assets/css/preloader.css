@@ -1,0 +1,89 @@
+/* Kept inline by the shared layout so the loader needs no extra request. */
+html.locus-preloader-active,
+html.locus-preloader-active body {
+  overflow: hidden;
+}
+
+.locus-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  background: #fdfbf7;
+  color: #172b4d;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  text-align: center;
+  opacity: 1;
+  transition: opacity 180ms ease-out;
+  touch-action: none;
+}
+
+.locus-preloader.is-leaving {
+  opacity: 0;
+}
+
+.locus-preloader__content {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.locus-preloader__ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(104px, 28vw, 128px);
+  aspect-ratio: 1;
+  margin-bottom: 8px;
+}
+
+.locus-preloader__ring::before,
+.locus-preloader__ring::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid rgba(222, 153, 31, 0.2);
+  border-radius: 50%;
+}
+
+.locus-preloader__ring::after {
+  border-color: #d99a29 transparent transparent;
+  animation: locus-preloader-trace 1.8s linear infinite;
+}
+
+.locus-preloader__logo {
+  display: block;
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+
+.locus-preloader__name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+}
+
+.locus-preloader__label {
+  color: #526079;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+@keyframes locus-preloader-trace {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .locus-preloader { transition: none; }
+  .locus-preloader__ring::after { animation: none; }
+}
+
+@media print {
+  .locus-preloader { display: none; }
+}

@@ -3,18 +3,17 @@ declare(strict_types=1);
 
 require __DIR__ . '/app/Support/web.php';
 $context = sfc_web_context();
-sfc_render_head('Decision Reports | SFCelerate', $context, ['page' => 'decision-reports', 'role' => $context['user']['role'] ?? 'guest']);
+sfc_render_head('Investment Reports | LOCUS-SF', $context, ['page' => 'decision-reports', 'role' => $context['user']['role'] ?? 'guest']);
 sfc_render_header($context, 'reports');
 ?>
-<main class="page-shell dashboard-page">
-  <section class="site-shell page-intro-card no-print">
+<main class="page-shell reports-page">
+  <header class="report-header">
     <div>
-      <div class="eyebrow">Decision Reports</div>
-      <h1>Policy-ready rankings with CLUP evidence attached.</h1>
-      <p>Review compliance distribution, suitability, and recommended LGU actions before generating a printable priority report.</p>
+      <h1>Investment Reports</h1>
+      <p>Review candidate rankings, land-use verification, and supporting evidence.</p>
     </div>
-    <div class="intro-actions"><button type="button" class="btn-shell btn-shell-primary" id="printDecisionReport">Print / Save PDF</button></div>
-  </section>
-  <section class="site-shell dashboard-root-grid" id="decisionReportsRoot"><div class="loading-panel">Loading reports...</div></section>
+    <button type="button" class="report-print-button no-print" id="printDecisionReport">Print / Save PDF</button>
+  </header>
+  <section id="decisionReportsRoot" aria-label="Investment report"><div class="loading-panel">Loading reports...</div></section>
 </main>
 <?php sfc_render_footer($context); ?>

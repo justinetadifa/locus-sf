@@ -6,7 +6,7 @@ require __DIR__ . '/app/Support/web.php';
 $context = sfc_web_context();
 sfc_require_role('admin', sfc_path('/admin-login.php'));
 $context = sfc_web_context();
-sfc_render_head('Admin Listings | SFCelerate', $context, ['page' => 'admin-properties', 'role' => 'admin']);
+sfc_render_head('Admin Listings | LOCUS-SF', $context, ['page' => 'admin-properties', 'role' => 'admin']);
 sfc_render_header($context, 'admin-properties');
 ?>
 <main class="page-shell admin-listings-page">
@@ -31,279 +31,132 @@ sfc_render_header($context, 'admin-properties');
   </section>
 </main>
 
-<!-- ═══════════════════════════════════════════════
-     EDIT / ADD PROPERTY MODAL — 4-Tab Interface
-═══════════════════════════════════════════════ -->
+<!-- Add / Edit Property: grouped fields with a separate action area. -->
 <div class="modal-shell" id="propertyCrudModal" hidden>
-  <div class="modal-card property-crud-modal" style="max-width:680px;border-radius:28px;padding:0;display:flex;flex-direction:column;max-height:92vh;overflow:hidden;background:#fff;box-shadow:0 32px 80px rgba(0,0,0,.22);">
-
-    <!-- ── Header ── -->
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;padding:26px 28px 18px;border-bottom:1px solid #f1f5f9;flex-shrink:0;">
+  <div class="modal-card property-crud-modal" role="dialog" aria-modal="true" aria-labelledby="crudModalTitle" aria-describedby="crudModalSubtitle" tabindex="-1">
+    <div class="crud-header">
       <div>
-        <div style="font-size:10px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#6366f1;margin-bottom:4px;">Admin Listing Editor</div>
-        <h3 style="font-size:1.1rem;font-weight:800;color:#0f172a;margin:0;letter-spacing:-.02em;" id="crudModalTitle">Edit Property</h3>
-        <p style="font-size:11px;color:#94a3b8;margin:3px 0 0;font-weight:500;" id="crudModalSubtitle">Complete all tabs before saving.</p>
+        <div class="panel-kicker">Admin Listing Editor</div>
+        <h3 id="crudModalTitle">Add Property</h3>
+        <p id="crudModalSubtitle">Fields marked Required must be completed.</p>
       </div>
-      <div style="display:flex;align-items:center;gap:5px;">
-        <span id="crud-dot-0" style="width:7px;height:7px;border-radius:50%;background:#6366f1;display:inline-block;transition:all .25s;"></span>
-        <span id="crud-dot-1" style="width:7px;height:7px;border-radius:50%;background:#e2e8f0;display:inline-block;transition:all .25s;"></span>
-        <span id="crud-dot-2" style="width:7px;height:7px;border-radius:50%;background:#e2e8f0;display:inline-block;transition:all .25s;"></span>
-        <span id="crud-dot-3" style="width:7px;height:7px;border-radius:50%;background:#e2e8f0;display:inline-block;transition:all .25s;"></span>
-        <button type="button" data-modal-close="propertyCrudModal" style="margin-left:8px;width:30px;height:30px;border-radius:9px;background:#f1f5f9;border:none;cursor:pointer;font-size:14px;color:#64748b;display:flex;align-items:center;justify-content:center;" title="Close">&times;</button>
-      </div>
+      <button type="button" class="modal-close" data-modal-close="propertyCrudModal" aria-label="Close property form" title="Close">&times;</button>
     </div>
-
-    <!-- ── Tab Switcher ── -->
-    <div style="padding:14px 28px 0;flex-shrink:0;">
-      <div style="display:flex;background:#f8fafc;border-radius:14px;padding:3px;gap:2px;">
-        <button type="button" onclick="crudTab(0)" id="crud-tab-0" style="flex:1;padding:7px 4px;border-radius:11px;border:none;font-size:10px;font-weight:700;cursor:pointer;background:#fff;color:#4f46e5;box-shadow:0 1px 4px rgba(0,0,0,.07);transition:all .18s;">&#128196; Basic Info</button>
-        <button type="button" onclick="crudTab(1)" id="crud-tab-1" style="flex:1;padding:7px 4px;border-radius:11px;border:none;font-size:10px;font-weight:600;cursor:pointer;background:transparent;color:#64748b;transition:all .18s;">&#128205; Location</button>
-        <button type="button" onclick="crudTab(2)" id="crud-tab-2" style="flex:1;padding:7px 4px;border-radius:11px;border:none;font-size:10px;font-weight:600;cursor:pointer;background:transparent;color:#64748b;transition:all .18s;">&#128178; Financials</button>
-        <button type="button" onclick="crudTab(3)" id="crud-tab-3" style="flex:1;padding:7px 4px;border-radius:11px;border:none;font-size:10px;font-weight:600;cursor:pointer;background:transparent;color:#64748b;transition:all .18s;">&#128737; Verification</button>
-      </div>
-    </div>
-
-    <!-- ── Form ── -->
-    <form id="propertyCrudForm" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+    <form id="propertyCrudForm">
       <input type="hidden" id="crudPropertyId">
-
-      <div style="flex:1;overflow-y:auto;padding:18px 28px 4px;" id="crud-panels-wrap">
-
-        <!-- PANEL 0: BASIC INFO -->
-        <div id="crud-panel-0" style="display:block;">
-          <div style="display:grid;gap:13px;">
-
+      <div id="crud-panels-wrap">
+        <section class="crud-section" id="crud-panel-0" aria-labelledby="crud-section-0">
+          <h4 id="crud-section-0">Property Details</h4>
+          <p class="crud-section-note">Describe the property and its key features.</p>
+          <div class="crud-section-fields">
             <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">Property Name</label>
-              <input class="input-shell" id="crudPropertyName" required
-                style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;font-weight:500;"
-                oninput="document.getElementById('crudModalSubtitle').textContent = this.value || 'Complete all tabs before saving.'" />
+              <label for="crudPropertyName">Property Name <span class="crud-required">Required</span></label>
+              <input class="input-shell" id="crudPropertyName" required />
             </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-              <div>
-                <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">City</label>
-                <input class="input-shell" id="crudCity" value="San Fernando, La Union" required
-                  style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;font-weight:500;" />
-              </div>
-              <div>
-                <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">Barangay</label>
-                <input class="input-shell" id="crudBarangay"
-                  style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;font-weight:500;" />
-              </div>
-            </div>
-
             <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:7px;">Property Type</label>
-              <div id="seg-crud-type" style="display:flex;flex-wrap:wrap;gap:7px;">
-                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'commercial')" class="crud-seg-btn" data-val="commercial" style="padding:6px 13px;border-radius:999px;border:1px solid #6366f1;background:#eef2ff;color:#4338ca;font-size:11px;font-weight:700;cursor:pointer;">Commercial</button>
-                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'logistics')" class="crud-seg-btn" data-val="logistics" style="padding:6px 13px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">Logistics</button>
-                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'hotel')" class="crud-seg-btn" data-val="hotel" style="padding:6px 13px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">Resort / Tourism</button>
-                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'bpo')" class="crud-seg-btn" data-val="bpo" style="padding:6px 13px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">Office / BPO</button>
-                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'manufacturing')" class="crud-seg-btn" data-val="manufacturing" style="padding:6px 13px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">Manufacturing</button>
+              <div class="crud-field-label" id="crudPropertyTypeLabel">Property Type <span class="crud-required">Required</span></div>
+              <div class="crud-options" role="group" aria-labelledby="crudPropertyTypeLabel" id="seg-crud-type">
+                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'commercial')" class="crud-seg-btn" data-val="commercial">Commercial</button>
+                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'logistics')" class="crud-seg-btn" data-val="logistics">Logistics</button>
+                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'hotel')" class="crud-seg-btn" data-val="hotel">Resort / Tourism</button>
+                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'bpo')" class="crud-seg-btn" data-val="bpo">Office / BPO</button>
+                <button type="button" onclick="crudSeg('seg-crud-type','crudPropertyType',this,'manufacturing')" class="crud-seg-btn" data-val="manufacturing">Manufacturing</button>
               </div>
-              <select class="input-shell" id="crudPropertyType" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;" aria-hidden="true">
+              <select class="input-shell" id="crudPropertyType" aria-hidden="true" tabindex="-1">
                 <option value="commercial">Commercial</option><option value="logistics">Logistics</option><option value="hotel">Resort / Tourism</option><option value="bpo">Office / BPO</option><option value="manufacturing">Manufacturing</option>
               </select>
             </div>
-
             <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:7px;">City Corridor</label>
-              <div id="seg-crud-corridor" style="display:flex;gap:7px;">
-                <button type="button" onclick="crudSeg('seg-crud-corridor','crudCorridor',this,'highway')" class="crud-seg-btn" data-val="highway" style="padding:6px 13px;border-radius:999px;border:1px solid #6366f1;background:#eef2ff;color:#4338ca;font-size:11px;font-weight:700;cursor:pointer;">Highway</button>
-                <button type="button" onclick="crudSeg('seg-crud-corridor','crudCorridor',this,'downtown')" class="crud-seg-btn" data-val="downtown" style="padding:6px 13px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">Downtown</button>
-                <button type="button" onclick="crudSeg('seg-crud-corridor','crudCorridor',this,'coastal')" class="crud-seg-btn" data-val="coastal" style="padding:6px 13px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">Coastal</button>
+              <label for="crudDescription">Description <span class="crud-required">Required</span></label>
+              <textarea class="input-shell input-textarea" id="crudDescription" required rows="3" ></textarea>
+            </div>
+            <div class="crud-field-grid">
+              <div>
+                <label for="crudTags">Tags <span class="crud-optional">Optional</span></label>
+                <input class="input-shell" id="crudTags" placeholder="Investor Ready, Strategic Location" />
               </div>
-              <select class="input-shell" id="crudCorridor" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;" aria-hidden="true">
+              <div>
+                <label for="crudFacilities">Facilities <span class="crud-optional">Optional</span></label>
+                <input class="input-shell" id="crudFacilities" placeholder="Highway Access, Utilities" />
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="crud-section" id="crud-panel-1" aria-labelledby="crud-section-1">
+          <h4 id="crud-section-1">Location and Pricing</h4>
+          <p class="crud-section-note">Set the location, asking price, and land area.</p>
+          <div class="crud-section-fields">
+            <div class="crud-field-grid">
+              <div>
+                <label for="crudCity">City <span class="crud-required">Required</span></label>
+                <input class="input-shell" id="crudCity" value="San Fernando, La Union" required />
+              </div>
+              <div>
+                <label for="crudBarangay">Barangay <span class="crud-optional">Optional</span></label>
+                <input class="input-shell" id="crudBarangay" />
+              </div>
+            </div>
+            <div>
+              <div class="crud-field-label" id="crudCorridorLabel">City Corridor <span class="crud-optional">Optional</span></div>
+              <div class="crud-options" role="group" aria-labelledby="crudCorridorLabel" id="seg-crud-corridor">
+                <button type="button" onclick="crudSeg('seg-crud-corridor','crudCorridor',this,'highway')" class="crud-seg-btn" data-val="highway">Highway</button>
+                <button type="button" onclick="crudSeg('seg-crud-corridor','crudCorridor',this,'downtown')" class="crud-seg-btn" data-val="downtown">Downtown</button>
+                <button type="button" onclick="crudSeg('seg-crud-corridor','crudCorridor',this,'coastal')" class="crud-seg-btn" data-val="coastal">Coastal</button>
+              </div>
+              <select class="input-shell" id="crudCorridor" aria-hidden="true" tabindex="-1">
                 <option value="highway">Highway</option><option value="downtown">Downtown</option><option value="coastal">Coastal</option>
               </select>
             </div>
-
             <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">Description</label>
-              <textarea class="input-shell input-textarea" id="crudDescription" required rows="3"
-                style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;resize:none;"></textarea>
-            </div>
-
-          </div>
-        </div><!-- /panel-0 -->
-
-        <!-- PANEL 1: LOCATION / ASSETS -->
-        <div id="crud-panel-1" style="display:none;">
-          <div style="display:grid;gap:13px;">
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-              <div>
-                <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">Tags</label>
-                <input class="input-shell" id="crudTags" placeholder="Investor Ready, Strategic Location"
-                  style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;" />
-              </div>
-              <div>
-                <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">Facilities</label>
-                <input class="input-shell" id="crudFacilities" placeholder="Highway Access, Utilities"
-                  style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;" />
+              <label for="crudPrice">Price (PHP) <span class="crud-required">Required</span></label>
+              <div class="crud-price-input">
+                <span>&#x20B1;</span>
+                <input type="number" class="input-shell" id="crudPrice" required oninput="crudFormatPrice(this.value)" />
+                <span id="crud-price-badge"></span>
               </div>
             </div>
-
             <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">Upload Image</label>
-              <input type="file" class="input-shell" id="crudImage" accept="image/*"
-                style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:9px 13px;font-size:13px;" />
-            </div>
-
-            <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">Fallback Image Path</label>
-              <input class="input-shell" id="crudImagePath" value="assets/images/Property10.png"
-                style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;" />
-            </div>
-
-            <div style="border-radius:14px;border:1px dashed #c7d2fe;background:#eef2ff;padding:14px;display:flex;gap:12px;align-items:flex-start;">
-              <span style="font-size:18px;flex-shrink:0;">&#128205;</span>
-              <div>
-                <p style="font-size:11px;font-weight:700;color:#4338ca;margin:0 0 3px;">Map Coordinates</p>
-                <p style="font-size:11px;color:#6366f1;margin:0;">Coordinates are pinned via the property explorer map editor. Use Tags to reference nearby anchors.</p>
-              </div>
-            </div>
-
-          </div>
-        </div><!-- /panel-1 -->
-
-        <!-- PANEL 2: FINANCIALS & METRICS -->
-        <div id="crud-panel-2" style="display:none;">
-          <div style="display:grid;gap:13px;">
-
-            <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">Price (PHP)</label>
-              <div style="position:relative;">
-                <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;font-weight:700;color:#94a3b8;">&#x20B1;</span>
-                <input type="number" class="input-shell" id="crudPrice" required
-                  style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px 10px 26px;font-size:13px;font-weight:600;padding-right:118px;"
-                  oninput="crudFormatPrice(this.value)" />
-                <span id="crud-price-badge" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);padding:3px 9px;border-radius:7px;background:#f0fdf4;border:1px solid #bbf7d0;font-size:10px;font-weight:800;color:#15803d;white-space:nowrap;"></span>
-              </div>
-            </div>
-
-            <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:7px;">Land Area</label>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                <div style="border-radius:12px;border:1px solid #c7d2fe;background:#eef2ff;padding:12px;">
-                  <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#6366f1;margin-bottom:5px;">Hectares (ha)</div>
-                  <input type="number" step="0.0001" min="0.0001" class="input-shell" id="crudLandArea" inputmode="decimal" required
-                    style="width:100%;box-sizing:border-box;border-radius:8px;border:1px solid #c7d2fe;background:#fff;padding:7px 10px;font-size:13px;font-weight:700;"
-                    oninput="crudSyncArea(this.value,'ha')" />
+              <div class="crud-field-label">Land Area <span class="crud-required">Required</span></div>
+              <div class="crud-field-grid">
+                <div>
+                  <label for="crudLandArea">Hectares (ha)</label>
+                  <input type="number" step="0.0001" min="0.0001" class="input-shell" id="crudLandArea" inputmode="decimal" required oninput="crudSyncArea(this.value,'ha')" />
                 </div>
-                <div style="border-radius:12px;border:1px solid #e2e8f0;background:#f8fafc;padding:12px;">
-                  <div style="font-size:9px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#94a3b8;margin-bottom:5px;">Sq. Meters (sqm)</div>
-                  <input type="number" step="1" id="crudLandAreaSqm"
-                    style="width:100%;box-sizing:border-box;border-radius:8px;border:1px solid #e2e8f0;background:#fff;padding:7px 10px;font-size:13px;font-weight:700;"
-                    oninput="crudSyncArea(this.value,'sqm')" />
+                <div>
+                  <label for="crudLandAreaSqm">Square meters (sqm) <span class="crud-optional">Optional conversion</span></label>
+                  <input type="number" step="1" id="crudLandAreaSqm" oninput="crudSyncArea(this.value,'sqm')" />
                 </div>
               </div>
-              <div style="display:flex;align-items:center;gap:6px;margin-top:7px;padding:7px 11px;border-radius:9px;background:#f1f5f9;border:1px solid #e2e8f0;">
-                <small class="form-helper" id="crudLandAreaHint" style="font-size:11px;color:#64748b;font-weight:500;">Use hectares directly. Sqm entries convert automatically on save.</small>
+              <div>
+                <small class="form-helper" id="crudLandAreaHint">Use hectares directly. Sqm entries convert automatically on save.</small>
               </div>
               <input type="hidden" id="crudLandAreaUnit" value="ha" />
             </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="crud-note">
+              <span>&#128205;</span>
               <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                  <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;">Market Score</label>
-                  <span id="crud-score-display" style="font-size:10px;font-weight:800;color:#6366f1;background:#eef2ff;padding:2px 7px;border-radius:5px;">82</span>
-                </div>
-                <input type="number" min="40" max="100" class="input-shell" id="crudScore" value="82"
-                  oninput="document.getElementById('crud-score-display').textContent = this.value"
-                  style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;" />
-              </div>
-              <div>
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                  <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;">Road Access</label>
-                  <span id="crud-access-display" style="font-size:10px;font-weight:800;color:#7c3aed;background:#f5f3ff;padding:2px 7px;border-radius:5px;">85</span>
-                </div>
-                <input type="number" min="40" max="100" class="input-shell" id="crudAccess" value="85"
-                  oninput="document.getElementById('crud-access-display').textContent = this.value"
-                  style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;" />
+                <p>Map Coordinates</p>
+                <p>Coordinates are pinned via the property explorer map editor. Use Tags to reference nearby anchors.</p>
               </div>
             </div>
-
           </div>
-        </div><!-- /panel-2 -->
-
-        <!-- PANEL 3: VERIFICATION -->
-        <div id="crud-panel-3" style="display:none;">
-          <div style="display:grid;gap:13px;">
-
+        </section>
+        <section class="crud-section" id="crud-panel-2" aria-labelledby="crud-section-2">
+          <h4 id="crud-section-2">Photos and Documents</h4>
+          <p class="crud-section-note">Add a property photo and update the supporting document checklist.</p>
+          <div class="crud-section-fields">
             <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:7px;">Listing Status</label>
-              <div id="seg-crud-status" style="display:flex;gap:7px;flex-wrap:wrap;">
-                <button type="button" onclick="crudSeg('seg-crud-status','crudStatus',this,'Available')" class="crud-seg-btn" data-val="Available" style="padding:8px 14px;border-radius:999px;border:1px solid #10b981;background:#ecfdf5;color:#065f46;font-size:11px;font-weight:700;cursor:pointer;">&#9679; Available</button>
-                <button type="button" onclick="crudSeg('seg-crud-status','crudStatus',this,'Reserved')" class="crud-seg-btn" data-val="Reserved" style="padding:8px 14px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">&#9680; Reserved</button>
-                <button type="button" onclick="crudSeg('seg-crud-status','crudStatus',this,'Under Review')" class="crud-seg-btn" data-val="Under Review" style="padding:8px 14px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">&#9680; Under Review</button>
-                <button type="button" onclick="crudSeg('seg-crud-status','crudStatus',this,'Negotiating')" class="crud-seg-btn" data-val="Negotiating" style="padding:8px 14px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">&#9672; Negotiating</button>
-              </div>
-              <select class="input-shell" id="crudStatus" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;" aria-hidden="true">
-                <option value="Available">Available</option><option value="Reserved">Reserved</option><option value="Under Review">Under Review</option><option value="Negotiating">Negotiating</option>
-              </select>
+              <label for="crudImage">Upload Image <span class="crud-optional">Optional</span></label>
+              <input type="file" class="input-shell" id="crudImage" accept="image/*" />
             </div>
-
             <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:7px;">Approval State</label>
-              <div id="seg-crud-approval" style="display:flex;gap:7px;flex-wrap:wrap;">
-                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'draft')" class="crud-seg-btn" data-val="draft" style="padding:8px 14px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">Draft</button>
-                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'pending_review')" class="crud-seg-btn" data-val="pending_review" style="padding:8px 14px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">&#9711; Pending</button>
-                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'approved')" class="crud-seg-btn" data-val="approved" style="padding:8px 14px;border-radius:999px;border:1px solid #6366f1;background:#eef2ff;color:#4338ca;font-size:11px;font-weight:700;cursor:pointer;">&#10003; Approved</button>
-                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'rejected')" class="crud-seg-btn" data-val="rejected" style="padding:8px 14px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">&#10007; Rejected</button>
-                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'archived')" class="crud-seg-btn" data-val="archived" style="padding:8px 14px;border-radius:999px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">Archived</button>
-              </div>
-              <select class="input-shell" id="crudApprovalState" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;" aria-hidden="true">
-                <option value="draft">Draft</option><option value="pending_review">Pending Review</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="archived">Archived</option>
-              </select>
+              <label for="crudImagePath">Fallback Image Path <span class="crud-optional">Optional</span></label>
+              <input class="input-shell" id="crudImagePath" value="assets/images/Property10.png" />
             </div>
-
-            <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:7px;">Seller Verification</label>
-              <div id="seg-crud-seller" style="display:flex;gap:7px;">
-                <button type="button" onclick="crudSeg('seg-crud-seller','crudSellerIdentityStatus',this,'unverified')" class="crud-seg-btn" data-val="unverified" style="flex:1;padding:9px;border-radius:11px;border:1px solid #6366f1;background:#eef2ff;color:#4338ca;font-size:11px;font-weight:700;cursor:pointer;">&#9888; Unverified</button>
-                <button type="button" onclick="crudSeg('seg-crud-seller','crudSellerIdentityStatus',this,'pending')" class="crud-seg-btn" data-val="pending" style="flex:1;padding:9px;border-radius:11px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">&#9711; Pending</button>
-                <button type="button" onclick="crudSeg('seg-crud-seller','crudSellerIdentityStatus',this,'verified')" class="crud-seg-btn" data-val="verified" style="flex:1;padding:9px;border-radius:11px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">&#10003; Verified</button>
-              </div>
-              <select class="input-shell" id="crudSellerIdentityStatus" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;" aria-hidden="true">
-                <option value="unverified">Unverified</option><option value="pending">Pending</option><option value="verified">Verified</option>
-              </select>
-            </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-              <div>
-                <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:7px;">Documents Reviewed</label>
-                <div id="seg-crud-docs" style="display:flex;gap:7px;">
-                  <button type="button" onclick="crudYesNo('seg-crud-docs','crudDocumentsReviewed',this,'1',true)" class="crud-seg-btn" data-val="1" style="flex:1;padding:9px;border-radius:11px;border:1px solid #10b981;background:#ecfdf5;color:#065f46;font-size:11px;font-weight:700;cursor:pointer;">&#10003; Yes</button>
-                  <button type="button" onclick="crudYesNo('seg-crud-docs','crudDocumentsReviewed',this,'0',false)" class="crud-seg-btn" data-val="0" style="flex:1;padding:9px;border-radius:11px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">&#10007; No</button>
-                </div>
-                <select class="input-shell" id="crudDocumentsReviewed" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;" aria-hidden="true">
-                  <option value="0">No</option><option value="1">Yes</option>
-                </select>
-              </div>
-              <div>
-                <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:7px;">Site Verified</label>
-                <div id="seg-crud-site" style="display:flex;gap:7px;">
-                  <button type="button" onclick="crudYesNo('seg-crud-site','crudSiteVerified',this,'1',true)" class="crud-seg-btn" data-val="1" style="flex:1;padding:9px;border-radius:11px;border:1px solid #10b981;background:#ecfdf5;color:#065f46;font-size:11px;font-weight:700;cursor:pointer;">&#10003; Yes</button>
-                  <button type="button" onclick="crudYesNo('seg-crud-site','crudSiteVerified',this,'0',false)" class="crud-seg-btn" data-val="0" style="flex:1;padding:9px;border-radius:11px;border:1px solid #e2e8f0;background:#fff;color:#64748b;font-size:11px;font-weight:600;cursor:pointer;">&#10007; No</button>
-                </div>
-                <select class="input-shell" id="crudSiteVerified" style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;" aria-hidden="true">
-                  <option value="0">No</option><option value="1">Yes</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label style="font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#64748b;display:block;margin-bottom:5px;">Last Confirmed Available</label>
-              <input type="datetime-local" class="input-shell" id="crudLastConfirmedAvailableAt"
-                style="width:100%;box-sizing:border-box;border-radius:11px;border:1px solid #e2e8f0;background:#f8fafc;padding:10px 13px;font-size:13px;" />
-            </div>
-
-            <fieldset style="border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin:0;">
-              <legend style="font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:#64748b;padding:0 5px;">Document Checklist</legend>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px;">
+            <fieldset class="crud-document-checklist">
+              <legend>Document Checklist</legend>
+              <p class="crud-section-note">Record document status here; this checklist does not upload files.</p>
+              <div class="crud-field-grid">
                 <?php foreach ([
                   ['crudDocTitleCopy',      'Title Copy'],
                   ['crudDocTaxDeclaration', 'Tax Declaration'],
@@ -313,8 +166,8 @@ sfc_render_header($context, 'admin-properties');
                   ['crudDocHazardReport',   'Hazard Report'],
                 ] as [$id, $label]): ?>
                 <div>
-                  <label style="font-size:10px;font-weight:700;color:#64748b;display:block;margin-bottom:3px;"><?= $label ?></label>
-                  <select class="input-shell" id="<?= $id ?>" style="width:100%;border-radius:9px;border:1px solid #e2e8f0;background:#f8fafc;padding:6px 10px;font-size:12px;">
+                  <label for="<?= $id ?>"><?= $label ?> <span class="crud-optional">Optional</span></label>
+                  <select class="input-shell" id="<?= $id ?>">
                     <option value="missing">Missing</option>
                     <option value="requested">Requested</option>
                     <option value="submitted">Submitted</option>
@@ -324,35 +177,101 @@ sfc_render_header($context, 'admin-properties');
                 <?php endforeach; ?>
               </div>
             </fieldset>
-
-            <p class="auth-form-note" style="font-size:11px;color:#94a3b8;margin:0;">Seller verification updates the linked seller account. Approval state and document review control listing trust badges and visibility.</p>
-
           </div>
-        </div><!-- /panel-3 -->
-
-      </div><!-- /crud-panels-wrap -->
-
-      <!-- Fixed Footer -->
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 28px;border-top:1px solid #f1f5f9;background:#fff;flex-shrink:0;">
-        <div style="display:flex;gap:7px;align-items:center;">
-          <button type="button" id="crud-btn-prev" onclick="crudNav(-1)"
-            style="display:none;align-items:center;gap:5px;padding:8px 14px;border-radius:11px;border:1px solid #e2e8f0;background:#fff;color:#475569;font-size:11px;font-weight:600;cursor:pointer;">&larr; Back</button>
-          <button type="button" class="btn-shell btn-shell-secondary" data-modal-close="propertyCrudModal"
-            style="padding:8px 14px;border-radius:11px;font-size:11px;">Cancel</button>
-        </div>
-        <div style="display:flex;align-items:center;gap:7px;">
-          <span id="crud-step-counter" style="font-size:10px;color:#94a3b8;font-weight:500;">Step 1 of 4</span>
-          <button type="button" id="crud-btn-next" onclick="crudNav(1)"
-            style="display:flex;align-items:center;gap:5px;padding:8px 16px;border-radius:11px;background:#4f46e5;color:#fff;border:none;font-size:11px;font-weight:700;cursor:pointer;">Next &rarr;</button>
-          <button type="submit" id="crud-btn-save"
-            style="display:none;align-items:center;gap:5px;padding:8px 16px;border-radius:11px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;font-size:11px;font-weight:700;cursor:pointer;">&#10003; Save Property</button>
-        </div>
+        </section>
+        <section class="crud-section" id="crud-panel-3" aria-labelledby="crud-section-3">
+          <h4 id="crud-section-3">Administrative Review</h4>
+          <p class="crud-section-note">Review listing visibility, verification, and assessment values.</p>
+          <div class="crud-section-fields">
+            <div>
+              <div class="crud-field-label" id="crudStatusLabel">Listing Status <span class="crud-optional">Optional</span></div>
+              <div class="crud-options" role="group" aria-labelledby="crudStatusLabel" id="seg-crud-status">
+                <button type="button" onclick="crudSeg('seg-crud-status','crudStatus',this,'Available')" class="crud-seg-btn" data-val="Available">&#9679; Available</button>
+                <button type="button" onclick="crudSeg('seg-crud-status','crudStatus',this,'Reserved')" class="crud-seg-btn" data-val="Reserved">&#9680; Reserved</button>
+                <button type="button" onclick="crudSeg('seg-crud-status','crudStatus',this,'Under Review')" class="crud-seg-btn" data-val="Under Review">&#9680; Under Review</button>
+                <button type="button" onclick="crudSeg('seg-crud-status','crudStatus',this,'Negotiating')" class="crud-seg-btn" data-val="Negotiating">&#9672; Negotiating</button>
+              </div>
+              <select class="input-shell" id="crudStatus" aria-hidden="true" tabindex="-1">
+                <option value="Available">Available</option><option value="Reserved">Reserved</option><option value="Under Review">Under Review</option><option value="Negotiating">Negotiating</option>
+              </select>
+            </div>
+            <div>
+              <div class="crud-field-label" id="crudApprovalStateLabel">Approval State <span class="crud-optional">Optional</span></div>
+              <div class="crud-options" role="group" aria-labelledby="crudApprovalStateLabel" id="seg-crud-approval">
+                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'draft')" class="crud-seg-btn" data-val="draft">Draft</button>
+                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'pending_review')" class="crud-seg-btn" data-val="pending_review">&#9711; Pending</button>
+                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'approved')" class="crud-seg-btn" data-val="approved">&#10003; Approved</button>
+                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'rejected')" class="crud-seg-btn" data-val="rejected">&#10007; Rejected</button>
+                <button type="button" onclick="crudSeg('seg-crud-approval','crudApprovalState',this,'archived')" class="crud-seg-btn" data-val="archived">Archived</button>
+              </div>
+              <select class="input-shell" id="crudApprovalState" aria-hidden="true" tabindex="-1">
+                <option value="draft">Draft</option><option value="pending_review">Pending Review</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="archived">Archived</option>
+              </select>
+            </div>
+            <div>
+              <div class="crud-field-label" id="crudSellerIdentityStatusLabel">Seller Verification <span class="crud-optional">Optional</span></div>
+              <div class="crud-options" role="group" aria-labelledby="crudSellerIdentityStatusLabel" id="seg-crud-seller">
+                <button type="button" onclick="crudSeg('seg-crud-seller','crudSellerIdentityStatus',this,'unverified')" class="crud-seg-btn" data-val="unverified">&#9888; Unverified</button>
+                <button type="button" onclick="crudSeg('seg-crud-seller','crudSellerIdentityStatus',this,'pending')" class="crud-seg-btn" data-val="pending">&#9711; Pending</button>
+                <button type="button" onclick="crudSeg('seg-crud-seller','crudSellerIdentityStatus',this,'verified')" class="crud-seg-btn" data-val="verified">&#10003; Verified</button>
+              </div>
+              <select class="input-shell" id="crudSellerIdentityStatus" aria-hidden="true" tabindex="-1">
+                <option value="unverified">Unverified</option><option value="pending">Pending</option><option value="verified">Verified</option>
+              </select>
+            </div>
+            <div class="crud-field-grid">
+              <div>
+                <div class="crud-field-label" id="crudDocumentsReviewedLabel">Documents Reviewed <span class="crud-optional">Optional</span></div>
+                <div class="crud-options" role="group" aria-labelledby="crudDocumentsReviewedLabel" id="seg-crud-docs">
+                  <button type="button" onclick="crudYesNo('seg-crud-docs','crudDocumentsReviewed',this,'1',true)" class="crud-seg-btn" data-val="1">&#10003; Yes</button>
+                  <button type="button" onclick="crudYesNo('seg-crud-docs','crudDocumentsReviewed',this,'0',false)" class="crud-seg-btn" data-val="0">&#10007; No</button>
+                </div>
+                <select class="input-shell" id="crudDocumentsReviewed" aria-hidden="true" tabindex="-1">
+                  <option value="0">No</option><option value="1">Yes</option>
+                </select>
+              </div>
+              <div>
+                <div class="crud-field-label" id="crudSiteVerifiedLabel">Site Verified <span class="crud-optional">Optional</span></div>
+                <div class="crud-options" role="group" aria-labelledby="crudSiteVerifiedLabel" id="seg-crud-site">
+                  <button type="button" onclick="crudYesNo('seg-crud-site','crudSiteVerified',this,'1',true)" class="crud-seg-btn" data-val="1">&#10003; Yes</button>
+                  <button type="button" onclick="crudYesNo('seg-crud-site','crudSiteVerified',this,'0',false)" class="crud-seg-btn" data-val="0">&#10007; No</button>
+                </div>
+                <select class="input-shell" id="crudSiteVerified" aria-hidden="true" tabindex="-1">
+                  <option value="0">No</option><option value="1">Yes</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label for="crudLastConfirmedAvailableAt">Last Confirmed Available <span class="crud-optional">Optional</span></label>
+              <input type="datetime-local" class="input-shell" id="crudLastConfirmedAvailableAt" />
+            </div>
+            <div class="crud-field-grid">
+              <div>
+                <div class="crud-field-heading">
+                  <label for="crudScore">Market Score <span class="crud-optional">Optional</span></label>
+                  <span id="crud-score-display">82</span>
+                </div>
+                <input type="number" min="40" max="100" class="input-shell" id="crudScore" value="82" oninput="document.getElementById('crud-score-display').textContent = this.value" />
+              </div>
+              <div>
+                <div class="crud-field-heading">
+                  <label for="crudAccess">Road Access <span class="crud-optional">Optional</span></label>
+                  <span id="crud-access-display">85</span>
+                </div>
+                <input type="number" min="40" max="100" class="input-shell" id="crudAccess" value="85" oninput="document.getElementById('crud-access-display').textContent = this.value" />
+              </div>
+            </div>
+            <p class="auth-form-note">Seller verification updates the linked seller account. Approval state and document review control listing trust badges and visibility.</p>
+          </div>
+        </section>
       </div>
-
+      <div class="crud-form-actions">
+        <button type="button" class="btn-shell btn-shell-secondary" data-modal-close="propertyCrudModal">Cancel</button>
+        <button type="submit" class="btn-shell btn-shell-primary" id="crud-btn-save">Save Property</button>
+      </div>
     </form>
   </div>
 </div>
-
 <!-- Delete Modal (unchanged) -->
 <div class="modal-shell" id="propertyDeleteModal" hidden>
   <div class="modal-card compact-modal">
@@ -371,54 +290,20 @@ sfc_render_header($context, 'admin-properties');
   </div>
 </div>
 
-<!-- Tab / Segmented Control JS -->
+<!-- Property form presentation and segmented controls -->
 <script>
 (function () {
-  var _tab = 0, _total = 4;
-
-  window.crudTab = function (idx) {
-    for (var i = 0; i < _total; i++) {
-      var p = document.getElementById('crud-panel-' + i);
-      var t = document.getElementById('crud-tab-' + i);
-      var d = document.getElementById('crud-dot-' + i);
-      if (p) p.style.display = (i === idx) ? 'block' : 'none';
-      if (t) {
-        t.style.background  = (i === idx) ? '#fff' : 'transparent';
-        t.style.color       = (i === idx) ? '#4f46e5' : '#64748b';
-        t.style.fontWeight  = (i === idx) ? '700' : '600';
-        t.style.boxShadow   = (i === idx) ? '0 1px 4px rgba(0,0,0,.07)' : 'none';
-      }
-      if (d) d.style.background = (i === idx) ? '#6366f1' : '#e2e8f0';
-    }
-    _tab = idx;
-    _updateFooter();
-  };
-
-  window.crudNav = function (dir) {
-    var n = _tab + dir;
-    if (n >= 0 && n < _total) crudTab(n);
-  };
-
-  function _updateFooter() {
-    var prev    = document.getElementById('crud-btn-prev');
-    var nxt     = document.getElementById('crud-btn-next');
-    var save    = document.getElementById('crud-btn-save');
-    var counter = document.getElementById('crud-step-counter');
-    if (counter) counter.textContent = 'Step ' + (_tab + 1) + ' of ' + _total;
-    if (prev)  prev.style.display  = _tab > 0              ? 'flex'  : 'none';
-    if (nxt)   nxt.style.display   = _tab < _total - 1     ? 'flex'  : 'none';
-    if (save)  save.style.display  = _tab === _total - 1   ? 'flex'  : 'none';
-  }
-
   window.crudSeg = function (groupId, selectId, btn, val) {
     var grp = document.getElementById(groupId);
     if (!grp) return;
     grp.querySelectorAll('.crud-seg-btn').forEach(function (b) {
+      b.setAttribute('aria-pressed', 'false');
       b.style.background = '#fff'; b.style.color = '#64748b';
       b.style.border = '1px solid #e2e8f0'; b.style.fontWeight = '600';
     });
     btn.style.background = '#eef2ff'; btn.style.color = '#4338ca';
     btn.style.border = '1px solid #6366f1'; btn.style.fontWeight = '700';
+    btn.setAttribute('aria-pressed', 'true');
     var sel = document.getElementById(selectId);
     if (sel) sel.value = val;
   };
@@ -427,6 +312,7 @@ sfc_render_header($context, 'admin-properties');
     var grp = document.getElementById(groupId);
     if (!grp) return;
     grp.querySelectorAll('.crud-seg-btn').forEach(function (b) {
+      b.setAttribute('aria-pressed', 'false');
       b.style.background = '#fff'; b.style.color = '#64748b';
       b.style.border = '1px solid #e2e8f0'; b.style.fontWeight = '600';
     });
@@ -436,6 +322,7 @@ sfc_render_header($context, 'admin-properties');
       btn.style.background = '#fff1f2'; btn.style.color = '#9f1239'; btn.style.border = '1px solid #fca5a5';
     }
     btn.style.fontWeight = '700';
+    btn.setAttribute('aria-pressed', 'true');
     var sel = document.getElementById(selectId);
     if (sel) sel.value = val;
   };
@@ -486,11 +373,13 @@ sfc_render_header($context, 'admin-properties');
       if (!sel || !grp) return;
       var val = sel.value;
       grp.querySelectorAll('.crud-seg-btn').forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
         b.style.background = '#fff'; b.style.color = '#64748b';
         b.style.border = '1px solid #e2e8f0'; b.style.fontWeight = '600';
       });
       var match = grp.querySelector('[data-val="' + val + '"]');
       if (match) {
+        match.setAttribute('aria-pressed', 'true');
         match.style.background = '#eef2ff'; match.style.color = '#4338ca';
         match.style.border = '1px solid #6366f1'; match.style.fontWeight = '700';
       }
@@ -506,11 +395,13 @@ sfc_render_header($context, 'admin-properties');
       if (!sel || !grp) return;
       var isYes = sel.value === '1';
       grp.querySelectorAll('.crud-seg-btn').forEach(function (b) {
+        b.setAttribute('aria-pressed', 'false');
         b.style.background = '#fff'; b.style.color = '#64748b';
         b.style.border = '1px solid #e2e8f0'; b.style.fontWeight = '600';
       });
       var match = grp.querySelector('[data-val="' + sel.value + '"]');
       if (match) {
+        match.setAttribute('aria-pressed', 'true');
         if (isYes) {
           match.style.background = '#ecfdf5'; match.style.color = '#065f46'; match.style.border = '1px solid #10b981';
         } else {
@@ -533,13 +424,45 @@ sfc_render_header($context, 'admin-properties');
   }
 
   var _modal = document.getElementById('propertyCrudModal');
+  var _returnFocus = null;
+  var _bodyOverflow = '';
+  function focusableControls() {
+    return Array.from(_modal.querySelectorAll('button, input, textarea, select, [tabindex]')).filter(function (el) {
+      return !el.disabled && el.tabIndex >= 0 && el.getClientRects().length;
+    });
+  }
   if (_modal) {
     new MutationObserver(function () {
-      if (!_modal.hidden) { crudTab(0); _syncSegsFromSelects(); }
+      if (!_modal.hidden) {
+        _returnFocus = document.activeElement;
+        _bodyOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+        _syncSegsFromSelects();
+        document.getElementById('crudModalSubtitle').textContent = 'Fields marked Required must be completed.';
+        document.getElementById('crud-panels-wrap').scrollTop = 0;
+        _modal.querySelector('[data-modal-close]').focus({ preventScroll: true });
+      } else {
+        document.body.style.overflow = _bodyOverflow;
+        if (_returnFocus && _returnFocus.isConnected) _returnFocus.focus({ preventScroll: true });
+      }
     }).observe(_modal, { attributes: true, attributeFilter: ['hidden'] });
   }
 
-  _updateFooter();
+  _modal.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      _modal.querySelector('[data-modal-close]').click();
+    }
+    if (event.key === 'Tab') {
+      var controls = focusableControls();
+      var first = controls[0], last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault(); last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault(); first.focus();
+      }
+    }
+  });
 })();
 </script>
 <?php sfc_render_footer($context); ?>

@@ -4,7 +4,7 @@ declare(strict_types=1);
 require __DIR__ . '/app/Support/web.php';
 
 $context = sfc_web_context();
-sfc_render_head('Investment Priority Board | SFCelerate', $context, ['page' => 'property-ranking', 'role' => $context['user']['role'] ?? 'guest']);
+sfc_render_head('Investment Priority Board | LOCUS-SF', $context, ['page' => 'property-ranking', 'role' => $context['user']['role'] ?? 'guest']);
 sfc_render_header($context, 'ranking');
 ?>
 <main class="page-shell ranking-page ranking-page-shell">
@@ -15,7 +15,7 @@ sfc_render_header($context, 'ranking');
         <span class="page-role-pill is-role">Decision Board</span>
         <span class="page-role-pill">IAI + CLUP-gated prioritization</span>
       </div>
-      <h1>Prioritize sites that are attractive, suitable, and land-use compliant.</h1>
+      <h1>Find the right site for your next investment.</h1>
       <p>Every recommendation combines investment attractiveness with a visible CLUP gate, corridor strategy, readiness, and an explainable LGU action.</p>
     </div>
     <div class="intro-actions">

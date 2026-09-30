@@ -11,7 +11,7 @@ function sfc_web_context(): array
     }
 
     $config = require dirname(__DIR__) . '/config.php';
-    $appName = (string) ($config['app']['name'] ?? 'SFCelerate');
+    $appName = (string) ($config['app']['name'] ?? 'LOCUS-SF');
     $scriptName = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? '/index.php'));
     $basePath = rtrim(str_replace('/index.php', '', $scriptName), '/');
     if (preg_match('#/(admin-dashboard|seller-dashboard|investor-dashboard|admin-login|seller-login|investor-login|property-explorer|property-ranking|voting-dashboard|property-details|compare-decision|admin-properties|admin-showcase|offer-board|city-pipeline|simulator|reports|logout)\.php$#', $scriptName, $matches) === 1) {
@@ -110,6 +110,8 @@ function sfc_render_head(string $title, array $context, array $bodyData = []): v
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?></title>
   <base href="<?= htmlspecialchars(($context['basePath'] === '' ? '/' : $context['basePath'] . '/'), ENT_QUOTES, 'UTF-8') ?>">
+  <style><?php readfile(dirname(__DIR__, 2) . '/assets/css/preloader.css'); ?></style>
+  <script data-app-name="<?= htmlspecialchars($context['appName'], ENT_QUOTES, 'UTF-8') ?>" data-base-path="<?= htmlspecialchars($context['basePath'], ENT_QUOTES, 'UTF-8') ?>" data-logo="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/images/webLogoSfc-favicon.png?v=8"><?php readfile(dirname(__DIR__, 2) . '/assets/js/preloader.js'); ?></script>
   <link rel="icon" type="image/png" sizes="32x32" href="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/images/webLogoSfc-favicon.png?v=8">
   <link rel="icon" type="image/png" sizes="16x16" href="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/images/webLogoSfc-favicon.png?v=8">
   <link rel="shortcut icon" href="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/images/webLogoSfc-favicon.png?v=8">
@@ -119,8 +121,21 @@ function sfc_render_head(string $title, array $context, array $bodyData = []): v
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <?php if (in_array($pageName, ['property-explorer', 'property-explorer-terminal', 'property-details'], true)): ?>
   <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css">
+  <script defer src="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.js"></script>
   <?php endif; ?>
   <link rel="stylesheet" href="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/css/portal.css<?= htmlspecialchars(sfc_asset_version('css/portal.css'), ENT_QUOTES, 'UTF-8') ?>">
+  <?php if (in_array($pageName, ['landing', 'property-ranking'], true)): ?>
+  <link rel="stylesheet" href="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/css/discovery.css<?= htmlspecialchars(sfc_asset_version('css/discovery.css'), ENT_QUOTES, 'UTF-8') ?>">
+  <?php endif; ?>
+  <?php if ($pageName === 'landing'): ?>
+  <link rel="stylesheet" href="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/css/welcome.css<?= htmlspecialchars(sfc_asset_version('css/welcome.css'), ENT_QUOTES, 'UTF-8') ?>">
+  <script defer src="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/js/welcome.js<?= htmlspecialchars(sfc_asset_version('js/welcome.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
+  <?php endif; ?>
+  <link rel="stylesheet" href="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/css/navigation.css<?= htmlspecialchars(sfc_asset_version('css/navigation.css'), ENT_QUOTES, 'UTF-8') ?>">
+  <?php if ($pageName === 'decision-reports'): ?>
+  <link rel="stylesheet" href="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/css/reports.css<?= htmlspecialchars(sfc_asset_version('css/reports.css'), ENT_QUOTES, 'UTF-8') ?>">
+  <?php endif; ?>
+  <script defer src="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/js/navigation.js<?= htmlspecialchars(sfc_asset_version('js/navigation.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
 </head>
 <body <?= implode(' ', $bodyAttributes) ?>>
 <script>
@@ -220,18 +235,22 @@ function sfc_render_header(array $context, string $active = ''): void
           aria-controls="cityBriefModal"
           aria-label="Open San Fernando city brief"
         >
-          <img src="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/images/webLogoSfc.png" alt="SFCelerate" class="brand-logo">
+          <img src="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/images/webLogoSfc.png" alt="<?= htmlspecialchars($context['appName'], ENT_QUOTES, 'UTF-8') ?>" class="brand-logo">
         </button>
         <a href="<?= htmlspecialchars(sfc_path('/index.php'), ENT_QUOTES, 'UTF-8') ?>" class="brand-copy brand-home-link">
-          <span class="brand-title">SFCelerate</span>
+          <span class="brand-title"><?= htmlspecialchars($context['appName'], ENT_QUOTES, 'UTF-8') ?></span>
           <span class="brand-subtitle"><?= htmlspecialchars($brandSubtitle, ENT_QUOTES, 'UTF-8') ?></span>
         </a>
       </div>
 
-      <div class="nav-center">
+      <button type="button" class="nav-mobile-toggle" aria-expanded="false" aria-controls="primaryNavigation headerActions">
+        <span class="nav-toggle-lines" aria-hidden="true"></span>
+        <span>Menu</span>
+      </button>
+      <div class="nav-center" id="primaryNavigation">
         <nav class="top-nav" aria-label="Primary navigation">
           <?php foreach ($navItems as $item): ?>
-            <a href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>" class="nav-link <?= $active === $item['key'] ? 'active' : '' ?>">
+            <a href="<?= htmlspecialchars($item['href'], ENT_QUOTES, 'UTF-8') ?>" class="nav-link <?= $active === $item['key'] ? 'active' : '' ?>" <?= $active === $item['key'] ? 'aria-current="page"' : '' ?>>
               <span class="nav-link-icon"><?= sfc_icon($item['icon']) ?></span>
               <span><?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?></span>
             </a>
@@ -239,7 +258,7 @@ function sfc_render_header(array $context, string $active = ''): void
         </nav>
       </div>
 
-      <div class="nav-actions">
+      <div class="nav-actions" id="headerActions">
         <div class="portal-menu portal-menu-compact" data-sfc-menu>
           <button type="button" class="btn-shell btn-shell-secondary portal-menu-trigger more-menu-trigger <?= in_array($active, ['offer-board', 'city-pipeline', 'admin-showcase'], true) ? 'is-active' : '' ?>" data-sfc-menu-toggle aria-expanded="false" aria-controls="moreMenuPanel">
             <span class="btn-shell-icon"><?= sfc_icon('menu') ?></span>
@@ -577,7 +596,10 @@ function sfc_render_footer(array $context): void
       </div>
     </div>
   </div>
-  <script src="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.js"></script>
+  <script>
+    // The native login form is usable without portal data or optional modules.
+    if (document.body.dataset.page?.endsWith('-login')) window.LOCUS_PRELOADER?.dismiss();
+  </script>
   <script type="module" src="<?= htmlspecialchars($context['assetBase'], ENT_QUOTES, 'UTF-8') ?>/js/portal.js<?= htmlspecialchars(sfc_asset_version('js/portal.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

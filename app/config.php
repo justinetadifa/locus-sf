@@ -16,7 +16,7 @@ $normalizeBoolean = static function (mixed $value, bool $fallback): bool {
 
 $defaults = [
     'app' => [
-        'name' => 'SFCelerate',
+        'name' => 'LOCUS-SF',
         'environment' => getenv('APP_ENV') ?: 'local',
     ],
     'db' => [
